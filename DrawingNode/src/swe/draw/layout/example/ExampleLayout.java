@@ -24,47 +24,56 @@ public class ExampleLayout extends Layout {
     public void execute() {
 
         Collection<Nodes> nodes = show.getMap().getNodeTableId();
-        
-        
+        double x = 0.0, xLab = 0.0, xRec = 0.0;
+        double y1 = 0.0, y2 = 0.0, y3 = 0.0, yLab = 0.0, yRec = 0.0;
+        int counter = 0; 
         
         
         for (Nodes node : nodes) {
-        	//String temp = node.getNodeId();
+        	
         	
         	//adjust location of node using x and y
-        	double x = 0.0;
-            double y = 0.0;
-            
-            //testing temp varible
-            //System.out.println(temp);
-        	switch (node.getNodeId()) {
         	
-        	case "Image1":
-        		x = 100.0;
+            
+            
+        	switch (node.getNodeId().substring(0, 3)) {
+        	
+        	case "Ima":
+        		counter++;
+        		
+        		if (counter < 5) {
+        			x = 200.0;
+        			y1 += 150.0;
+        			node.relocate(x, y1);
+        		} 
+        		
+        		if (counter >= 5 && counter < 8){
+        			x = 400.0;
+        			y2 += 150.0;
+        			node.relocate(x, y2);
+        		}
+        		
+        		if (counter >= 8) {
+        			x = 600.0;
+        			y3 += 150.0;
+        			node.relocate(x, y3);
+        		}
+     
+        		
+        		
         		break;
         		
-        	case "Button1":
-        		x = 100.0;
-        		y = 110.0;
+        	case "Lab":
+        		
+        		xLab += 200.0;
+        		yLab = 100.0;
+        		node.relocate(xLab, yLab);
         		break;
         		
-        	case "PImage1":
-        		x = 160.0;
-        		y = 65.0;
-        		break;
-        		
-        	case "Image2":
-        		x = 500.0;
-        		break;
-        		
-        	case "Button2":
-        		x = 500.0;
-        		y = 110.0;
-        		break;
-        		
-        	case "PImage2":
-        		x = 460.0;
-        		y = 65.0;
+        	case "Rec":
+        		xRec += 180.0;
+        		yRec = 50.0;
+        		node.relocate(xRec, yRec);
         		break;
         		
         	default:
@@ -74,9 +83,8 @@ public class ExampleLayout extends Layout {
         	}
             
 
-        	x += 200;
-        	y += 200;
-            node.relocate(x, y);
+        	
+            
 
         }
 

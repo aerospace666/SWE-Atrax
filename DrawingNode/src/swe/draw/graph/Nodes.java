@@ -12,7 +12,6 @@ public class Nodes extends Pane {
     String nodeId;
     
     Node view; 
-
     // two list for tree view, parent point to children
     
     
@@ -50,7 +49,6 @@ public class Nodes extends Pane {
 
         this.view = view;
         getChildren().add(view);
-
     }
 
     public Node getView() {
@@ -60,4 +58,7 @@ public class Nodes extends Pane {
     public String getNodeId() {
         return this.nodeId;
     }
+    
+    
+    
 }

@@ -22,8 +22,7 @@ public class Show {
 
    	private ScrollPane sp = new ScrollPane();
 
-   	//mouseGesture
-    MouseGestures mouseGestures;
+ 
 
     NodeLayout nodeLayout;
 
@@ -36,8 +35,7 @@ public class Show {
 
         draw.getChildren().add(nodeLayout);
 
-        mouseGestures = new MouseGestures(this);
-        
+    
         // set all node into scrollpane to be displayed
         sp.setContent(draw);
         
@@ -70,9 +68,6 @@ public class Show {
     
         
         
-        for (Nodes node : mapNode.getAddedNode()) {
-            mouseGestures.makeDraggable(node);
-        }
         
     
         getMap().refresh();

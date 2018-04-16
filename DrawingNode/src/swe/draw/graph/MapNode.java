@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import swe.draw.nodes.ButtonNode;
-import swe.draw.nodes.ImageNode;
-import swe.draw.nodes.RectangleNode;
+import swe.draw.nodes.*;
 
 
 public class MapNode {
@@ -96,7 +94,17 @@ public class MapNode {
         	addNode(buttonNode);
         	//allNodes.add(buttonNode);
         	break;
-
+        	
+        case LABEL:
+        	LabelNode labelNode = new LabelNode(id);
+        	addNode(labelNode);
+        	break;
+        	
+        case BOOK:
+        	BookNode bookNode = new BookNode(id);
+        	addNode(bookNode);
+        	break;
+        	
         default:
             throw new UnsupportedOperationException("Unsupported type: " + type);
         }

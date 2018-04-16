@@ -20,11 +20,11 @@ public class BindLine extends Group {
 
         line = new Line();
 
-        line.startXProperty().bind( source.layoutXProperty().add(source.getBoundsInParent().getWidth() / 2));
-        line.startYProperty().bind( source.layoutYProperty().add(source.getBoundsInParent().getHeight() / 2));
+        line.startXProperty().bind( source.layoutXProperty().add(source.getBoundsInParent().getWidth() / 4.0));
+        line.startYProperty().bind( source.layoutYProperty().add(source.getBoundsInParent().getHeight() / 4.0));
 
-        line.endXProperty().bind( destin.layoutXProperty().add(destin.getBoundsInParent().getWidth() / 2));
-        line.endYProperty().bind( destin.layoutYProperty().add(destin.getBoundsInParent().getHeight() /2));
+        line.endXProperty().bind( destin.layoutXProperty().add(destin.getBoundsInParent().getWidth() / 4.0));
+        line.endYProperty().bind( destin.layoutYProperty().add(destin.getBoundsInParent().getHeight() / 4.0));
 
         getChildren().add(line);
 

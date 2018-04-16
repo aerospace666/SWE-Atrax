@@ -8,7 +8,8 @@ public enum NodeType {
     //Document's components
     LABEL,
     IMAGE,
-    BUTTON
+    BUTTON, 
+    BOOK
     ;
 
 }

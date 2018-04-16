@@ -43,23 +43,17 @@ public class Main extends Application {
 
         MapNode mapNode = show.getMap();
 
-        
+        for (int i = 0; i != 9; i++) {
+        	mapNode.checkNode("Image" + i, NodeType.IMAGE);
+        }
 
-        mapNode.checkNode("Image1", NodeType.IMAGE);
-        mapNode.checkNode("PImage1", NodeType.RECTANGLE);
-        mapNode.checkNode("Button1", NodeType.BUTTON);
+        for(int j = 65; j != 68; j++) {
+        	mapNode.checkNode( "Label " + (char)j , NodeType.LABEL);
+        }
         
-        mapNode.checkNode("Image2", NodeType.IMAGE);
-        mapNode.checkNode("PImage2", NodeType.RECTANGLE);
-        mapNode.checkNode("Button2", NodeType.BUTTON);
-
-        
-        // bind line (add connection)
-        mapNode.addBindLine("PImage1", "PImage2");
-        
-        
-       
-       
+       for(int f = 0; f != 3; f++) {
+    	   mapNode.checkNode("Rectangle" + f, NodeType.RECTANGLE);
+       }
         show.update();
 
     }

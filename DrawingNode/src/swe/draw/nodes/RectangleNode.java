@@ -10,12 +10,12 @@ public class RectangleNode extends Nodes {
     public RectangleNode( String nodeId) {
     	super(nodeId);
 
-        Rectangle rectangle = new Rectangle(8,8);
+        Rectangle rectangle = new Rectangle(1,800);
 
+       
+        rectangle.setStroke(Color.LIGHTGRAY);
         
-        rectangle.setStroke(Color.RED);
-        
-        rectangle.setFill(Color.RED);
+        //rectangle.setFill(Color.RED);
 
         drawView(rectangle);
 
