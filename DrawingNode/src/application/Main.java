@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import swe.draw.layout.parent.Layout;
+import swe.database.AtraxDatabase;
 import swe.draw.graph.MapNode;
 import swe.draw.graph.NodeType;
 import swe.draw.graph.Show;
@@ -54,9 +55,15 @@ public class Main extends Application {
        }
         show.update();
     }
+    
 
     public static void main(String[] args) {
     	System.out.println("Start main application........");
-        launch(args);
+    	
+    	AtraxDatabase atraxdb = new AtraxDatabase();
+    	atraxdb.getDatabaseConnection();
+    	atraxdb.closeDatabaseConnection();
+    	
+        //launch(args);
     }
 }
