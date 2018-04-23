@@ -7,8 +7,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/conghienhoang/Library/Mobile Documents/com~apple~CloudDocs/Documents/Year_4_Semester_1/SWE40001_Software Engineering Project A/pdfbox-2.0.9.jar"/>
 	<classpathentry kind="lib" path="/Users/conghienhoang/Downloads/db-derby-10.14.1.0-bin/lib/derby.jar"/>
 	<classpathentry kind="lib" path="lib/pdfbox-2.0.9.jar"/>
+	<classpathentry kind="lib" path="lib/derby.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
