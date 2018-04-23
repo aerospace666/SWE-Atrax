@@ -1,15 +1,15 @@
-package application;
+package src.application;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import swe.draw.layout.parent.Layout;
-import swe.database.AtraxDatabase;
-import swe.draw.graph.MapNode;
-import swe.draw.graph.NodeType;
-import swe.draw.graph.Show;
-import swe.draw.layout.example.ExampleLayout;
+import src.swe.draw.layout.parent.Layout;
+import src.swe.database.AtraxDatabase;
+import src.swe.draw.graph.MapNode;
+import src.swe.draw.graph.NodeType;
+import src.swe.draw.graph.Show;
+import src.swe.draw.layout.example.ExampleLayout;
 
 public class Main extends Application {
 

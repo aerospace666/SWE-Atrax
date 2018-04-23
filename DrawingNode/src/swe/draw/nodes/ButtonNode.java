@@ -1,7 +1,7 @@
-package swe.draw.nodes;
+package src.swe.draw.nodes;
 
 import javafx.scene.control.Button;
-import swe.draw.graph.Nodes;
+import src.swe.draw.graph.Nodes;
 
 public class ButtonNode extends Nodes{
 

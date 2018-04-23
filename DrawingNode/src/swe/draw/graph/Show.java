@@ -1,4 +1,4 @@
-package swe.draw.graph;
+package src.swe.draw.graph;
 
 /* Show class is to add all modeled nodes into a viewable scrollpane
  * 

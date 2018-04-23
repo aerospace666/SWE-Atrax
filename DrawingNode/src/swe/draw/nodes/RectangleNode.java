@@ -1,9 +1,9 @@
-package swe.draw.nodes;
+package src.swe.draw.nodes;
 
 
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
-import swe.draw.graph.Nodes;
+import src.swe.draw.graph.Nodes;
 
 public class RectangleNode extends Nodes {
 

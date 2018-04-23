@@ -1,9 +1,9 @@
-package swe.draw.layout.example;
+package src.swe.draw.layout.example;
 
 import java.util.Collection;
-import swe.draw.graph.Nodes;
-import swe.draw.graph.Show;
-import swe.draw.layout.parent.Layout;
+import src.swe.draw.graph.Nodes;
+import src.swe.draw.graph.Show;
+import src.swe.draw.layout.parent.Layout;
 
 
 // this class layout is to show example for adjusting node location 

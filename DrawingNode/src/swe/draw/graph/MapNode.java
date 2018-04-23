@@ -1,10 +1,10 @@
-package swe.draw.graph;
+package src.swe.draw.graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import swe.draw.nodes.*;
+import src.swe.draw.nodes.*;
 
 
 public class MapNode {

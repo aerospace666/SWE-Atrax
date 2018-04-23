@@ -1,4 +1,4 @@
-package swe.draw.graph;
+package src.swe.draw.graph;
 
 import javafx.scene.Group;
 import javafx.scene.shape.Line;

@@ -1,4 +1,4 @@
-package swe.draw.graph;
+package src.swe.draw.graph;
 
 public enum NodeType {
 	//point

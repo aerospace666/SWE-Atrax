@@ -1,4 +1,4 @@
-package swe.database;
+package src.swe.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

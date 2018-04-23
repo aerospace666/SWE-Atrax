@@ -1,6 +1,6 @@
 //main abstract layout for arrange the nodes in the graph
 
-package swe.draw.layout.parent;
+package src.swe.draw.layout.parent;
 
 public abstract class Layout {
 
