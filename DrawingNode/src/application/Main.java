@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import swe.draw.layout.parent.Layout;
+import swe.database.AtraxDatabase;
 import swe.draw.graph.MapNode;
 import swe.draw.graph.NodeType;
 import swe.draw.graph.Show;
@@ -16,6 +17,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+    	
         BorderPane root = new BorderPane();
 
         show = new Show();
@@ -24,10 +26,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, 1024, 720);
         
-        
         scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
-        
 
         addDrawNodes();
 
@@ -44,7 +43,7 @@ public class Main extends Application {
         MapNode mapNode = show.getMap();
 
         for (int i = 0; i != 9; i++) {
-        	mapNode.checkNode("Image" + i, NodeType.IMAGE);
+        	mapNode.checkNode("Image-----" + i, NodeType.IMAGE);
         }
 
         for(int j = 65; j != 68; j++) {
@@ -55,10 +54,16 @@ public class Main extends Application {
     	   mapNode.checkNode("Rectangle" + f, NodeType.RECTANGLE);
        }
         show.update();
-
     }
+    
 
     public static void main(String[] args) {
-        launch(args);
+    	System.out.println("Start main application........");
+    	
+    	AtraxDatabase atraxdb = new AtraxDatabase();
+    	atraxdb.getDatabaseConnection();
+    	atraxdb.closeDatabaseConnection();
+    	
+        //launch(args);
     }
 }
