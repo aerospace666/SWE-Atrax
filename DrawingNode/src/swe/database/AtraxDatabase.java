@@ -8,7 +8,7 @@ public class AtraxDatabase {
 	
 	private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	private String URL = "jdbc:derby:atraxdb;create=true";
-	private Connection connection =  null;
+	public Connection connection =  null;
 	
 	public AtraxDatabase(){}
 	

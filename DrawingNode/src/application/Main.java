@@ -1,5 +1,10 @@
 package src.application;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -57,13 +62,38 @@ public class Main extends Application {
     }
     
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
     	System.out.println("Start main application........");
     	
     	AtraxDatabase atraxdb = new AtraxDatabase();
+    	
     	atraxdb.getDatabaseConnection();
-    	atraxdb.closeDatabaseConnection();
+    	
+    	Statement statement = atraxdb.connection.createStatement();
+    	ResultSet resultSet = statement.executeQuery("SELECT * FROM keyword");
+        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+        System.out.println("Retreive data from table----");
+        
+        int colCount = resultSetMetaData.getColumnCount();
+        for(int x=1; x <= colCount; x++)
+        {
+        	System.out.format("%20s", resultSetMetaData.getColumnName(x) + " | ");
+        }
+        System.out.println("\n");
+        while(resultSet.next())
+        {
+        	for(int x=1; x <= colCount; x++)
+        	{
+        		System.out.format("%20s", resultSet.getString(x) + " | ");
+        	}
+        	System.out.println("\n");
+        }
     	
         launch(args);
+        
+        if(atraxdb.connection != null)
+        {
+        	atraxdb.closeDatabaseConnection();
+        }
     }
 }
