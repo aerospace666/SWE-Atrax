@@ -118,7 +118,7 @@ public class mainControl implements Initializable {
 
 
 	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	public void initialize(URL url, ResourceBundle rd) {
 		// TODO Auto-generated method stub
 		init();
 		load();
