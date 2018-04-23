@@ -64,6 +64,6 @@ public class Main extends Application {
     	atraxdb.getDatabaseConnection();
     	atraxdb.closeDatabaseConnection();
     	
-        //launch(args);
+        launch(args);
     }
 }
