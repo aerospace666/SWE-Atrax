@@ -3,17 +3,18 @@ package src.swe.main.ui.library;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
-import javafx.beans.property.SimpleStringProperty;
+import org.fxmisc.livedirs.LiveDirs;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -22,24 +23,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-
-import org.fxmisc.livedirs.LiveDirs;
-
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 public class LibraryUIControl implements Initializable{
