@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class AtraxDatabase {
 	
 	private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-	private String URL = "jdbc:derby:atraxdb;create=true";
+	private String URL = "jdbc:derby:atraxdb";
 	public Connection connection =  null;
 	
 	public AtraxDatabase(){}

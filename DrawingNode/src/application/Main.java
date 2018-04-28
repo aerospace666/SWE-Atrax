@@ -70,7 +70,7 @@ public class Main extends Application {
     	atraxdb.getDatabaseConnection();
     	
     	Statement statement = atraxdb.connection.createStatement();
-    	ResultSet resultSet = statement.executeQuery("SELECT * FROM doc_keyword");
+    	ResultSet resultSet = statement.executeQuery("SELECT * FROM documents");
         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
         System.out.println("Retreive data from table----");
         
