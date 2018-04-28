@@ -7,23 +7,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import src.swe.draw.layout.parent.Layout;
 import src.swe.database.AtraxDatabase;
-import src.swe.draw.graph.MapNode;
-import src.swe.draw.graph.NodeType;
-import src.swe.draw.graph.Show;
-import src.swe.draw.layout.example.ExampleLayout;
 
 public class Main extends Application {
 
-    Show show = new Show();
 
     @Override
     public void start(Stage primaryStage) throws IOException {
     	
+<<<<<<< HEAD
     	MetaData Data = new MetaData();
 		
 		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
@@ -68,6 +64,17 @@ public class Main extends Application {
     	   mapNode.checkNode("Rectangle" + f, NodeType.RECTANGLE);
        }
         show.update();
+=======
+    	try {
+			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
+			Scene scene = new Scene(root,750,500);
+			scene.getStylesheets().add(getClass().getResource("/src/swe/main/ui/library/library.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+>>>>>>> 5b2f6e02ab5fcec147d130e2c53205b4bae5481f
     }
     
 
@@ -98,13 +105,19 @@ public class Main extends Application {
         	System.out.println("\n");
         }
     	
+        
         launch(args);
         
         if(atraxdb.connection != null)
         {
         	atraxdb.closeDatabaseConnection();
         }
+<<<<<<< HEAD
         **/
+=======
+        
+        
+>>>>>>> 5b2f6e02ab5fcec147d130e2c53205b4bae5481f
     }
     
 }
