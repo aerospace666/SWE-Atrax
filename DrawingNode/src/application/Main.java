@@ -1,5 +1,6 @@
 package src.application;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -21,8 +22,16 @@ public class Main extends Application {
     Show show = new Show();
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
     	
+    	MetaData Data = new MetaData();
+		
+		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
+		
+		Data.getFilePath(Path,"library"); //testing purpose
+		
+    
+    	/**
         BorderPane root = new BorderPane();
 
         show = new Show();
@@ -48,7 +57,7 @@ public class Main extends Application {
         MapNode mapNode = show.getMap();
 
         for (int i = 0; i != 9; i++) {
-        	mapNode.checkNode("Image-----" + i, NodeType.IMAGE);
+        	mapNode.checkNode("Imagehaha" + i, NodeType.IMAGE);
         }
 
         for(int j = 65; j != 68; j++) {
@@ -95,5 +104,7 @@ public class Main extends Application {
         {
         	atraxdb.closeDatabaseConnection();
         }
+        **/
     }
+    
 }
