@@ -1,4 +1,30 @@
+<<<<<<< HEAD
 Sun Apr 29 07:19:56 AEST 2018 Thread[main,5,main] Cleanup action starting
+=======
+<<<<<<< HEAD
+----------------------------------------------------------------
+<<<<<<< HEAD
+Mon Apr 23 21:25:16 AEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0162-f240-3390-00000726bf70 
+on database directory /Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/atraxdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4f8e5cde 
+Loaded from file:/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/lib/derby.jar
+=======
+Sat Apr 28 14:30:53 AEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-0a84-9b9e-0000072b12e8 
+on database directory C:\Users\Huy Q Phung\Desktop\SW_Project_A\SWE-Atrax\DrawingNode\atraxdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@2f217633 
+Loaded from file:/C:/Users/Huy%20Q%20Phung/Desktop/SW_Project_A/SWE-Atrax/DrawingNode/lib/derby.jar
+>>>>>>> a356baf3ba74d418fffa81b6e5b49300873e0d30
+java.vendor=Oracle Corporation
+java.runtime.version=9.0.4+11
+user.dir=/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.13.4
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+=======
+Sat Apr 28 19:08:45 AEST 2018 Thread[main,5,main] Cleanup action starting
+>>>>>>> 47149d7449bf81d42bb34c501b62a355b5750c75
 java.sql.SQLException: Failed to start database 'atraxdb' with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4f8e5cde, see the next exception for details.
 	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
 	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
@@ -230,3 +256,4 @@ ERROR XSDB6: Another instance of Derby may have already booted the database /Use
 	at java.base/sun.launcher.LauncherHelper$FXHelper.main(LauncherHelper.java:945)
 ============= end nested exception, level (2) ===========
 Cleanup action completed
+>>>>>>> 5b2f6e02ab5fcec147d130e2c53205b4bae5481f

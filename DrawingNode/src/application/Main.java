@@ -1,5 +1,6 @@
 package src.application;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -16,8 +17,54 @@ public class Main extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
     	
+<<<<<<< HEAD
+    	MetaData Data = new MetaData();
+		
+		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
+		
+		Data.getFilePath(Path,"library"); //testing purpose
+		
+    
+    	/**
+        BorderPane root = new BorderPane();
+
+        show = new Show();
+
+        root.setCenter(show.getScrollPane());
+
+        Scene scene = new Scene(root, 1024, 720);
+        
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+        addDrawNodes();
+
+        //check example layout for arranging the nodes
+        Layout layout = new ExampleLayout(show);
+        layout.execute();
+        
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void addDrawNodes() {
+
+        MapNode mapNode = show.getMap();
+
+        for (int i = 0; i != 9; i++) {
+        	mapNode.checkNode("Imagehaha" + i, NodeType.IMAGE);
+        }
+
+        for(int j = 65; j != 68; j++) {
+        	mapNode.checkNode( "Label " + (char)j , NodeType.LABEL);
+        }
+        
+       for(int f = 0; f != 3; f++) {
+    	   mapNode.checkNode("Rectangle" + f, NodeType.RECTANGLE);
+       }
+        show.update();
+=======
     	try {
 			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
 			Scene scene = new Scene(root,750,500);
@@ -27,6 +74,7 @@ public class Main extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+>>>>>>> 5b2f6e02ab5fcec147d130e2c53205b4bae5481f
     }
     
 
@@ -64,7 +112,12 @@ public class Main extends Application {
         {
         	atraxdb.closeDatabaseConnection();
         }
+<<<<<<< HEAD
+        **/
+=======
         
         
+>>>>>>> 5b2f6e02ab5fcec147d130e2c53205b4bae5481f
     }
+    
 }
