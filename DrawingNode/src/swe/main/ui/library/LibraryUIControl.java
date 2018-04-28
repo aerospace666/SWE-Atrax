@@ -10,15 +10,30 @@ import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import org.fxmisc.livedirs.LiveDirs;
 
@@ -46,8 +61,86 @@ public class LibraryUIControl implements Initializable{
 
     @FXML
     private TreeView<Path> FileExplorer;
+
+    @FXML
+    private MenuItem OpenFolderId;
     
-   
+    
+    //TODO passing folder path & library name 
+    @FXML
+    void OpenFolder(ActionEvent event) {
+    	
+    	//Open Folder dialog
+    	DirectoryChooser directoryChooser = new DirectoryChooser();
+    	File selectedDirectory = directoryChooser.showDialog(LibraryTable.getScene().getWindow());
+         
+        if(selectedDirectory == null){
+            System.out.println("No Directory selected");
+        }else{
+        	
+            System.out.println(selectedDirectory.getAbsolutePath());   //this return folder path
+            
+            
+            //Creating a pop up to get Library name
+            Stage popup = new Stage();
+			
+            GridPane grid = new GridPane();
+			grid.setPadding(new Insets(10, 10, 10, 10));
+			grid.setVgap(5);
+			grid.setHgap(5);
+			//Defining the Name text field
+			final TextField name = new TextField();
+			name.setPromptText("Enter your libary name.");
+			name.setPrefColumnCount(10);
+			name.getText();
+			GridPane.setConstraints(name, 0, 0);
+			grid.getChildren().add(name);
+			
+			//Defining the Submit button
+			Button create = new Button("Create");
+			GridPane.setConstraints(create, 1, 0);
+			grid.getChildren().add(create);
+			
+			Scene pop = new Scene(grid, 250, 50);
+			popup.setScene(pop);
+			popup.setTitle("Enter Libary Name");
+			popup.show();
+			
+			
+			create.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				    public void handle(ActionEvent e) {
+				       
+					
+						System.out.println(name.getText());   //this return libraryname
+						popup.close();
+				       
+						
+						//TODO call function to reading folder and insert to database
+						
+						
+						//example:
+				        //ReadFolder data = new ReadFolder;
+				        // data.getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
+				       
+						
+						//TODO then call load funtion to load data to table view
+				        // load();
+				        				        
+				     }
+				 });
+			
+			
+			
+			
+        }
+    }
+    
+    
+    
+    
+    
     //TODO import bookdata and display
     
     ObservableList<Book> BookList = FXCollections.observableArrayList();
@@ -62,6 +155,8 @@ public class LibraryUIControl implements Initializable{
     	Date.setCellValueFactory(new PropertyValueFactory<>("date"));
     }
     
+    
+    //TODO retrieve data from database, asign to book object then display to table view
     public void load() {
     	//this is only example
     	
