@@ -13,23 +13,11 @@ public class box
 		
 		MetaData Data = new MetaData();
 		
-		File file = new File("C:/Users/dolly/Downloads/Atraxtestdata/demo/Adams2017.pdf");
+		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
 		
-		Data.ExtractMetaData(file);
+		Data.getFilePath(Path,1); //testing purpose
 		
-		List<MetaData> DataList = new ArrayList<MetaData>();
-		
-		// the directory/library to search for similar keywords
-		 File Folder = new File(file.getParent());
-				
-		//make an array of files, which contains all the files
-		File[] ListOfFiles = Folder.listFiles();
-		
-		for(int i=0;i<ListOfFiles.length;i++)
-		{
-			DataList.add(new MetaData());
-			DataList.get(i).ExtractMetaData(ListOfFiles[i]);
-		}
+
 		
 		/****************************************************************************************
 		Scanner scan = new Scanner(System.in);

@@ -26,6 +26,7 @@ public class MetaData {
 	private String Subject;
 	private String FileName;
 	private File file;
+	private int LibraryID;
 	
 	public MetaData(String keywords, String author, String title, String subject,String filename) {
 		super();
@@ -187,6 +188,25 @@ public class MetaData {
 		}
 			
 	}
+	
+	public void getFilePath(String FilePath,int Library) throws IOException
+	{
+		LibraryID = Library;
+		file = new File(FilePath);
+		
+		if(file.isDirectory())
+		{
+			File[] ListOfFiles = file.listFiles();
+			for(int i=0;i<ListOfFiles.length;i++)
+			{
+				ExtractMetaData(ListOfFiles[i]);
+			}
+		}
+		else
+		{
+			ExtractMetaData(file);
+		}
+	}
 
 	public String getKeywords() {
 		return Keywords;
@@ -207,7 +227,10 @@ public class MetaData {
 	public String getFileNamet() {
 		return file.getName();
 	}
-
+	
+	public int getLibrary() {
+		return LibraryID;
+	}
 	
 	
 	
