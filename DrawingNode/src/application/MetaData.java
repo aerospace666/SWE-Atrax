@@ -55,8 +55,12 @@ public class MetaData {
 		WhitespaceTokenizer whitespaceTokenizer = WhitespaceTokenizer.INSTANCE;
 		
 		//open NLP for tagging each word from pdf
+		System.out.println("\n" + "before POS model" + "\n");
 		POSModel model = new POSModel(Stream_input);
+		System.out.println("\n" + "after POS model" + "\n");
+		System.out.println("\n" + "before POSTaggerME model" + "\n");
 		POSTaggerME tagger = new POSTaggerME(model);
+		System.out.println("\n" + "After POSTaggerME model" + "\n");
 		
 		//contains the entire pdf as a string
 		String Extract_Text_pdf,Keywords;

@@ -18,6 +18,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+<<<<<<< HEAD
     	
     	MetaData Data = new MetaData();
 		
@@ -25,45 +26,9 @@ public class Main extends Application {
 		
 		Data.getFilePath(Path,"library"); //testing purpose
 		
-    
-    	/**
-        BorderPane root = new BorderPane();
-
-        show = new Show();
-
-        root.setCenter(show.getScrollPane());
-
-        Scene scene = new Scene(root, 1024, 720);
-        
-        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
-        addDrawNodes();
-
-        //check example layout for arranging the nodes
-        Layout layout = new ExampleLayout(show);
-        layout.execute();
-        
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    private void addDrawNodes() {
-
-        MapNode mapNode = show.getMap();
-
-        for (int i = 0; i != 9; i++) {
-        	mapNode.checkNode("Imagehaha" + i, NodeType.IMAGE);
-        }
-
-        for(int j = 65; j != 68; j++) {
-        	mapNode.checkNode( "Label " + (char)j , NodeType.LABEL);
-        }
-        
-       for(int f = 0; f != 3; f++) {
-    	   mapNode.checkNode("Rectangle" + f, NodeType.RECTANGLE);
-       }
-        show.update();
 =======
+>>>>>>> 212dc38e53acb01a36cce844f0c944432a8b5514
+    
     	try {
 			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
 			Scene scene = new Scene(root,750,500);
@@ -73,46 +38,70 @@ public class Main extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
->>>>>>> 5b2f6e02ab5fcec147d130e2c53205b4bae5481f
+	
     }
     
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws IOException {
     	System.out.println("Start main application........");
     	
-    	AtraxDatabase atraxdb = new AtraxDatabase();
+//    	AtraxDatabase atraxdb = new AtraxDatabase();
+//    	
+//    	atraxdb.getDatabaseConnection();
+//    	
+//    	Statement statement = atraxdb.connection.createStatement();
+//    	ResultSet resultSet = statement.executeQuery("SELECT * FROM documents");
+//        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+//        System.out.println("Retreive data from table----");
+//        
+//        int colCount = resultSetMetaData.getColumnCount();
+//        for(int x=1; x <= colCount; x++)
+//        {
+//        	System.out.format("%20s", resultSetMetaData.getColumnName(x) + " | ");
+//        }
+//        System.out.println("\n");
+//        while(resultSet.next())
+//        {
+//        	for(int x=1; x <= colCount; x++)
+//        	{
+//        		System.out.format("%20s", resultSet.getString(x) + " | ");
+//        	}
+//        	System.out.println("\n");
+//        }
     	
-    	atraxdb.getDatabaseConnection();
+    	MetaData Data = new MetaData();
+		
+		String Path = "./TestPdf";
+		
+		Data.getFilePath(Path,"library"); //testing purpose
+		
+		//ArrayList<String> keywords = new ArrayList<String>();
+    	//keywords.add(metaData.getKeywords());
     	
-    	Statement statement = atraxdb.connection.createStatement();
-    	ResultSet resultSet = statement.executeQuery("SELECT * FROM documents");
-        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-        System.out.println("Retreive data from table----");
-        
-        int colCount = resultSetMetaData.getColumnCount();
-        for(int x=1; x <= colCount; x++)
-        {
-        	System.out.format("%20s", resultSetMetaData.getColumnName(x) + " | ");
-        }
-        System.out.println("\n");
-        while(resultSet.next())
-        {
-        	for(int x=1; x <= colCount; x++)
-        	{
-        		System.out.format("%20s", resultSet.getString(x) + " | ");
-        	}
-        	System.out.println("\n");
-        }
+    	System.out.println(Data.getKeywords());
+    	System.out.println(Data.getAuthor());
+    	System.out.println(Data.getFileNamet());
+    	System.out.println(Data.getSubject());
+    	System.out.println(Data.getTitle());
     	
-        
         launch(args);
         
+<<<<<<< HEAD
         if(atraxdb.connection != null)
         {
         	atraxdb.closeDatabaseConnection();
         }
 <<<<<<< HEAD
         **/
+=======
+//        if(atraxdb.connection != null)
+//        {
+//        	atraxdb.closeDatabaseConnection();
+//        }
+
+        
+
+>>>>>>> 212dc38e53acb01a36cce844f0c944432a8b5514
     }
     
 }
