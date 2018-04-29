@@ -68,11 +68,11 @@ public class Main extends Application {
 		//ArrayList<String> keywords = new ArrayList<String>();
     	//keywords.add(metaData.getKeywords());
     	
-    	System.out.println(Data.getKeywords());
-    	System.out.println(Data.getAuthor());
-    	System.out.println(Data.getFileNamet());
-    	System.out.println(Data.getSubject());
-    	System.out.println(Data.getTitle());
+    	System.out.println("- Keywords: " + Data.getKeywords());
+    	System.out.println("- Author: " + Data.getAuthor());
+    	System.out.println("- Name: " + Data.getFileNamet());
+    	System.out.println("- Subject:  " + Data.getSubject());
+    	System.out.println("- Title: " + Data.getTitle());
     	
         launch(args);
         
