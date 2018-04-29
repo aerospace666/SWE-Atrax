@@ -43,5 +43,8 @@
 	<classpathentry kind="lib" path="/Users/conghienhoang/Documents/GitHub/SWE-Atrax/PDFBox/lib/opennlp-uima-1.8.4.jar"/>
 	<classpathentry kind="lib" path="/Users/conghienhoang/Documents/GitHub/SWE-Atrax/PDFBox/lib/osgi-resource-locator-1.0.1.jar"/>
 	<classpathentry kind="lib" path="/Users/conghienhoang/Documents/GitHub/SWE-Atrax/PDFBox/lib/validation-api-1.1.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-app-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-tools-2.0.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

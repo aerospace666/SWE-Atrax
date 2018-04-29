@@ -3,6 +3,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
+import org.apache.pdfbox.text.PDFTextStripper;
+
+import opennlp.tools.postag.POSModel;
+import opennlp.tools.postag.POSTaggerME;
+import opennlp.tools.sentdetect.SentenceDetectorME;
+import opennlp.tools.sentdetect.SentenceModel;
+import opennlp.tools.tokenize.WhitespaceTokenizer;
+
 import java.io.*;
 
 
@@ -11,15 +22,15 @@ public class box
 	public static void main(String[] args) throws IOException 
 	{
 		
-		MetaData Data = new MetaData();
+		//MetaData Data = new MetaData();
 		
-		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
+		//String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
 		
-		Data.getFilePath(Path,1); //testing purpose
+		//Data.getFilePath(Path,1); //testing purpose
 		
 
 		
-		/****************************************************************************************
+		
 		Scanner scan = new Scanner(System.in);
 		List<String> words = new ArrayList<String> ();
 		
@@ -31,7 +42,7 @@ public class box
 		
         int Title_count  = 0,Subject_count =0,Keyword_count =0;
 		
-     	File file = new File("C:/Users/dolly/Downloads/Atraxtestdata/demo/Adams2017.pdf");
+     	File file = new File("./demo/Adams2017.pdf");
 		
 		PDDocument document = PDDocument.load(file);
 		PDDocumentInformation pdd = document.getDocumentInformation();
@@ -355,7 +366,7 @@ public class box
 	//	Writer.clear();
 	    document.close();
 	    
-	    ***********************************************************************************/
+	    
 	    
 	}
 

@@ -18,16 +18,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-    	
-
-    	
     
-    	/**
-        
-    
-
-    
-
     	try {
 			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
 			Scene scene = new Scene(root,750,500);
@@ -37,11 +28,11 @@ public class Main extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-	**/
+	
     }
     
 
-    public static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws IOException {
     	System.out.println("Start main application........");
     	
 //    	AtraxDatabase atraxdb = new AtraxDatabase();
@@ -70,14 +61,18 @@ public class Main extends Application {
     	
     	MetaData Data = new MetaData();
 		
-		String Path = "C:\\Users\\Huy Q Phung\\Desktop\\test_file";
+		String Path = "./TestPdf";
 		
 		Data.getFilePath(Path,"library"); //testing purpose
 		
 		//ArrayList<String> keywords = new ArrayList<String>();
     	//keywords.add(metaData.getKeywords());
     	
-    	System.out.println("\n" + Data.getKeywords() + "\n");
+    	System.out.println(Data.getKeywords());
+    	System.out.println(Data.getAuthor());
+    	System.out.println(Data.getFileNamet());
+    	System.out.println(Data.getSubject());
+    	System.out.println(Data.getTitle());
     	
         launch(args);
         
