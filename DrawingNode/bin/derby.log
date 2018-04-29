@@ -1,3 +1,18 @@
+<<<<<<< HEAD
+----------------------------------------------------------------
+Sat Apr 28 16:17:54 AEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-0ae6-973d-0000072b7d08 
+on database directory C:\Users\Huy Q Phung\Desktop\SW_Project_A\SWE-Atrax\DrawingNode\atraxdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@614ca7df 
+Loaded from file:/C:/Users/Huy%20Q%20Phung/Desktop/SW_Project_A/SWE-Atrax/DrawingNode/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=10+46
+user.dir=C:\Users\Huy Q Phung\Desktop\SW_Project_A\SWE-Atrax\DrawingNode
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+=======
 Sun Apr 29 07:19:56 AEST 2018 Thread[main,5,main] Cleanup action starting
 java.sql.SQLException: Failed to start database 'atraxdb' with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4f8e5cde, see the next exception for details.
 	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
@@ -230,3 +245,4 @@ ERROR XSDB6: Another instance of Derby may have already booted the database /Use
 	at java.base/sun.launcher.LauncherHelper$FXHelper.main(LauncherHelper.java:945)
 ============= end nested exception, level (2) ===========
 Cleanup action completed
+>>>>>>> 212dc38e53acb01a36cce844f0c944432a8b5514

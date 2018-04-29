@@ -18,6 +18,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+<<<<<<< HEAD
+    	
+    	MetaData Data = new MetaData();
+		
+		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
+		
+		Data.getFilePath(Path,"library"); //testing purpose
+		
+=======
+>>>>>>> 212dc38e53acb01a36cce844f0c944432a8b5514
     
     	try {
 			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
@@ -76,6 +86,14 @@ public class Main extends Application {
     	
         launch(args);
         
+<<<<<<< HEAD
+        if(atraxdb.connection != null)
+        {
+        	atraxdb.closeDatabaseConnection();
+        }
+<<<<<<< HEAD
+        **/
+=======
 //        if(atraxdb.connection != null)
 //        {
 //        	atraxdb.closeDatabaseConnection();
@@ -83,6 +101,7 @@ public class Main extends Application {
 
         
 
+>>>>>>> 212dc38e53acb01a36cce844f0c944432a8b5514
     }
     
 }

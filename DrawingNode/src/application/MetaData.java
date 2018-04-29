@@ -46,7 +46,7 @@ public class MetaData {
 	public void ExtractMetaData(File file) throws IOException
 	{
 		this.file = file;
-		String[] PDFText, SentenceExtraction, Tokens, keywordTags,Spilt;
+		String[] PDFText, SentenceExtraction, Tokens, keywordTags;
 		HashMap<String, Integer> Keyowrds = new HashMap<String, Integer>(15);
 		InputStream Stream_input = new FileInputStream("en-pos-maxent.bin");
 				
@@ -62,13 +62,14 @@ public class MetaData {
 		//System.out.println("\n" + "After POSTaggerME model" + "\n");
 		
 		//contains the entire pdf as a string
-		String Extract_Text_pdf;
+		String Extract_Text_pdf,Keywords;
 		
 		int occurance =0; //counts the occurance of each word in the pdf
 		int MaxKeyword = 0;
 		Map<Integer, String> Keyword_occurance = new HashMap<Integer, String>();
 		List<String> tag_keyword = new ArrayList<String> (); //contains tags for each word in the pdf
 		List<String> MetaData_keyword = new ArrayList<String> ();
+		List<Integer> KeywordOccurance = new ArrayList<Integer> ();
 		
 		PDDocument document;
 		try {
@@ -124,13 +125,10 @@ public class MetaData {
 					Map<Integer, String> SortKeyword_occurance = new TreeMap<Integer, String>(Keyword_occurance);	
 					
 					for(Map.Entry<Integer, String> entry : SortKeyword_occurance.entrySet())
-					{
-						
-					//	System.out.println("Keyword  = " + entry.getValue());
-					//	System.out.println("Occurance = " +entry.getKey());
-						
+					{	
 						if(MaxKeyword < 20)
 						{
+							KeywordOccurance.add(entry.getKey());
 							MetaData_keyword.add(entry.getValue());
 							MaxKeyword++;
 						}
@@ -141,6 +139,7 @@ public class MetaData {
 						
 					}
 					
+<<<<<<< HEAD
 					System.out.println("The size of array is " +MetaData_keyword.size());
 						PDoc.setKeywords( MetaData_keyword.toString());
 						System.out.println("Before tokenizing");
@@ -164,6 +163,24 @@ public class MetaData {
 						System.out.println(temp);
 			}
 			
+=======
+						Keywords = MetaData_keyword.toString();
+					    MetaData_keyword.clear();
+					
+						String[] SpiltString = Keywords.split("-|\\.|,|:|\\[|\\]|\\ ");
+						for(int i=0;i<SpiltString.length;i++)
+						{
+							if((!SpiltString[i].equals("")) && (!SpiltString[i].matches("-?\\d+"))&&(SpiltString[i].length() > 1))
+							{
+								MetaData_keyword.add(SpiltString[i]);
+							}
+						}
+						
+						PDoc.setKeywords( MetaData_keyword.toString());
+						System.out.println("New set of keywords for " + file.getName());
+						System.out.println(PDoc.getKeywords());
+			}			
+>>>>>>> 26fca84f0c1034b1adf9261095fe0588a5a7721d
 			
 			if((PDoc.getTitle() != null))
 			{	
