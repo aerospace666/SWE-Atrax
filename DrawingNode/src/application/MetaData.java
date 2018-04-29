@@ -39,9 +39,8 @@ public class MetaData {
 		FileName = filename;
 	}
 	
-	public MetaData()
-	{
-	
+	public MetaData () {
+		
 	}
 	
 	public void ExtractMetaData(File file) throws IOException
@@ -55,8 +54,17 @@ public class MetaData {
 		WhitespaceTokenizer whitespaceTokenizer = WhitespaceTokenizer.INSTANCE;
 		
 		//open NLP for tagging each word from pdf
+<<<<<<< HEAD
 		POSModel model = new POSModel(Stream_input);
 		POSTaggerME tagger = new POSTaggerME(model);
+=======
+		//System.out.println("\n" + "before POS model" + "\n");
+		POSModel model = new POSModel(Stream_input);
+		//System.out.println("\n" + "after POS model" + "\n");
+		//System.out.println("\n" + "before POSTaggerME model" + "\n");
+		POSTaggerME tagger = new POSTaggerME(model);
+		//System.out.println("\n" + "After POSTaggerME model" + "\n");
+>>>>>>> d7cbe982157fc9c73290768d677087c5952112b8
 		
 		//contains the entire pdf as a string
 		String Extract_Text_pdf,Keywords;
@@ -98,7 +106,7 @@ public class MetaData {
 						}
 					}
 					
-					for(int index1 =0;index1 < tag_keyword.size();index1++)
+					for(int index1 =0;index1 < tag_keyword.size();index1++) //change
 					{
 						for(int index2 =0;index2 < SentenceExtraction.length;index2++)
 						{
@@ -129,13 +137,38 @@ public class MetaData {
 							MetaData_keyword.add(entry.getValue());
 							MaxKeyword++;
 						}
-						else
-						{
-							break;
-						}
+						//else
+						//{
+						//	break;
+						//}
 						
 					}
 					
+<<<<<<< HEAD
+					System.out.println("The size of array is " +MetaData_keyword.size());
+						PDoc.setKeywords( MetaData_keyword.toString());
+						System.out.println("Before tokenizing");
+						//System.out.println(PDoc.getKeywords());
+					    MetaData_keyword.clear();
+					    String temp = "";
+						//for(int i=0;i<Tokens.length;i++)
+						//{
+							
+							temp = PDoc.getKeywords();
+							temp = temp.substring(1, temp.length() - 1);
+							Scanner Scan = new Scanner(temp).useDelimiter(",");
+							while (Scan.hasNext()) {
+								System.out.println("Keywords: " + Scan.next());
+							}
+							//MetaData_keyword.add(Spilt[i]);
+						//}
+						
+						PDoc.setKeywords( MetaData_keyword.toString());
+						System.out.println(PDoc.getKeywords());
+						System.out.println(temp);
+			}
+			
+=======
 						Keywords = MetaData_keyword.toString();
 					    MetaData_keyword.clear();
 					
@@ -152,6 +185,7 @@ public class MetaData {
 						System.out.println("New set of keywords for " + file.getName());
 						System.out.println(PDoc.getKeywords());
 			}			
+>>>>>>> 26fca84f0c1034b1adf9261095fe0588a5a7721d
 			
 			if((PDoc.getTitle() != null))
 			{	
@@ -200,7 +234,9 @@ public class MetaData {
 			File[] ListOfFiles = file.listFiles();
 			for(int i=0;i<ListOfFiles.length;i++)
 			{
-				ExtractMetaData(ListOfFiles[i]);
+				if(ListOfFiles[i].getName().contains(".pdf")) {			//only accepts pdf file
+					ExtractMetaData(ListOfFiles[i]);
+				}
 			}
 		}
 		else

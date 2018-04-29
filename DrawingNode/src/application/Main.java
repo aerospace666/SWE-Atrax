@@ -69,6 +69,14 @@ public class Main extends Application {
         }
     	
     	
+<<<<<<< HEAD
+=======
+    	System.out.println("- Keywords: " + Data.getKeywords());
+    	System.out.println("- Author: " + Data.getAuthor());
+    	System.out.println("- Name: " + Data.getFileNamet());
+    	System.out.println("- Subject:  " + Data.getSubject());
+    	System.out.println("- Title: " + Data.getTitle());
+>>>>>>> d7cbe982157fc9c73290768d677087c5952112b8
     	
         launch(args);
         
