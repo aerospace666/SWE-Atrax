@@ -20,12 +20,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
     	
 
-    	MetaData Data = new MetaData();
-		
-		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
-		
-		Data.getFilePath(Path,"library"); //testing purpose
-		
+    	
     
     	/**
         
@@ -42,46 +37,56 @@ public class Main extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
+	**/
     }
     
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
     	System.out.println("Start main application........");
     	
-    	AtraxDatabase atraxdb = new AtraxDatabase();
+//    	AtraxDatabase atraxdb = new AtraxDatabase();
+//    	
+//    	atraxdb.getDatabaseConnection();
+//    	
+//    	Statement statement = atraxdb.connection.createStatement();
+//    	ResultSet resultSet = statement.executeQuery("SELECT * FROM documents");
+//        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+//        System.out.println("Retreive data from table----");
+//        
+//        int colCount = resultSetMetaData.getColumnCount();
+//        for(int x=1; x <= colCount; x++)
+//        {
+//        	System.out.format("%20s", resultSetMetaData.getColumnName(x) + " | ");
+//        }
+//        System.out.println("\n");
+//        while(resultSet.next())
+//        {
+//        	for(int x=1; x <= colCount; x++)
+//        	{
+//        		System.out.format("%20s", resultSet.getString(x) + " | ");
+//        	}
+//        	System.out.println("\n");
+//        }
     	
-    	atraxdb.getDatabaseConnection();
+    	MetaData Data = new MetaData();
+		
+		String Path = "C:\\Users\\Huy Q Phung\\Desktop\\test_file";
+		
+		Data.getFilePath(Path,"library"); //testing purpose
+		
+		//ArrayList<String> keywords = new ArrayList<String>();
+    	//keywords.add(metaData.getKeywords());
     	
-    	Statement statement = atraxdb.connection.createStatement();
-    	ResultSet resultSet = statement.executeQuery("SELECT * FROM documents");
-        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-        System.out.println("Retreive data from table----");
-        
-        int colCount = resultSetMetaData.getColumnCount();
-        for(int x=1; x <= colCount; x++)
-        {
-        	System.out.format("%20s", resultSetMetaData.getColumnName(x) + " | ");
-        }
-        System.out.println("\n");
-        while(resultSet.next())
-        {
-        	for(int x=1; x <= colCount; x++)
-        	{
-        		System.out.format("%20s", resultSet.getString(x) + " | ");
-        	}
-        	System.out.println("\n");
-        }
+    	System.out.println("\n" + Data.getKeywords() + "\n");
     	
-        
         launch(args);
         
-        if(atraxdb.connection != null)
-        {
-        	atraxdb.closeDatabaseConnection();
-        }
+//        if(atraxdb.connection != null)
+//        {
+//        	atraxdb.closeDatabaseConnection();
+//        }
 
-        **/
+        
 
     }
     
