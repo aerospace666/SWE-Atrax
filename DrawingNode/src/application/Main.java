@@ -19,7 +19,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
     	
-<<<<<<< HEAD
     	MetaData Data = new MetaData();
 		
 		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
@@ -114,10 +113,6 @@ public class Main extends Application {
         }
 <<<<<<< HEAD
         **/
-=======
-        
-        
->>>>>>> 5b2f6e02ab5fcec147d130e2c53205b4bae5481f
     }
     
 }
