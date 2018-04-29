@@ -39,4 +39,6 @@ public class AtraxDatabase {
 			System.out.println("Close Database connection Error code: " + e.getErrorCode());
 		}
 	}
+	
+	
 }

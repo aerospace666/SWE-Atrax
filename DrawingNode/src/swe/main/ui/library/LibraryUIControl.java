@@ -5,10 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ResourceBundle;
-
-import org.fxmisc.livedirs.LiveDirs;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -189,22 +186,7 @@ public class LibraryUIControl implements Initializable{
             }
         });
 		
-		try {
-			LiveDirs<ChangeSource> Dirs = new LiveDirs<>(ChangeSource.EXTERNAL);
-			
-			Path dir = Paths.get("/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode");
-			Dirs.addTopLevelDirectory(dir);
-
-			// use LiveDirs as a TreeView model
-			
-			FileExplorer.setShowRoot(false);
-			FileExplorer.setRoot(Dirs.model().getRoot());
-
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    
+		
 		
 		
 	}

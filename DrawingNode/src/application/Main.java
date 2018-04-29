@@ -18,16 +18,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-<<<<<<< HEAD
+
     	
-    	MetaData Data = new MetaData();
+//    	MetaData Data = new MetaData();
+//		
+//		String Path = ""; //include path here
+//		
+//		Data.getFilePath(Path,"library"); //testing purpose
 		
-		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
-		
-		Data.getFilePath(Path,"library"); //testing purpose
-		
-=======
->>>>>>> 212dc38e53acb01a36cce844f0c944432a8b5514
+
     
     	try {
 			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
@@ -42,66 +41,43 @@ public class Main extends Application {
     }
     
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
     	System.out.println("Start main application........");
     	
-//    	AtraxDatabase atraxdb = new AtraxDatabase();
-//    	
-//    	atraxdb.getDatabaseConnection();
-//    	
-//    	Statement statement = atraxdb.connection.createStatement();
-//    	ResultSet resultSet = statement.executeQuery("SELECT * FROM documents");
-//        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-//        System.out.println("Retreive data from table----");
-//        
-//        int colCount = resultSetMetaData.getColumnCount();
-//        for(int x=1; x <= colCount; x++)
-//        {
-//        	System.out.format("%20s", resultSetMetaData.getColumnName(x) + " | ");
-//        }
-//        System.out.println("\n");
-//        while(resultSet.next())
-//        {
-//        	for(int x=1; x <= colCount; x++)
-//        	{
-//        		System.out.format("%20s", resultSet.getString(x) + " | ");
-//        	}
-//        	System.out.println("\n");
-//        }
+    	AtraxDatabase atraxdb = new AtraxDatabase();
     	
-    	MetaData Data = new MetaData();
-		
-		String Path = "./TestPdf";
-		
-		Data.getFilePath(Path,"library"); //testing purpose
-		
-		//ArrayList<String> keywords = new ArrayList<String>();
-    	//keywords.add(metaData.getKeywords());
+    	atraxdb.getDatabaseConnection();
     	
-    	System.out.println(Data.getKeywords());
-    	System.out.println(Data.getAuthor());
-    	System.out.println(Data.getFileNamet());
-    	System.out.println(Data.getSubject());
-    	System.out.println(Data.getTitle());
+    	Statement statement = atraxdb.connection.createStatement();
+    	ResultSet resultSet = statement.executeQuery("SELECT * FROM documents");
+        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+        System.out.println("Retreive data from table----");
+        
+        int colCount = resultSetMetaData.getColumnCount();
+        for(int x=1; x <= colCount; x++)
+        {
+        	System.out.format("%20s", resultSetMetaData.getColumnName(x) + " | ");
+        }
+        System.out.println("\n");
+        while(resultSet.next())
+        {
+        	for(int x=1; x <= colCount; x++)
+        	{
+        		System.out.format("%20s", resultSet.getString(x) + " | ");
+        	}
+        	System.out.println("\n");
+        }
+    	
+    	
     	
         launch(args);
         
-<<<<<<< HEAD
+
         if(atraxdb.connection != null)
         {
         	atraxdb.closeDatabaseConnection();
         }
-<<<<<<< HEAD
-        **/
-=======
-//        if(atraxdb.connection != null)
-//        {
-//        	atraxdb.closeDatabaseConnection();
-//        }
 
-        
-
->>>>>>> 212dc38e53acb01a36cce844f0c944432a8b5514
     }
     
 }
