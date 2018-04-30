@@ -2,6 +2,7 @@ package src.application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,13 +23,14 @@ import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 
 public class MetaData {
 	
-	private String Keywords;
-	private String Author;
+	private String Keywords;  // please change this to array list of keywords
+	private String Author; // please change this to array list of authors
 	private String Title;
 	private String Subject;
 	private String FileName;
 	private File file;
 	private String LibraryName;
+	private Date publicationDate;
 	
 	public MetaData(String keywords, String author, String title, String subject,String filename) {
 		super();
@@ -54,17 +56,10 @@ public class MetaData {
 		WhitespaceTokenizer whitespaceTokenizer = WhitespaceTokenizer.INSTANCE;
 		
 		//open NLP for tagging each word from pdf
-<<<<<<< HEAD
+
 		POSModel model = new POSModel(Stream_input);
 		POSTaggerME tagger = new POSTaggerME(model);
-=======
-		//System.out.println("\n" + "before POS model" + "\n");
-		POSModel model = new POSModel(Stream_input);
-		//System.out.println("\n" + "after POS model" + "\n");
-		//System.out.println("\n" + "before POSTaggerME model" + "\n");
-		POSTaggerME tagger = new POSTaggerME(model);
-		//System.out.println("\n" + "After POSTaggerME model" + "\n");
->>>>>>> d7cbe982157fc9c73290768d677087c5952112b8
+
 		
 		//contains the entire pdf as a string
 		String Extract_Text_pdf,Keywords;
@@ -144,7 +139,7 @@ public class MetaData {
 						
 					}
 					
-<<<<<<< HEAD
+
 					System.out.println("The size of array is " +MetaData_keyword.size());
 						PDoc.setKeywords( MetaData_keyword.toString());
 						System.out.println("Before tokenizing");
@@ -168,7 +163,7 @@ public class MetaData {
 						System.out.println(temp);
 			}
 			
-=======
+
 						Keywords = MetaData_keyword.toString();
 					    MetaData_keyword.clear();
 					
@@ -184,8 +179,8 @@ public class MetaData {
 						PDoc.setKeywords( MetaData_keyword.toString());
 						System.out.println("New set of keywords for " + file.getName());
 						System.out.println(PDoc.getKeywords());
-			}			
->>>>>>> 26fca84f0c1034b1adf9261095fe0588a5a7721d
+					
+
 			
 			if((PDoc.getTitle() != null))
 			{	
@@ -261,12 +256,20 @@ public class MetaData {
 		return Subject;
 	}
 	
-	public String getFileNamet() {
+	public String getFileName() {
 		return file.getName();
+	}
+	
+	public String getFilePath() {
+		return file.getPath();
 	}
 	
 	public String getLibrary() {
 		return LibraryName;
+	}
+	
+	public Date getPublicationDate() {
+		return publicationDate;
 	}
 	
 }
