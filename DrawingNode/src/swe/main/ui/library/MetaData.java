@@ -1,15 +1,21 @@
-package src.application;
+package src.swe.main.ui.library;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.TreeMap;
-import java.io.*;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
+import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
@@ -17,18 +23,12 @@ import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.WhitespaceTokenizer;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.pdfbox.pdmodel.PDDocumentInformation;
-import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
-
 public class MetaData {
 	
 	private String Keywords;
 	private String Author;
 	private String Title;
 	private String Subject;
-	private String FileName;
 	private File file;
 	private String LibraryName;
 	private List<String> MetaData_keyword;
@@ -43,7 +43,6 @@ public class MetaData {
 		Author = author;
 		Title = title;
 		Subject = subject;
-		FileName = filename;
 	}
 	
 	public MetaData()
@@ -54,8 +53,7 @@ public class MetaData {
 	public void ExtractMetaData(File file) throws IOException
 	{
 		this.file = file;
-		String[] PDFText, SentenceExtraction, Tokens, keywordTags;
-		HashMap<String, Integer> Keyowrds = new HashMap<String, Integer>(15);
+		String[] SentenceExtraction, Tokens, keywordTags;
 		InputStream Stream_input = new FileInputStream("en-pos-maxent.bin");
 				
 		//openNLP class for tokenizing
@@ -226,7 +224,7 @@ public class MetaData {
 			for(File a : ListOfFiles)
 			{
 				ExtractMetaData(a);
-				//System.out.println(getCreationDate());
+				
 				
 			}
 		}
