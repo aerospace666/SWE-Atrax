@@ -9,6 +9,7 @@ import java.sql.Statement;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import src.swe.database.AtraxDatabase;
@@ -20,12 +21,17 @@ public class Main extends Application {
     	boolean uploadButtonClick = true;
     	
     	MetaData Data = new MetaData();
+    	
+    	AtraxDatabase dbConn = new AtraxDatabase();
 
 		String Path = "./TestPdf"; //include path here
 		
 		if(uploadButtonClick == true)
 		{
 			Data.getFilePath(Path,"library"); // get metadata then insert into database
+			String result = dbConn.insertDocToLibrary(Data.getFileName(), Data.getTitle(), Data.getSubject(), Data.getCreationDate(), Data.getPath(), 1, Data.getAuthor());
+			System.out.println("\n The result from DB query is: " + result);
+			dbConn.testQuery();
 		}
 		
     	try {

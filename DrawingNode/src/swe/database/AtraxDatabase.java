@@ -48,38 +48,80 @@ public class AtraxDatabase {
 		}
 	}
 	
-	// This method populate data to documents table
-	public boolean insertToDocument(String FileName, String Title, String Subject, Date CreationDate, 
-									String filePath, int library_id, String author)  
+	// Add a document into the DOCUMENT table
+	public String insertDocToLibrary(String FileName, String Title, String Subject, java.util.Date CreationDate, String filePath, int library_id, String author)  
 	{
-		String documet_query = "INSERT INTO DOCUMENTS(filename, title, subject, creation_date, file_path, library_id, author) "
-								+ "VALUES (?,?,?,?,?,?,?)";
+		System.out.println("\n Entered into insertintoDocLibrary function");
+		String updateQuery = "INSERT INTO DOCUMENTS(filename, title, subject, CREATEION_DATE, file_path, library_id, author) VALUES (?,?,?,?,?,?,?)";
+		String checkExistance = "SELECT ID FROM DOCUMENTS WHERE LIBRARY_ID=? AND FILE_PATH=? AND FILENAME=?";
 	
 		// check for database connection
 		if(connection == null)
 		{
 			getDatabaseConnection();
 		}
-
+		
+		//Check if the file already exists in the library, if so, don't process it and return the document ID instead
 		try {
-			// create the mysql insert preparedstatement
-		    PreparedStatement preparedStmt = connection.prepareStatement(documet_query);
-		    
-		    preparedStmt.setString (1, FileName);
-		    preparedStmt.setString (2, Title);
-		    preparedStmt.setString (3, Subject);
-		    preparedStmt.setDate(4, (Date)CreationDate); // nullable
-		    preparedStmt.setString(5, filePath);
-		    preparedStmt.setInt(6, library_id); 
-		    preparedStmt.setString(7, author);
-		    
-		    // execute the preparedstatement successfully, return 0
-		    return !(preparedStmt.execute());
-		} catch (SQLException ex) {
-			System.out.println("\n Failed to insert into documents table : " + ex.getErrorCode());
-			return false;
-		}		
+			//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
+			//create the statement
+			PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
+			preparedStmt.setInt (1, 1);
+			preparedStmt.setString (2, filePath);
+			preparedStmt.setString (3, FileName);
+			// execute the preparedstatement successfully, return 0
+			ResultSet rs = preparedStmt.executeQuery();
+			int result = 0;
+			while (rs.next()) {
+				result = rs.getInt("ID");
+
+			}
+		   // ResultSet resultset = preparedStmt.getResultSet();
+		    if (result == 0) {
+		    	//means the file doesn't exist, so process it
+				try {
+					//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-insert-a-record/
+					System.out.println("\n means the file doesn't exist, so process it");
+					// create the mysql insert preparedstatement
+				    PreparedStatement preparedStmt1 = connection.prepareStatement(updateQuery);
+				    
+				    java.sql.Date sqlDate = new java.sql.Date(CreationDate.getTime());
+				    
+				    preparedStmt1.setString (1, FileName);
+				    preparedStmt1.setString (2, Title);
+				    preparedStmt1.setString (3, Subject);
+				    preparedStmt1.setDate(4, sqlDate); // nullable
+				    preparedStmt1.setString(5, filePath);
+				    preparedStmt1.setInt(6, library_id); 
+				    preparedStmt1.setString(7, author);
+				    
+				    // execute the preparedstatement successfully, return 0
+				    //TO DO: why is this "not'ed" using ! ? 
+				    // convert to string
+				    preparedStmt1.executeUpdate();
+				    //rs1.insertRow();
+				    return "0";
+				} catch (SQLException ex) {
+					System.out.println("\n Failed to insert into documents table : " + ex.getErrorCode() + ex.getMessage() + ex.getSQLState());
+					return "1";
+				}
+		    }else {
+		    	//means it DOES exist, so return the docID
+		    	//resultset.getObject(0);
+				System.out.println("\n means the file exists, so do not process it!!");
+		    	return Integer.toString(result);
+		    }
+			
+		}catch (SQLException ex) {
+			System.out.println("\n Failed to select from documents table : " + ex.getErrorCode() + ex.getMessage() + ex.getSQLState());
+			return "1";
+		}		 
+				
 	}
+	
+	
+	
+	
 	
 	// This method populate data to keywords table
 	public boolean insertToKeyword(String keyword)  
