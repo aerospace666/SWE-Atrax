@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +23,7 @@ import opennlp.tools.postag.POSTaggerME;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.WhitespaceTokenizer;
+import src.swe.database.AtraxDatabase;
 
 public class MetaData {
 	
@@ -36,6 +38,8 @@ public class MetaData {
  	private Calendar CreationDate;
  	PDDocument document;
  	PDDocumentInformation PDoc;
+	AtraxDatabase dbConn = new AtraxDatabase();
+
 	
 	public MetaData(String keywords, String author, String title, String subject,String filename) {
 		super();
@@ -204,6 +208,9 @@ public class MetaData {
 				System.out.println(file.getName());
 				System.out.println(PDoc.getKeywords());
 				//TODO insertToDatabase function goes here 
+				//TODO pass library ID instead of "1"
+				String result = dbConn.insertDocToLibrary(getFileName(), getTitle(), getSubject(), getCreationDate(), getPath(), 1, getAuthor());
+				System.out.println("\n The result from DB query is: " + result);
 				
 			}
 		}
