@@ -32,6 +32,9 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+import src.swe.database.AtraxDatabase;
+import java.util.Date;
+import java.sql.SQLException;
 
 public class LibraryUIControl implements Initializable{
 
@@ -48,7 +51,7 @@ public class LibraryUIControl implements Initializable{
     private TableColumn<Book, String> Author;
 
     @FXML
-    private TableColumn<Book, Calendar> Date;
+    private TableColumn<Book, Date> Date;
 
     @FXML
     private TableColumn<Book, String> Subject;
@@ -125,6 +128,21 @@ public class LibraryUIControl implements Initializable{
 							
 							getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
 							
+							AtraxDatabase dbConn = new AtraxDatabase();
+							for (Book book: BookList) {
+								
+								Date tempDate = (Date) book.getDate().getTime().clone();
+								
+								dbConn.insertDocToLibrary(book.getTitle(), book.getTitle(), book.getSubject(), tempDate, book.getFilepath(), book.getId(), book.getAuthor());
+							}
+							
+							try {
+								dbConn.testQuery();
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
 						} catch (IOException e1) {
 							
 							e1.printStackTrace();
@@ -149,7 +167,7 @@ public class LibraryUIControl implements Initializable{
     
     public void getFilePath(String FilePath,String Library) throws IOException
 	{
-		
+    	ExtractMetadata extractBook = new ExtractMetadata();
 		File path = new File(FilePath);
 		int id = 0;
 		
@@ -161,7 +179,7 @@ public class LibraryUIControl implements Initializable{
 			{	
 				if (file.getName().contains(".pdf")) {
 					id++;
-					BookList.add(new ExtractMetadata().Extractdata(file, id + ""));
+					BookList.add(extractBook.Extractdata(file, id));
 				}
 				
 				
@@ -170,7 +188,7 @@ public class LibraryUIControl implements Initializable{
 		else
 		{
 			id++;
-			BookList.add(new ExtractMetadata().Extractdata(path, id + ""));
+			BookList.add(new ExtractMetadata().Extractdata(path, id));
 		}
 	}
     
@@ -193,9 +211,9 @@ public class LibraryUIControl implements Initializable{
     	Subject.setCellValueFactory(new PropertyValueFactory<>("subject"));
     	Date.setCellValueFactory(new PropertyValueFactory<>("date"));
     	
-    	
+    	/**
     	final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
-    	Date.setCellFactory(column -> new TableCell<Book, Calendar>() {
+    	Date.setCellFactory(column -> new TableCell<Book, Date>() {
     	    @Override
     	    public void updateItem(Calendar date, boolean empty) {
     	        super.updateItem(date, empty);
@@ -206,6 +224,7 @@ public class LibraryUIControl implements Initializable{
     	        }
     	    }
     	});
+    	*/
     	
     }
     
@@ -213,11 +232,12 @@ public class LibraryUIControl implements Initializable{
     //TODO retrieve data from database, asign to book object then display to table view
     public void load() {
     	//this is only example
-    	
+    	AtraxDatabase dbConn = new AtraxDatabase();
+    	ObservableList<Book> retrieveBook = FXCollections.observableArrayList();
     	//need to use pdfbox code to load all book
    
     	
-    	LibraryTable.setItems(BookList);
+    	LibraryTable.setItems(retrieveBook);
     	
     }
     

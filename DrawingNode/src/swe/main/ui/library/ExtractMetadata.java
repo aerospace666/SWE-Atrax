@@ -30,7 +30,7 @@ public class ExtractMetadata {
  	private PDDocumentInformation PDoc;
  	
 
-	public Book Extractdata(final File file, final String ID) throws IOException
+	public Book Extractdata(final File file, final int ID) throws IOException
 	{
 		String[] SentenceExtraction, Tokens, keywordTags;
 		InputStream Stream_input = new FileInputStream("en-pos-maxent.bin");
