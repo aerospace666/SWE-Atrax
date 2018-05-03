@@ -3,3 +3,5 @@ DrawingNode/.classpath
 /.metadata/
 PDFBox/.classpath
 /.recommenders/
+DrawingNode/atraxdb/log
+DrawingNode/derby.log
