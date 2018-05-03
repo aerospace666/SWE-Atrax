@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Thu May 03 20:14:51 AEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-257f-5152-000005edb200 
+Thu May 03 23:04:50 AEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-261a-f4a7-0000060003d8 
 on database directory /Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/atraxdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4f8e5cde 
 Loaded from file:/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/lib/derby.jar
 java.vendor=Oracle Corporation

@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -168,16 +167,16 @@ public class ExtractMetadata {
 			
 			
 			
-			Date tempCalendar =  new Date(0);
+			Date tempDate =  new Date(0);
 			if(PDoc.getCreationDate() != null)
 			{	
-				tempCalendar = PDoc.getCreationDate().getTime();
+				tempDate = PDoc.getCreationDate().getTime();
 			
 			}
 			
 			
 			
-			book = new Book(ID, tempSubject, file.getName(), tempAuthor, tempCalendar, file.getAbsolutePath(), libid);
+			book = new Book(ID, tempSubject, file.getName(), tempAuthor, tempDate, file.getAbsolutePath(), libid);
 			document.close();
 			
 		} catch (InvalidPasswordException e) {

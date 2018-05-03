@@ -12,7 +12,7 @@ public class LibraryMain extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
-			Scene scene = new Scene(root,750,500);
+			Scene scene = new Scene(root,1020,600);
 			scene.getStylesheets().add(getClass().getResource("/src/swe/main/ui/library/library.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();

@@ -23,7 +23,6 @@ public class Book {
     	this.id = new SimpleIntegerProperty(id);
     	this.author = new SimpleStringProperty(author);
     	this.date = date;
-    	System.out.println(date);
     	this.filepath = new SimpleStringProperty(filepath);
     	this.libid = new SimpleStringProperty(libid);
     }

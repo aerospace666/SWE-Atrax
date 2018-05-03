@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -20,7 +18,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -70,8 +67,9 @@ public class LibraryUIControl implements Initializable{
     private Label showKeywords;		//label for keywords syntax: showKeywords.setContentDisplay(value)
  
     
-    private String Libraryname;
+    private String Libraryname;  //library name, declare at line 121
     AtraxDatabase dbConn = new AtraxDatabase();
+    ObservableList<Book> BookList = FXCollections.observableArrayList();
     
     //TODO passing folder path & library name to metadata function
     @FXML
@@ -131,14 +129,9 @@ public class LibraryUIControl implements Initializable{
 						try {
 							
 							getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
-							
-							//dbConn = new AtraxDatabase();
-							
-							
+						
 							
 							for (Book book: BookList) {
-								
-								
 								
 								dbConn.insertDocToLibrary(book.getTitle(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor());
 							}
@@ -155,7 +148,7 @@ public class LibraryUIControl implements Initializable{
 				        // data.getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
 				       
 						
-						//TODO then call load funtion to load data to table view
+						//TODO then call load function to load data to table view
 				        load();
 				        				        
 				     }
@@ -169,12 +162,12 @@ public class LibraryUIControl implements Initializable{
     
     public void getFilePath(String FilePath,String Library) throws IOException
 	{
-    	//dbConn = new AtraxDatabase();
+    	
     	
     	dbConn.createNewLibrary(Library);
     	
     	String libid = dbConn.getLibraryID(Library);
-    	
+    	//System.out.println(libid);
     	ExtractMetadata extractBook = new ExtractMetadata();
 		File path = new File(FilePath);
 		int id = 0;
@@ -190,7 +183,6 @@ public class LibraryUIControl implements Initializable{
 					BookList.add(extractBook.Extractdata(file, id, libid));
 				}
 				
-				
 			}
 		}
 		else
@@ -202,15 +194,10 @@ public class LibraryUIControl implements Initializable{
     
     
     
-    //TODO import bookdata and display
     
     
-    
-    ObservableList<Book> BookList = FXCollections.observableArrayList();
-    
- 
-    
-    
+    //TODO initialize table column & Load() import bookdata and display
+     
     public void init() {
     	
     	ID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -219,30 +206,17 @@ public class LibraryUIControl implements Initializable{
     	Subject.setCellValueFactory(new PropertyValueFactory<>("subject"));
     	Date.setCellValueFactory(new PropertyValueFactory<>("date"));
     	
-    	/**
-    	final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
-    	Date.setCellFactory(column -> new TableCell<Book, Date>() {
-    	    @Override
-    	    public void updateItem(Calendar date, boolean empty) {
-    	        super.updateItem(date, empty);
-    	        if (date == null) {
-    	            setText(null);
-    	        } else {
-    	            setText(dateFormat.format(date.getTime()));
-    	        }
-    	    }
-    	});
-    	*/
     	
     }
     
     
-    //TODO retrieve data from database, asign to book object then display to table view
+    //TODO retrieve data from database, assign to book object then display to table view
     public void load() {
     	
-    	ObservableList<Book> rBook = FXCollections.observableArrayList();
-    	
-    	if (dbConn.getLibraryID(Libraryname) != "ERROR") {
+    	//ObservableList<Book> rBook = FXCollections.observableArrayList();
+    	BookList.clear();
+    	if (dbConn.getLibraryID(Libraryname) != null) {
+    		
     		int libid = Integer.parseInt(dbConn.getLibraryID(Libraryname));
     		System.out.println(libid);
     	
@@ -250,7 +224,7 @@ public class LibraryUIControl implements Initializable{
     	
     		try {
 				while(rs.next()) {
-					rBook.add(new Book(rs.getInt("ID"), rs.getString("SUBJECT"), rs.getString("TITLE"), rs.getString("AUTHOR"), rs.getDate("CREATEION_DATE"), rs.getString("FILE_PATH"), libid + ""));
+					BookList.add(new Book(rs.getInt("ID"), rs.getString("SUBJECT"), rs.getString("TITLE"), rs.getString("AUTHOR"), rs.getDate("CREATEION_DATE"), rs.getString("FILE_PATH"), libid + ""));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -259,7 +233,7 @@ public class LibraryUIControl implements Initializable{
     	
     		}
     	
-    	LibraryTable.setItems(rBook);
+    	LibraryTable.setItems(BookList);
     }
     
     
@@ -270,7 +244,7 @@ public class LibraryUIControl implements Initializable{
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO Auto-generated method stub
 		init();
-		//load();
+		
 		
 		//add open file on double click, required: file resources path
 		LibraryTable.setOnMouseClicked((MouseEvent event) -> {
