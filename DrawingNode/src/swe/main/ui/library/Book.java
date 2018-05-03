@@ -1,20 +1,25 @@
 package src.swe.main.ui.library;
 
+import java.util.Calendar;
+
 import javafx.beans.property.SimpleStringProperty;
 
 public class Book {
 	private final SimpleStringProperty title;
+	private final SimpleStringProperty subject;
     private final SimpleStringProperty id;
     private final SimpleStringProperty author;
-    private final SimpleStringProperty date;
+    private final Calendar date;
     private final SimpleStringProperty filepath;
+   
 
     
-    public Book(String title, String id, String author, String date, String filepath) {
+    public Book(String id, String subject ,String title, String author, Calendar date, String filepath) {
     	this.title = new SimpleStringProperty(title);
+    	this.subject = new SimpleStringProperty(subject);
     	this.id = new SimpleStringProperty(id);
     	this.author = new SimpleStringProperty(author);
-    	this.date = new SimpleStringProperty(date);
+    	this.date = (Calendar)date.clone();
     	this.filepath = new SimpleStringProperty(filepath);
     }
     public String getTitle() {
@@ -29,12 +34,16 @@ public class Book {
     	
     	return author.get();
     }
-    public String getDate() {
+    public Calendar getDate() {
 
-    	return date.get();
+    	return date;
     }
     public String getFilepath() {
     	return filepath.get();
+    }
+    
+    public String getSubject() {
+    	return subject.get();
     }
     
     

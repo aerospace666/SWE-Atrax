@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -16,7 +18,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -44,18 +48,28 @@ public class LibraryUIControl implements Initializable{
     private TableColumn<Book, String> Author;
 
     @FXML
-    private TableColumn<Book, String> Date;
+    private TableColumn<Book, Calendar> Date;
 
+    @FXML
+    private TableColumn<Book, String> Subject;
+    
     @FXML
     private TreeView<Path> FileExplorer;
 
     @FXML
-    private MenuItem OpenFolderId;
+    private MenuItem AddFolder;
     
-    
-    //TODO passing folder path & library name 
     @FXML
-    void OpenFolder(ActionEvent event) {
+    private MenuItem AddFile;
+    
+    @FXML
+    private Label showKeywords;		//label for keywords syntax: showKeywords.setContentDisplay(value)
+ 
+    
+    
+    //TODO passing folder path & library name to metadata function
+    @FXML
+    void AddFolder(ActionEvent event) {
     	
     	//Open Folder dialog
     	DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -70,7 +84,7 @@ public class LibraryUIControl implements Initializable{
             
             //Creating a pop up to get Library name
             Stage popup = new Stage();
-			
+
             GridPane grid = new GridPane();
 			grid.setPadding(new Insets(10, 10, 10, 10));
 			grid.setVgap(5);
@@ -104,8 +118,17 @@ public class LibraryUIControl implements Initializable{
 						popup.close();
 				       
 						
+						
 						//TODO call function to reading folder and insert to database
 						
+						try {
+							
+							getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
+							
+						} catch (IOException e1) {
+							
+							e1.printStackTrace();
+						}
 						
 						//example:
 				        //ReadFolder data = new ReadFolder;
@@ -124,11 +147,38 @@ public class LibraryUIControl implements Initializable{
         }
     }
     
-    
+    public void getFilePath(String FilePath,String Library) throws IOException
+	{
+		
+		File path = new File(FilePath);
+		int id = 0;
+		
+		if(path.isDirectory())
+		{
+			
+			File[] ListOfFiles = path.listFiles();
+			for(File file : ListOfFiles)
+			{	
+				if (file.getName().contains(".pdf")) {
+					id++;
+					BookList.add(new ExtractMetadata().Extractdata(file, id + ""));
+				}
+				
+				
+			}
+		}
+		else
+		{
+			id++;
+			BookList.add(new ExtractMetadata().Extractdata(path, id + ""));
+		}
+	}
     
     
     
     //TODO import bookdata and display
+    
+    
     
     ObservableList<Book> BookList = FXCollections.observableArrayList();
     
@@ -136,10 +186,27 @@ public class LibraryUIControl implements Initializable{
     
     
     public void init() {
+    	
     	ID.setCellValueFactory(new PropertyValueFactory<>("id"));
     	Title.setCellValueFactory(new PropertyValueFactory<>("title"));
     	Author.setCellValueFactory(new PropertyValueFactory<>("author"));
+    	Subject.setCellValueFactory(new PropertyValueFactory<>("subject"));
     	Date.setCellValueFactory(new PropertyValueFactory<>("date"));
+    	
+    	
+    	final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
+    	Date.setCellFactory(column -> new TableCell<Book, Calendar>() {
+    	    @Override
+    	    public void updateItem(Calendar date, boolean empty) {
+    	        super.updateItem(date, empty);
+    	        if (date == null) {
+    	            setText(null);
+    	        } else {
+    	            setText(dateFormat.format(date.getTime()));
+    	        }
+    	    }
+    	});
+    	
     }
     
     
@@ -148,10 +215,7 @@ public class LibraryUIControl implements Initializable{
     	//this is only example
     	
     	//need to use pdfbox code to load all book
-    	
-    	BookList.add(new Book("A", "1", "Adam", "2000", "/TestPdf/PROJECT PLAN copy.pdf"));
-    	BookList.add(new Book("B", "2", "David", "2000", "/TestPdf/PROJECT PLAN copy.pdf"));
-    	
+   
     	
     	LibraryTable.setItems(BookList);
     	
@@ -178,7 +242,7 @@ public class LibraryUIControl implements Initializable{
                     }
                     
                     //fixed unrecognized resources path
-                    String temp = "." + LibraryTable.getSelectionModel().getSelectedItem().getFilepath();
+                    String temp = LibraryTable.getSelectionModel().getSelectedItem().getFilepath();
                      desktop.open(new File(temp));
                   } catch (IOException ioe) {
                     ioe.printStackTrace();
