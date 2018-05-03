@@ -34,6 +34,7 @@ import javafx.stage.Stage;
 
 import src.swe.database.AtraxDatabase;
 import java.util.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LibraryUIControl implements Initializable{
@@ -69,6 +70,8 @@ public class LibraryUIControl implements Initializable{
     private Label showKeywords;		//label for keywords syntax: showKeywords.setContentDisplay(value)
  
     
+    private String Libraryname;
+    AtraxDatabase dbConn = new AtraxDatabase();
     
     //TODO passing folder path & library name to metadata function
     @FXML
@@ -117,7 +120,8 @@ public class LibraryUIControl implements Initializable{
 				    public void handle(ActionEvent e) {
 				       
 					
-						System.out.println(name.getText());   //this return libraryname
+						System.out.println(name.getText()); 
+						Libraryname = name.getText();//this return libraryname
 						popup.close();
 				       
 						
@@ -126,22 +130,20 @@ public class LibraryUIControl implements Initializable{
 						
 						try {
 							
-							getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
+							getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
 							
-							AtraxDatabase dbConn = new AtraxDatabase();
+							//dbConn = new AtraxDatabase();
+							
+							
+							
 							for (Book book: BookList) {
 								
-								Date tempDate = (Date) book.getDate().getTime().clone();
 								
-								dbConn.insertDocToLibrary(book.getTitle(), book.getTitle(), book.getSubject(), tempDate, book.getFilepath(), book.getId(), book.getAuthor());
+								
+								dbConn.insertDocToLibrary(book.getTitle(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor());
 							}
 							
-							try {
-								dbConn.testQuery();
-							} catch (SQLException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+							
 							
 						} catch (IOException e1) {
 							
@@ -154,7 +156,7 @@ public class LibraryUIControl implements Initializable{
 				       
 						
 						//TODO then call load funtion to load data to table view
-				        // load();
+				        load();
 				        				        
 				     }
 				 });
@@ -167,6 +169,12 @@ public class LibraryUIControl implements Initializable{
     
     public void getFilePath(String FilePath,String Library) throws IOException
 	{
+    	//dbConn = new AtraxDatabase();
+    	
+    	dbConn.createNewLibrary(Library);
+    	
+    	String libid = dbConn.getLibraryID(Library);
+    	
     	ExtractMetadata extractBook = new ExtractMetadata();
 		File path = new File(FilePath);
 		int id = 0;
@@ -179,7 +187,7 @@ public class LibraryUIControl implements Initializable{
 			{	
 				if (file.getName().contains(".pdf")) {
 					id++;
-					BookList.add(extractBook.Extractdata(file, id));
+					BookList.add(extractBook.Extractdata(file, id, libid));
 				}
 				
 				
@@ -188,7 +196,7 @@ public class LibraryUIControl implements Initializable{
 		else
 		{
 			id++;
-			BookList.add(new ExtractMetadata().Extractdata(path, id));
+			BookList.add(new ExtractMetadata().Extractdata(path, id, libid));
 		}
 	}
     
@@ -231,14 +239,27 @@ public class LibraryUIControl implements Initializable{
     
     //TODO retrieve data from database, asign to book object then display to table view
     public void load() {
-    	//this is only example
-    	AtraxDatabase dbConn = new AtraxDatabase();
-    	ObservableList<Book> retrieveBook = FXCollections.observableArrayList();
-    	//need to use pdfbox code to load all book
-   
     	
-    	LibraryTable.setItems(retrieveBook);
+    	ObservableList<Book> rBook = FXCollections.observableArrayList();
     	
+    	if (dbConn.getLibraryID(Libraryname) != "ERROR") {
+    		int libid = Integer.parseInt(dbConn.getLibraryID(Libraryname));
+    		System.out.println(libid);
+    	
+    		ResultSet rs = dbConn.getAllLibraryDoc(libid);
+    	
+    		try {
+				while(rs.next()) {
+					rBook.add(new Book(rs.getInt("ID"), rs.getString("SUBJECT"), rs.getString("TITLE"), rs.getString("AUTHOR"), rs.getDate("CREATEION_DATE"), rs.getString("FILE_PATH"), libid + ""));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	
+    		}
+    	
+    	LibraryTable.setItems(rBook);
     }
     
     
@@ -249,7 +270,7 @@ public class LibraryUIControl implements Initializable{
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO Auto-generated method stub
 		init();
-		load();
+		//load();
 		
 		//add open file on double click, required: file resources path
 		LibraryTable.setOnMouseClicked((MouseEvent event) -> {

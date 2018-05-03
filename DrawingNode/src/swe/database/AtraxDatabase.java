@@ -69,7 +69,7 @@ public class AtraxDatabase {
 			//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
 			//create the statement
 			PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
-			preparedStmt.setInt (1, 1);
+			preparedStmt.setInt (1, library_id);
 			preparedStmt.setString (2, filePath);
 			preparedStmt.setString (3, FileName);
 			// execute the preparedstatement
@@ -274,7 +274,7 @@ public class AtraxDatabase {
 	public ResultSet getAllLibraryDoc(int libraryID){
 		
 		{
-			String checkExistance = "SELECT ID, FILENAME, TITLE, SUBJECT, CREATETION_DATE, FILE_PATH, AUTHOR FROM DOCUMENTS WHERE LIBRARY_ID=?";
+			String checkExistance = "SELECT ID, FILENAME, TITLE, SUBJECT, CREATEION_DATE, FILE_PATH, AUTHOR FROM DOCUMENTS WHERE LIBRARY_ID=?";
 
 			// check for database connection
 			if(connection == null)

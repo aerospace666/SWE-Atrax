@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class ExtractMetadata {
  	private PDDocumentInformation PDoc;
  	
 
-	public Book Extractdata(final File file, final int ID) throws IOException
+	public Book Extractdata(final File file, final int ID, final String libid) throws IOException
 	{
 		String[] SentenceExtraction, Tokens, keywordTags;
 		InputStream Stream_input = new FileInputStream("en-pos-maxent.bin");
@@ -167,16 +168,16 @@ public class ExtractMetadata {
 			
 			
 			
-			Calendar tempCalendar = Calendar.getInstance();
+			Date tempCalendar =  new Date(0);
 			if(PDoc.getCreationDate() != null)
 			{	
-				tempCalendar = (Calendar)PDoc.getCreationDate().clone();
+				tempCalendar = PDoc.getCreationDate().getTime();
 			
 			}
 			
 			
 			
-			book = new Book(ID, tempSubject, file.getName(), tempAuthor, tempCalendar, file.getAbsolutePath());
+			book = new Book(ID, tempSubject, file.getName(), tempAuthor, tempCalendar, file.getAbsolutePath(), libid);
 			document.close();
 			
 		} catch (InvalidPasswordException e) {

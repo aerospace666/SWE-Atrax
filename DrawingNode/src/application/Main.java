@@ -28,7 +28,7 @@ public class Main extends Application {
 		if(uploadButtonClick == true)
 		{
 			Data.getFilePath(Path,"library"); // get metadata then insert into database
-
+			
 		}
 		
     	try {
