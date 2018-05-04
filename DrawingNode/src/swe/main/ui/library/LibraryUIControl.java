@@ -162,8 +162,6 @@ public class LibraryUIControl implements Initializable{
     
     public void getFilePath(String FilePath,String Library) throws IOException
 	{
-    	
-    	
     	dbConn.createNewLibrary(Library);
     	
     	String libid = dbConn.getLibraryID(Library);
