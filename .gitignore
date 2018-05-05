@@ -5,3 +5,5 @@ PDFBox/.classpath
 /.recommenders/
 DrawingNode/atraxdb/log
 DrawingNode/derby.log
+DrawingNode/bin/derby.log
+DrawingNode/bin/atraxdb/log/
