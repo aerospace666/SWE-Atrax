@@ -1,24 +1,20 @@
 package src.swe.database;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Calendar;
 import java.util.List;
 
-import src.application.MetaData;
 
 public class AtraxDatabase {
 
 	private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	private String URL = "jdbc:derby:atraxdb";
 	public Connection connection =  null;
-	private String[] results;
 
 	public AtraxDatabase(){}
 
@@ -447,7 +443,37 @@ public class AtraxDatabase {
 
 		}
 
-	//test query only
+	//get keywords for a docID
+	
+	public ResultSet getKeywordsforDoc(int docID)  
+	{
+		String checkExistance = "SELECT KEYWORD FROM KEYWORDS KW LEFT JOIN DOCUMENT_KEYWORD DKW on DKW.KEYWORD_ID=KW.ID WHERE DKW.DOC_ID=?";
+
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+			try {
+				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
+				//create the statement
+				PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
+				preparedStmt.setInt (1, docID);
+				// execute the preparedstatement
+				ResultSet rs = preparedStmt.executeQuery();
+				//return the result
+				return rs;
+
+	
+			}catch (SQLException ex) {
+				System.out.println("\n Failed to select from KEYWORDS/DOC_KEYWORDS table(s)!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+				//return 1 meaning error
+				return null;
+			}		
+
+
+	}
+	
 	// this method is for testing the query
 	public void testQuery() throws SQLException
 	{
