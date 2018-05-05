@@ -1,23 +1,20 @@
 package src.swe.database;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Calendar;
+import java.util.List;
 
-import src.application.MetaData;
 
 public class AtraxDatabase {
 
 	private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	private String URL = "jdbc:derby:atraxdb";
 	public Connection connection =  null;
-	private String[] results;
 
 	public AtraxDatabase(){}
 
@@ -274,7 +271,7 @@ public class AtraxDatabase {
 	public ResultSet getAllLibraryDoc(int libraryID){
 		
 		{
-			String checkExistance = "SELECT ID, FILENAME, TITLE, SUBJECT, CREATEION_DATE, FILE_PATH, AUTHOR FROM DOCUMENTS WHERE LIBRARY_ID=?";
+			String checkExistance = "SELECT ID, FILENAME, TITLE, SUBJECT, CREATION_DATE, FILE_PATH, AUTHOR FROM DOCUMENTS WHERE LIBRARY_ID=?";
 
 			// check for database connection
 			if(connection == null)
@@ -304,10 +301,179 @@ public class AtraxDatabase {
 	}
 
 	// This method populate data to keywords table
+	
+	public String insertKeywordtoKeywordsTable(List<String> keywords)  
+	{
+		String updateQuery = "INSERT INTO KEYWORDS(KEYWORD) VALUES (?)";
+		String checkExistance = "SELECT ID FROM KEYWORDS WHERE KEYWORD=?";
 
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		//for each KW in the list, let's process it
+		for (String tempKW : keywords) {
+			//Check if the keyword already exists in the DB, if so, don't process it and return the keyword ID instead
+			try {
+				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
+				//create the statement
+				PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
+				preparedStmt.setString (1, tempKW);
+				// execute the preparedstatement
+				ResultSet rs = preparedStmt.executeQuery();
+				int result = 0;
+				//get the result into an int. There will only ever be a single result in the query
+				while (rs.next()) {
+					result = rs.getInt("ID");
+	
+				}
+				// ResultSet resultset = preparedStmt.getResultSet();
+				if (result == 0) {
+					//means the KW doesn't exist/nothing was returned above, so process it
+					try {
+						//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-insert-a-record/
+						//System.out.println("\n means the file doesn't exist, so process it");
+						// create the mysql insert preparedstatement
+						PreparedStatement preparedStmt1 = connection.prepareStatement(updateQuery);
+						//prepare the statement
+						preparedStmt1.setString (1, tempKW);	
+						// execute the preparedstatement
+						preparedStmt1.executeUpdate();
+						//return 0 meaning success, catch block will catch failure
+						return "0";
+					} catch (SQLException ex) {
+						System.out.println("\n Failed to insert into KEYWORDS table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+						//return 1 meaning error
+						return "1";
+					}
+				}else {
+					//means KW DOES exist, so return the docID instead of adding duplicate
+					//System.out.println("\n means the file exists, so do not process it!!");
+					return Integer.toString(result);
+				}
+	
+			}catch (SQLException ex) {
+				System.out.println("\n Failed to select from KEYWORDS table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+				//return 1 meaning error
+				return "1";
+			}		
+		}
+		//if it ever gets to here, means the list was empty
+		System.out.println("\n Failed to run function insertKeyword...most likely the list was empty");
+		return "1";
+
+	}
+
+	//Get the keyword ID from Keywords table
+
+	public String getKeywordID(String keyword)  
+	{
+		String checkExistance = "SELECT ID FROM KEYWORDS WHERE KEYWORD=?";
+
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+			//Check if the keyword already exists in the DB, if so, don't process it and return the keyword ID instead
+			try {
+				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
+				//create the statement
+				PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
+				preparedStmt.setString (1, keyword);
+				// execute the preparedstatement
+				ResultSet rs = preparedStmt.executeQuery();
+				int result = 0;
+				//get the result into an int. There will only ever be a single result in the query
+				while (rs.next()) {
+					result = rs.getInt("ID");
+	
+				}
+				// ResultSet resultset = preparedStmt.getResultSet();
+				if (result == 0) {
+					//means the KW doesn't exist/nothing was returned above
+						return "1";
+					}
+				else {
+					//means KW DOES exist, so return the KWID
+					return Integer.toString(result);
+				}
+	
+			}catch (SQLException ex) {
+				System.out.println("\n Failed to select from KEYWORDS table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+				//return 1 meaning error
+				return "1";
+			}		
+
+
+	}
+	
 	// This method populate data to document_keyword table
 
+	public String insertIntoDocKeywordTable(int docID, int keywordID, int keywordOccurence)  
+	{
+		String updateQuery = "INSERT INTO DOCUMENT_KEYWORD(DOC_ID,KEYWORD_ID,OCCURENCE) VALUES (?,?,?)";
 
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+
+			try {
+				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-insert-a-record/
+				//System.out.println("\n means the file doesn't exist, so process it");
+				// create the mysql insert preparedstatement
+				PreparedStatement preparedStmt1 = connection.prepareStatement(updateQuery);
+				//prepare the statement
+				preparedStmt1.setInt (1, docID);	
+				preparedStmt1.setInt (2, keywordID);	
+				preparedStmt1.setInt (3, keywordOccurence);	
+
+				// execute the preparedstatement
+				preparedStmt1.executeUpdate();
+				//return 0 meaning success, catch block will catch failure
+				return "0";
+			} catch (SQLException ex) {
+				System.out.println("\n Failed to insert into DOCUMENT_KEYWORD table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+				//return 1 meaning error
+				return "1";
+			}
+
+		}
+
+	//get keywords for a docID
+	
+	public ResultSet getKeywordsforDoc(int docID)  
+	{
+		String checkExistance = "SELECT KEYWORD FROM KEYWORDS KW LEFT JOIN DOCUMENT_KEYWORD DKW on DKW.KEYWORD_ID=KW.ID WHERE DKW.DOC_ID=?";
+
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+			try {
+				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
+				//create the statement
+				PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
+				preparedStmt.setInt (1, docID);
+				// execute the preparedstatement
+				ResultSet rs = preparedStmt.executeQuery();
+				//return the result
+				return rs;
+
+	
+			}catch (SQLException ex) {
+				System.out.println("\n Failed to select from KEYWORDS/DOC_KEYWORDS table(s)!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+				//return 1 meaning error
+				return null;
+			}		
+
+
+	}
+	
 	// this method is for testing the query
 	public void testQuery() throws SQLException
 	{
