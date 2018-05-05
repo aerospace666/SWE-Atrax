@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -13,17 +14,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.swe.main.ui.library.LibraryUIControl">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="716.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.swe.main.ui.library.LibraryUIControl">
    <children>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="433.0" prefWidth="674.0">
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="423.0" prefWidth="728.0">
         <items>
             <MenuBar>
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
                     <MenuItem fx:id="AddFolder" mnemonicParsing="false" onAction="#AddFolder" text="Add a folder" />
-                        <MenuItem fx:id="OpenFile" mnemonicParsing="false" text="Add a file" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
@@ -55,6 +56,13 @@
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
+                                 <contextMenu>
+                                    <ContextMenu>
+                                      <items>
+                                        <MenuItem mnemonicParsing="false" text="Delete Book" />
+                                      </items>
+                                    </ContextMenu>
+                                 </contextMenu>
                               </TableView>
                            </center>
                            <right>
@@ -64,8 +72,11 @@
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="295.0" prefWidth="277.0">
                                              <children>
-                                                <Label layoutX="14.0" layoutY="14.0" text="Keywords:" />
-                                                <Label fx:id="showKeywords" layoutX="14.0" layoutY="40.0" prefHeight="99.0" prefWidth="133.0" />
+                                                <Label layoutX="14.0" layoutY="6.0" text="Keywords:" />
+                                                <Label fx:id="showKeywords" alignment="TOP_LEFT" layoutX="9.0" layoutY="23.0" prefHeight="148.0" prefWidth="133.0" textOverrun="LEADING_ELLIPSIS" wrapText="true">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="13.0" />
+                                                   </font></Label>
                                              </children></AnchorPane>
                                     </content>
                                   </Tab>
@@ -81,13 +92,21 @@
                               </TabPane>
                            </right>
                            <left>
-                              <TableView prefHeight="328.0" prefWidth="107.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="CollectionTable" prefHeight="328.0" prefWidth="107.0" BorderPane.alignment="CENTER">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="Collections" />
+                                  <TableColumn fx:id="CollectionColumn" prefWidth="75.0" text="Collections" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
+                                 <contextMenu>
+                                    <ContextMenu>
+                                      <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#AddFolder" text="Add a Folder" />
+                                          <MenuItem mnemonicParsing="false" onAction="#AddFile" text="Add a File" />
+                                      </items>
+                                    </ContextMenu>
+                                 </contextMenu>
                               </TableView>
                            </left>
                         </BorderPane>

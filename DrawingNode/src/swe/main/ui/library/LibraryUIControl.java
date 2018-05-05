@@ -4,7 +4,9 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Path;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -15,25 +17,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import src.swe.database.AtraxDatabase;
-import java.util.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import src.swe.main.ui.Alert.AlertFormat;;
 public class LibraryUIControl implements Initializable{
 
     @FXML
@@ -54,8 +54,12 @@ public class LibraryUIControl implements Initializable{
     @FXML
     private TableColumn<Book, String> Subject;
     
+    
     @FXML
-    private TreeView<Path> FileExplorer;
+    private TableView<String> CollectionTable;
+
+    @FXML
+    private TableColumn<String, String> CollectionColumn;
 
     @FXML
     private MenuItem AddFolder;
@@ -64,12 +68,13 @@ public class LibraryUIControl implements Initializable{
     private MenuItem AddFile;
     
     @FXML
-    private Label showKeywords;		//label for keywords syntax: showKeywords.setContentDisplay(value)
+    private Label showKeywords;		//label for keywords, syntax: showKeywords.setContentDisplay(book.getKeywords())
  
     
     private String Libraryname;  //library name, declare at line 121
     AtraxDatabase dbConn = new AtraxDatabase();
     ObservableList<Book> BookList = FXCollections.observableArrayList();
+    AlertFormat alert = new AlertFormat();
     
     //TODO passing folder path & library name to metadata function
     @FXML
@@ -121,6 +126,18 @@ public class LibraryUIControl implements Initializable{
 						System.out.println(name.getText()); 
 						Libraryname = name.getText();//this return libraryname
 						popup.close();
+						
+						if (name.getText().isEmpty()) {
+							
+							Alert alert = new Alert(AlertType.ERROR);
+							alert.setTitle("No name");
+							alert.setContentText("Please enter Libray name");
+							alert.showAndWait();
+							
+							popup.show();			//recursive to ask library name again
+							return;
+							
+						}
 				       
 						
 						
@@ -160,6 +177,28 @@ public class LibraryUIControl implements Initializable{
         }
     }
     
+    
+    @FXML
+    void AddFile(ActionEvent event) {
+    	
+    	if (CollectionTable.getSelectionModel().getSelectedItem() == null) {
+    		alert.errorAlert("No file selecetd", "Please choose a file");
+    		return;
+    	}
+    	
+    	FileChooser fileChooser = new FileChooser();
+    	File selectedfile = fileChooser.showOpenDialog(LibraryTable.getScene().getWindow());
+    	Libraryname = CollectionTable.getSelectionModel().getSelectedItem();
+    	
+    	
+    	try {
+			getFilePath(selectedfile.getAbsolutePath(), Libraryname);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     public void getFilePath(String FilePath,String Library) throws IOException
 	{
     	
@@ -167,7 +206,8 @@ public class LibraryUIControl implements Initializable{
     	dbConn.createNewLibrary(Library);
     	
     	String libid = dbConn.getLibraryID(Library);
-    	//System.out.println(libid);
+    	System.out.println(libid);
+    	
     	ExtractMetadata extractBook = new ExtractMetadata();
 		File path = new File(FilePath);
 		int id = 0;
@@ -182,13 +222,24 @@ public class LibraryUIControl implements Initializable{
 					id++;
 					BookList.add(extractBook.Extractdata(file, id, libid));
 				}
-				
+					
+			}
+			// if no pdf file in folder show error
+			if (id == 0) {
+				alert.errorAlert("Unsupported file type(s)", "Please choose only pdf file");
+				return;
 			}
 		}
 		else
 		{
-			id++;
-			BookList.add(new ExtractMetadata().Extractdata(path, id, libid));
+			if (path.getName().contains(".pdf")) {
+				id++;
+				BookList.add(new ExtractMetadata().Extractdata(path, id, libid));
+			} else 		// show error 
+			{
+				alert.errorAlert("Unsupported file type", "Please choose only pdf file");
+				return;
+			}
 		}
 	}
     
@@ -214,7 +265,7 @@ public class LibraryUIControl implements Initializable{
     public void load() {
     	
     	//ObservableList<Book> rBook = FXCollections.observableArrayList();
-    	BookList.clear();
+    	BookList.clear(); 						//Erase bookList then assign database to book
     	if (dbConn.getLibraryID(Libraryname) != null) {
     		
     		int libid = Integer.parseInt(dbConn.getLibraryID(Libraryname));
@@ -258,15 +309,26 @@ public class LibraryUIControl implements Initializable{
                     
                     //fixed unrecognized resources path
                     String temp = LibraryTable.getSelectionModel().getSelectedItem().getFilepath();
-                     desktop.open(new File(temp));
+                    File openFile = new File(temp);
+                    
+                    if(openFile.exists()) {
+                     desktop.open(openFile);
+                    } else
+                    {
+                    	alert.errorAlert("", "File not found");
+                    }
+                    
                   } catch (IOException ioe) {
                     ioe.printStackTrace();
                   }
             }
+            
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1){
+                System.out.println(LibraryTable.getSelectionModel().getSelectedItem().getTitle());
+                showKeywords.setText(LibraryTable.getSelectionModel().getSelectedItem().getSubject());
+            }
+            
         });
-		
-		
-		
 		
 	}
     
