@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Fri May 04 14:19:56 AEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-2960-c047-0000062035d8 
-on database directory C:\Users\Huy Q Phung\Desktop\SW_Project_A\SWE-Atrax\DrawingNode\atraxdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@76f63c7b 
-Loaded from file:/C:/Users/Huy%20Q%20Phung/Desktop/SW_Project_A/SWE-Atrax/DrawingNode/lib/derby.jar
+Sun May 06 00:48:14 AEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-30c6-555b-000006f669b0 
+on database directory /Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/atraxdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4f8e5cde 
+Loaded from file:/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=10+46
-user.dir=C:\Users\Huy Q Phung\Desktop\SW_Project_A\SWE-Atrax\DrawingNode
-os.name=Windows 10
-os.arch=amd64
-os.version=10.0
+java.runtime.version=9.0.4+11
+user.dir=/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.13.4
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

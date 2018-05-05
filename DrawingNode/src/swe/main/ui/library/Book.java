@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Book {
 	private final SimpleStringProperty title;
+	private final SimpleStringProperty name;
 	private final SimpleStringProperty subject;
     private final SimpleIntegerProperty id;
     private final SimpleStringProperty libid;
@@ -17,8 +18,9 @@ public class Book {
    
 
     
-    public Book(int id, String subject ,String title, String author, Date date, String filepath, String libid) {
+    public Book(int id, String subject ,String name,String title, String author, Date date, String filepath, String libid) {
     	this.title = new SimpleStringProperty(title);
+    	this.name = new SimpleStringProperty(name);
     	this.subject = new SimpleStringProperty(subject);
     	this.id = new SimpleIntegerProperty(id);
     	this.author = new SimpleStringProperty(author);
@@ -29,6 +31,10 @@ public class Book {
     public String getTitle() {
     	
     	return title.get();
+    }
+ public String getName() {
+    	
+    	return name.get();
     }
     public int getId() {
     	

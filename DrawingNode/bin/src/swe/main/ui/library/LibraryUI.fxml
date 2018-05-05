@@ -16,53 +16,27 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="716.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.swe.main.ui.library.LibraryUIControl">
+<StackPane fx:id="MainID" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="716.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.swe.main.ui.library.LibraryUIControl">
    <children>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="423.0" prefWidth="728.0">
+      <SplitPane fx:id="SplitPaneId" dividerPositions="0.5" orientation="VERTICAL" prefHeight="423.0" prefWidth="728.0">
         <items>
-            <MenuBar>
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem fx:id="AddFolder" mnemonicParsing="false" onAction="#AddFolder" text="Add a folder" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-            <TabPane prefHeight="340.0" prefWidth="598.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabpane" prefHeight="340.0" prefWidth="598.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="Libary">
+                <Tab fx:id="LibraryTab" text="Libary">
                      <content>
-                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                        <BorderPane fx:id="LibraryUI" prefHeight="200.0" prefWidth="200.0">
                            <center>
-                              <TableView fx:id="LibraryTable" prefHeight="328.0" prefWidth="312.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="LibraryTable" onMouseClicked="#CheckLibraryEvent" prefHeight="328.0" prefWidth="312.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="ID" maxWidth="70.0" minWidth="40.0" prefWidth="40.0" text="ID" />
-                                  <TableColumn fx:id="Title" prefWidth="75.0" text="Title" />
+                                  <TableColumn fx:id="Name" prefWidth="75.0" text="Name" />
                                     <TableColumn fx:id="Author" prefWidth="75.0" text="Author" />
                                     <TableColumn fx:id="Date" prefWidth="75.0" text="Date" />
-                                    <TableColumn fx:id="Subject" prefWidth="75.0" text="Subject" />
+                                    <TableColumn fx:id="Title" prefWidth="75.0" text="Title" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
-                                 <contextMenu>
-                                    <ContextMenu>
-                                      <items>
-                                        <MenuItem mnemonicParsing="false" text="Delete Book" />
-                                      </items>
-                                    </ContextMenu>
-                                 </contextMenu>
                               </TableView>
                            </center>
                            <right>
@@ -77,6 +51,12 @@
                                                    <font>
                                                       <Font name="System Bold Italic" size="13.0" />
                                                    </font></Label>
+                                                <Label layoutX="14.0" layoutY="171.0" text="Subject:" />
+                                                <Label fx:id="showSubject" alignment="TOP_LEFT" layoutX="9.0" layoutY="188.0" prefHeight="148.0" prefWidth="133.0" textOverrun="LEADING_ELLIPSIS" wrapText="true">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="13.0" />
+                                                   </font>
+                                                </Label>
                                              </children></AnchorPane>
                                     </content>
                                   </Tab>
@@ -92,7 +72,7 @@
                               </TabPane>
                            </right>
                            <left>
-                              <TableView fx:id="CollectionTable" prefHeight="328.0" prefWidth="107.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="CollectionTable" onMouseClicked="#CheckCollectionEvent" prefHeight="328.0" prefWidth="107.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="CollectionColumn" prefWidth="75.0" text="Collections" />
                                 </columns>
@@ -100,7 +80,7 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                                  <contextMenu>
-                                    <ContextMenu>
+                                    <ContextMenu fx:id="CollectionContextMenu">
                                       <items>
                                         <MenuItem mnemonicParsing="false" onAction="#AddFolder" text="Add a Folder" />
                                           <MenuItem mnemonicParsing="false" onAction="#AddFile" text="Add a File" />
@@ -112,13 +92,27 @@
                         </BorderPane>
                      </content>
                 </Tab>
-                <Tab text="Mindmap">
+                <Tab fx:id="MindmapTab" text="Mindmap">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                 </Tab>
               </tabs>
             </TabPane>
+            <MenuBar>
+              <menus>
+                <Menu fx:id="FileId" mnemonicParsing="false" onAction="#ClearCollectionSelection" text="File">
+                  <items>
+                    <MenuItem fx:id="AddFolder" mnemonicParsing="false" onAction="#AddFolder" text="Add a folder" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
         </items>
       </SplitPane>
    </children>

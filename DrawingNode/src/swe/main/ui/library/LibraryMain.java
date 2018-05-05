@@ -1,17 +1,17 @@
 package src.swe.main.ui.library;
 	
 import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 
 public class LibraryMain extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
 			Scene scene = new Scene(root,1020,600);
 			scene.getStylesheets().add(getClass().getResource("/src/swe/main/ui/library/library.css").toExternalForm());
 			primaryStage.setScene(scene);

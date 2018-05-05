@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -52,7 +53,7 @@ public class AtraxDatabase {
 	public String insertDocToLibrary(String FileName, String Title, String Subject, java.util.Date CreationDate, String filePath, int library_id, String author)  
 	{
 		//System.out.println("\n Entered into insertintoDocLibrary function");
-		String updateQuery = "INSERT INTO DOCUMENTS(filename, title, subject, CREATEION_DATE, file_path, library_id, author) VALUES (?,?,?,?,?,?,?)";
+		String updateQuery = "INSERT INTO DOCUMENTS(filename, title, subject, CREATION_DATE, file_path, library_id, author) VALUES (?,?,?,?,?,?,?)";
 		String checkExistance = "SELECT ID FROM DOCUMENTS WHERE LIBRARY_ID=? AND FILE_PATH=? AND FILENAME=?";
 
 		// check for database connection
@@ -124,7 +125,7 @@ public class AtraxDatabase {
 
 	
 	{
-		String updateQuery = "INSERT INTO LIBRARIES(LibraryName) VALUES (?)";
+		String updateQuery = "INSERT INTO LIBRARIES(Name) VALUES (?)";
 		String checkExistance = "SELECT ID FROM LIBRARIES WHERE NAME=?";
 
 		// check for database connection
@@ -226,7 +227,7 @@ public class AtraxDatabase {
 	
 	// Get array of all libraries in DB
 	
-	public String[] getAllLibraryNames(){
+	public List<String> getAllLibraryNames(){
 		
 		{
 			String checkExistance = "SELECT NAME FROM LIBRARIES";
@@ -244,21 +245,22 @@ public class AtraxDatabase {
 				PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
 				// execute the preparedstatement
 				ResultSet rs = preparedStmt.executeQuery();
-				String[] result = new String[100];
+				List<String> result = new ArrayList<String>();
 				int n = 0;
 				//get the result into a string
 				while (rs.next()) {
-					result[n] = rs.getString("NAME");
+					result.add(rs.getString("NAME"));
+					//System.out.println("the result is: " + result.get(n));
 					n++;
 
 				}
-				System.out.println("the result arrary is: " + result[1]);
+				//System.out.println("the result arrary is: " + result[0]);
 				return result;
 				
 			}catch (SQLException ex) {
 				System.out.println("\n Failed to select from LIBRARY table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
 				//return 1 meaning error
-				return new String[] { "ERROR" };
+				return new ArrayList<String>();
 			
 
 		}

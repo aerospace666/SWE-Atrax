@@ -22,6 +22,8 @@ import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.WhitespaceTokenizer;
 
+import src.swe.database.AtraxDatabase;
+
 public class ExtractMetadata {
 	private Book book;
 	private List<String> MetaData_keyword;
@@ -151,6 +153,13 @@ public class ExtractMetadata {
 			
 			}
 			
+			String tempTitle = "-";
+			if((PDoc.getTitle() != null && !PDoc.getTitle().isEmpty()))
+			{	
+				tempTitle = PDoc.getTitle();
+			
+			}
+			
 			String tempAuthor = "-";
 			if(PDoc.getAuthor() != null && !PDoc.getAuthor().isEmpty())
 			{	
@@ -158,12 +167,19 @@ public class ExtractMetadata {
 			
 			}
 			
-			
-			
-			
+			/**
+			//insert to database for keywords
+			AtraxDatabase dbConn = new AtraxDatabase();
 			Keywords = PDoc.getKeywords();
-			
-			
+			dbConn.insertKeywordtoKeywordsTable(MetaData_keyword);
+			for (String tempString : MetaData_keyword) {
+				for (String TempOccur : Keyword_occurance.values()) {
+					if(TempOccur.equals(tempString)) {
+						dbConn.insertIntoDocKeywordTable(d, keywordID, keywordOccurence) // need get doc id function
+					}
+				}
+			}
+			*/
 			
 			
 			
@@ -176,7 +192,7 @@ public class ExtractMetadata {
 			
 			
 			
-			book = new Book(ID, tempSubject, file.getName(), tempAuthor, tempDate, file.getAbsolutePath(), libid);
+			book = new Book(ID, tempSubject, file.getName(), tempTitle , tempAuthor, tempDate, file.getAbsolutePath(), libid);
 			document.close();
 			
 		} catch (InvalidPasswordException e) {
