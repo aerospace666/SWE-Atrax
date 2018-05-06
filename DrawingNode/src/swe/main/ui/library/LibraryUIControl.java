@@ -302,6 +302,12 @@ public class LibraryUIControl implements Initializable{
     				// TODO Auto-generated catch block
     				e.printStackTrace();
     			}
+    			
+    			//insert book data into database
+    	    	for (Book book: BookList) {
+    				
+    	    		dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+    			}
     		}
     	}
     		
@@ -312,11 +318,6 @@ public class LibraryUIControl implements Initializable{
 			return;
     	}
     		
-    	//insert book data into database
-    	for (Book book: BookList) {
-			
-    		dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
-		}
     	
     	
     	//refresh library table 
