@@ -504,9 +504,13 @@ public class LibraryUIControl implements Initializable{
             	return;
             }
             
+            //Keywords section for database will be fixed after the keyoccurrence is fixed
+            /**
             String Keywords = "";
             
             ResultSet rs = dbConn.getKeywordsforDoc(LibraryTable.getSelectionModel().getSelectedItem().getId());
+            
+           
             try {
 				while (rs.next()) {
 					Keywords += " "  + rs.getString("KEYWORD");
@@ -515,7 +519,12 @@ public class LibraryUIControl implements Initializable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
             //System.out.println(Keywords);
+             * 
+             */
+            
+            
             showKeywords.setText(LibraryTable.getSelectionModel().getSelectedItem().getKeywords());
             
             showSubject.setText(LibraryTable.getSelectionModel().getSelectedItem().getSubject());
