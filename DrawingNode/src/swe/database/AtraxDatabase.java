@@ -99,12 +99,21 @@ public class AtraxDatabase {
 
 					// execute the preparedstatement
 					preparedStmt1.executeUpdate();
-					//return 0 meaning success, catch block will catch failure
-					return "0";
-				} catch (SQLException ex) {
+					
+					//if successful, fetch the docID
+					ResultSet rs1 = preparedStmt.executeQuery();
+					int result1 = 0;
+					//get the result into an int. There will only ever be a single result in the query
+					while (rs1.next()) {
+						result1 = rs1.getInt("ID");
+
+					}	
+					return Integer.toString(result1);
+					
+					} catch (SQLException ex) {
 					System.out.println("\n Failed to insert into documents table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
-					//return 1 meaning error
-					return "1";
+					//return ERROR meaning error
+					return "ERROR";
 				}
 			}else {
 				//means document DOES exist, so return the docID instead of adding duplicate
@@ -114,8 +123,8 @@ public class AtraxDatabase {
 
 		}catch (SQLException ex) {
 			System.out.println("\n Failed to select from documents table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
-			//return 1 meaning error
-			return "1";
+			//return ERROR meaning error
+			return "ERROR";
 		}		 
 
 	}
