@@ -485,6 +485,37 @@ public class AtraxDatabase {
 
 	}
 	
+	/*
+	 * this method retrieve relevant documents based on user input keyword
+	 * @param user input word
+	 * return information of documents
+	 */
+	public ResultSet getRelavantDocument(String inputWord)
+	{
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		// implementation of regular expression 
+		String relevantDocQuery = "SELECT DOCS.ID, FILENAME, TITLE, SUBJECT, CREATION_DATE, FILE_PATH, AUTHOR FROM DOCUMENTS DOCS " +
+								  "LEFT JOIN DOCUMENT_KEYWORD DKW ON DOCS.ID = DKW.DOC_ID " +
+								  "LEFT JOIN KEYWORDS KW ON DKW.KEYWORD_ID = KW.ID " + 
+								  "WHERE KW.KEYWORD LIKE " + "'" + inputWord + "%" + "'";
+		try {
+			//create the statement
+			PreparedStatement preparedStmt = connection.prepareStatement(relevantDocQuery);
+			// execute the statement
+			ResultSet rs = preparedStmt.executeQuery();
+			
+			return rs;
+			
+		}catch (SQLException ex) {
+			System.out.println("\n Failed to select relevant DOC from user search!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+			return null;
+		}
+	}
+	
 	// this method is for testing the query
 	public void testQuery() throws SQLException
 	{
