@@ -22,12 +22,13 @@ import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.WhitespaceTokenizer;
 
-import src.swe.database.AtraxDatabase;
+
 
 public class ExtractMetadata {
 	private Book book;
 	private List<String> MetaData_keyword;
 	private List<Integer> KeywordOccurance;
+	private Map<Integer, String> Keyword_occurance;
 	private PDDocument document;
  	private PDDocumentInformation PDoc;
  	
@@ -50,7 +51,8 @@ public class ExtractMetadata {
 		
 		int occurance =0; //counts the occurance of each word in the pdf
 		int MaxKeyword = 0;
-		Map<Integer, String> Keyword_occurance = new HashMap<Integer, String>();
+		Keyword_occurance = new HashMap<Integer, String>();
+		
 		List<String> tag_keyword = new ArrayList<String> (); //contains tags for each word in the pdf
 		MetaData_keyword = new ArrayList<String> ();
 		KeywordOccurance = new ArrayList<Integer> ();
@@ -190,9 +192,13 @@ public class ExtractMetadata {
 			
 			}
 			
+			String tempKeywords = "-";
+			if (PDoc.getKeywords() != null && ! PDoc.getKeywords().isEmpty()) {
+				tempKeywords = PDoc.getKeywords();
+			}
 			
 			
-			book = new Book(ID, tempSubject, file.getName(), tempTitle , tempAuthor, tempDate, file.getAbsolutePath(), libid);
+			book = new Book(ID, tempSubject, file.getName(), tempTitle , tempAuthor, tempDate, file.getAbsolutePath(), tempKeywords ,libid);
 			document.close();
 			
 		} catch (InvalidPasswordException e) {
@@ -209,4 +215,5 @@ public class ExtractMetadata {
 			return book;
 		
 	}
+
 }

@@ -177,7 +177,7 @@ public class LibraryUIControl implements Initializable{
 					//insert generated book to database
 					for (Book book: BookList) {
 						
-						dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor());
+						dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
 					}
 					
 					
@@ -234,7 +234,7 @@ public class LibraryUIControl implements Initializable{
 							
 							for (Book book: BookList) {
 								
-								dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor());
+								dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
 							}
 							
 							
@@ -315,7 +315,7 @@ public class LibraryUIControl implements Initializable{
     	//insert book data into database
     	for (Book book: BookList) {
 			
-    		dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor());
+    		dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
 		}
     	
     	
@@ -374,6 +374,12 @@ public class LibraryUIControl implements Initializable{
 	}
     
     
+    //TODO insert Keywords for each files
+    public void InsertKeywords() {
+    	
+    }
+    
+    
     
     
     
@@ -412,7 +418,7 @@ public class LibraryUIControl implements Initializable{
     		try {
 				while(rs.next()) {
 					counter++;
-					BookList.add(new Book(counter, rs.getString("SUBJECT"), rs.getString("FILENAME"), rs.getString("TITLE"), rs.getString("AUTHOR"), rs.getDate("CREATION_DATE"), rs.getString("FILE_PATH"), libid + ""));
+					BookList.add(new Book(counter, rs.getString("SUBJECT"), rs.getString("FILENAME"), rs.getString("TITLE"), rs.getString("AUTHOR"), rs.getDate("CREATION_DATE"), rs.getString("FILE_PATH"),  rs.getString("KEYWORDS"), libid + ""));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -510,7 +516,7 @@ public class LibraryUIControl implements Initializable{
 				e.printStackTrace();
 			}
             //System.out.println(Keywords);
-            showKeywords.setText(Keywords);
+            showKeywords.setText(LibraryTable.getSelectionModel().getSelectedItem().getKeywords());
             
             showSubject.setText(LibraryTable.getSelectionModel().getSelectedItem().getSubject());
         }

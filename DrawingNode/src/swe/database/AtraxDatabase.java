@@ -50,12 +50,20 @@ public class AtraxDatabase {
 	}
 
 	// Add a document into the DOCUMENT table
-	public String insertDocToLibrary(String FileName, String Title, String Subject, java.util.Date CreationDate, String filePath, int library_id, String author)  
+	public String insertDocToLibrary(String FileName, String Title, String Subject, java.util.Date CreationDate, String filePath, int library_id, String author, String keywords)  // add keywords
 	{
 		//System.out.println("\n Entered into insertintoDocLibrary function");
+		
+		/**
 		String updateQuery = "INSERT INTO DOCUMENTS(filename, title, subject, CREATION_DATE, file_path, library_id, author) VALUES (?,?,?,?,?,?,?)";
 		String checkExistance = "SELECT ID FROM DOCUMENTS WHERE LIBRARY_ID=? AND FILE_PATH=? AND FILENAME=?";
-
+		*/
+		
+		//Quick fix for keywords-> change to table document_temp
+		String updateQuery = "INSERT INTO DOCUMENT_TEMP(filename, title, subject, CREATION_DATE, file_path, library_id, author, keywords) VALUES (?,?,?,?,?,?,?,?)";
+		String checkExistance = "SELECT ID FROM DOCUMENTS WHERE LIBRARY_ID=? AND FILE_PATH=? AND FILENAME=?";
+		
+		
 		// check for database connection
 		if(connection == null)
 		{
@@ -96,6 +104,9 @@ public class AtraxDatabase {
 					preparedStmt1.setString(5, filePath);
 					preparedStmt1.setInt(6, library_id); 
 					preparedStmt1.setString(7, author);
+					
+					//add keywords for document_temp
+					preparedStmt1.setString(8, keywords);
 
 					// execute the preparedstatement
 					preparedStmt1.executeUpdate();
@@ -255,12 +266,12 @@ public class AtraxDatabase {
 				// execute the preparedstatement
 				ResultSet rs = preparedStmt.executeQuery();
 				List<String> result = new ArrayList<String>();
-				int n = 0;
+				//int n = 0;
 				//get the result into a string
 				while (rs.next()) {
 					result.add(rs.getString("NAME"));
 					//System.out.println("the result is: " + result.get(n));
-					n++;
+					//n++;
 
 				}
 				//System.out.println("the result arrary is: " + result[0]);
@@ -282,8 +293,10 @@ public class AtraxDatabase {
 	public ResultSet getAllLibraryDoc(int libraryID){
 		
 		{
-			String checkExistance = "SELECT ID, FILENAME, TITLE, SUBJECT, CREATION_DATE, FILE_PATH, AUTHOR FROM DOCUMENTS WHERE LIBRARY_ID=?";
-
+			//String checkExistance = "SELECT ID, FILENAME, TITLE, SUBJECT, CREATION_DATE, FILE_PATH, AUTHOR FROM DOCUMENTS WHERE LIBRARY_ID=?";
+			
+			//table Document_temp
+			String checkExistance = "SELECT ID, FILENAME, TITLE, SUBJECT, CREATION_DATE, FILE_PATH, AUTHOR, KEYWORDS FROM DOCUMENT_TEMP WHERE LIBRARY_ID=?";
 			// check for database connection
 			if(connection == null)
 			{

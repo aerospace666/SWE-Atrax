@@ -209,7 +209,7 @@ public class MetaData {
 				System.out.println(PDoc.getKeywords());
 				//TODO insertToDatabase function goes here 
 				//TODO pass library ID instead of "1"
-				String result = dbConn.insertDocToLibrary(getFileName(), getTitle(), getSubject(), getCreationDate(), getPath(), 1, getAuthor());
+				String result = dbConn.insertDocToLibrary(getFileName(), getTitle(), getSubject(), getCreationDate(), getPath(), 1, getAuthor(), ""); //temp fixed for keywords
 				System.out.println("\n The result from DB query is: " + result);
 				
 			}

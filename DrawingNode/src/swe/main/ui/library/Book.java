@@ -15,10 +15,11 @@ public class Book {
     private final SimpleStringProperty author;
     private final Date date;
     private final SimpleStringProperty filepath;
+    private final SimpleStringProperty keywords;
    
 
     
-    public Book(int id, String subject ,String name,String title, String author, Date date, String filepath, String libid) {
+    public Book(int id, String subject ,String name,String title, String author, Date date, String filepath, String keywords, String libid) {
     	this.title = new SimpleStringProperty(title);
     	this.name = new SimpleStringProperty(name);
     	this.subject = new SimpleStringProperty(subject);
@@ -27,6 +28,7 @@ public class Book {
     	this.date = date;
     	this.filepath = new SimpleStringProperty(filepath);
     	this.libid = new SimpleStringProperty(libid);
+    	this.keywords = new SimpleStringProperty(keywords);
     }
     public String getTitle() {
     	
@@ -59,6 +61,8 @@ public class Book {
     public String getLibid() {
     	return libid.get();
     }
-    
+    public String getKeywords() {
+    	return keywords.get();
+    }
     
 }
