@@ -10,3 +10,8 @@ DrawingNode/derby.log
 *.ctrl
 *.dat
 *.log
+*.lck
+*.lck
+*.ctrl
+*.dat
+*.log

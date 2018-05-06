@@ -7,6 +7,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -161,18 +162,19 @@ public class LibraryUIControl implements Initializable{
 			popup.setScene(pop);
 			popup.setTitle("Enter Libary Name");
 			
+			//check if it from collection context menu
 			if (CollectionTable.getSelectionModel().getSelectedItem() == null)
 			{
 				popup.show();
 				
 			} else {
-				
+				//start process with libraryname equal the collection selection
 				try {
 					Libraryname = CollectionTable.getSelectionModel().getSelectedItem();
-				
+					//extract data
 					getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
 					
-					
+					//insert generated book to database
 					for (Book book: BookList) {
 						
 						dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor());
@@ -204,7 +206,7 @@ public class LibraryUIControl implements Initializable{
 				@Override
 				    public void handle(ActionEvent e) {
 				       
-					
+						
 						System.out.println(name.getText()); 
 						Libraryname = name.getText();//this return libraryname
 						popup.close();
@@ -241,17 +243,19 @@ public class LibraryUIControl implements Initializable{
 							
 							e1.printStackTrace();
 						}
+			
 						
 						//example:
 				        //ReadFolder data = new ReadFolder;
 				        // data.getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
 				       
 						
-						//TODO then call load function to load data to table view
-				        load(Libraryname);
+						//TODO load new collection name & update library table
+				       
 				        LibraryList.add(Libraryname);
 				        CollectionTable.setItems(LibraryList);
 				        CollectionTable.getSelectionModel().selectLast();
+				        load(Libraryname);
 				        				        
 				     }
 				 });
@@ -260,50 +264,84 @@ public class LibraryUIControl implements Initializable{
     }
     
     
-    
+    //addfile option in collection context menu
     @FXML
     void AddFile(ActionEvent event) {
     	
+    	//if select from empty collection then return
     	if (CollectionTable.getSelectionModel().getSelectedItem() == null) {
     		alert.errorAlert("No file selecetd", "Please choose a file");
     		return;
     	}
     	
+    	//empty previous bookdata
+    	BookList.clear();
+    	
+    	//assign libraryname to selected collection then open multiple file chooser
+    	Libraryname = CollectionTable.getSelectionModel().getSelectedItem();
     	FileChooser fileChooser = new FileChooser();
-    	File selectedfile = fileChooser.showOpenDialog(LibraryTable.getScene().getWindow());
+    	//enable to select multiples file
+    	List<File> selectedfile = fileChooser.showOpenMultipleDialog(LibraryTable.getScene().getWindow());
     	Libraryname = CollectionTable.getSelectionModel().getSelectedItem();
     	
+    	//if there is no files selected then return
+    	if(selectedfile.isEmpty()) {
+    		return;
+    	}
+    	int counter = 0; //counter check for non pdf
     	
-    	try {
-			getFilePath(selectedfile.getAbsolutePath(), Libraryname);
+    	//extract each file data and insert into database
+    	for (File tempFile : selectedfile) {
+    		
+    		if (tempFile.getName().contains(".pdf")) {
+    			counter++;
+    			try {
+    				getFilePath(tempFile.getAbsolutePath(), Libraryname);
 			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
+    			} catch (IOException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+    		}
+    	}
+    		
+    	//if no pdf file, alert error and return
+    	if (counter == 0) {
+    			
+   			alert.errorAlert("Unsupported file type", "Please choose only pdf file");
+			return;
+    	}
+    		
+    	//insert book data into database
     	for (Book book: BookList) {
 			
-			dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor());
+    		dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor());
 		}
     	
+    	
+    	//refresh library table 
     	load(Libraryname);
     }
     
     
+    //import file path and library name to extract file data
     public void getFilePath(String FilePath,String Library) throws IOException
 	{
+    	//empty previous book list
     	BookList.clear();
+    	
+    	//create new collection _ if already exist then return libraryid
     	dbConn.createNewLibrary(Library);
     	
     	String libid = dbConn.getLibraryID(Library);
     	//System.out.println(libid);
     	
+    	//extract data from ExtractMetadata.java
     	ExtractMetadata extractBook = new ExtractMetadata();
 		File path = new File(FilePath);
-		int id = 0;
+		int id = 0; 		//counter for how many book
 		
-		if(path.isDirectory())
+		if(path.isDirectory())		//if a folder then put in loop
 		{
 			
 			File[] ListOfFiles = path.listFiles();
@@ -311,7 +349,7 @@ public class LibraryUIControl implements Initializable{
 			{	
 				if (file.getName().contains(".pdf")) {
 					id++;
-					BookList.add(extractBook.Extractdata(file, id, libid));
+					BookList.add(extractBook.Extractdata(file, id, libid));	//extractdata return a book identified with id and libid then add to bookList
 				}
 					
 			}
@@ -321,7 +359,7 @@ public class LibraryUIControl implements Initializable{
 				return;
 			}
 		}
-		else
+		else	//if a file
 		{
 			if (path.getName().contains(".pdf")) {
 				id++;
@@ -367,7 +405,7 @@ public class LibraryUIControl implements Initializable{
     	if (dbConn.getLibraryID(libname) != null) {
     		
     		int libid = Integer.parseInt(dbConn.getLibraryID(libname));
-    		System.out.println(libid);
+    		//System.out.println(libid);
     	
     		ResultSet rs = dbConn.getAllLibraryDoc(libid);
     	
@@ -383,30 +421,34 @@ public class LibraryUIControl implements Initializable{
     	
     		}
     	
-    	LibraryTable.setItems(BookList);
+    	LibraryTable.setItems(BookList);	//set book to table view
 
  
     }
     
+    //TODO check if database is existed, if yes load Libraries name to collection and document(book) to library 
     public void CheckExistDatabase () {
-    	LibraryList.clear();
+    	LibraryList.clear();	//clear previous collection list
+    	
     	if (!dbConn.getAllLibraryNames().isEmpty()) {
     		for (String lib : dbConn.getAllLibraryNames()) {
-    			LibraryList.add(lib);
+    			LibraryList.add(lib);		//get all collection list
     		}
     		
+    		//set to collection table & select the first collection & show all book of the selected collection 
     		CollectionTable.setItems(LibraryList);
     		CollectionTable.getSelectionModel().selectFirst();
     		load(CollectionTable.getSelectionModel().getSelectedItem());
     		
     	} else {
-    		return;
+    		return;		//if non in database then return
     	}
     	
     } 
     
     
     
+    //TODO collection event, if mouse click one once then load book from that collection to library table 
     @FXML
     void CheckCollectionEvent(MouseEvent event) {
     	if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1){
@@ -415,10 +457,17 @@ public class LibraryUIControl implements Initializable{
         }
     }
     
+    //TODO library event, if mouse click ONE then load book subject&keyword, if TWO then open the file 
     @FXML
     void CheckLibraryEvent(MouseEvent event) {
     	if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2){
             //System.out.println(LibraryTable.getSelectionModel().getSelectedItem().getFilepath());
+    		 
+    		//if null selection then skips
+            if (LibraryTable.getSelectionModel().getSelectedItem() == null) {
+            	return;
+            }
+            
             try {
                 Desktop desktop = null;
                 if (Desktop.isDesktopSupported()) {
@@ -443,7 +492,14 @@ public class LibraryUIControl implements Initializable{
         
         if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1){
             //System.out.println(LibraryTable.getSelectionModel().getSelectedItem().getTitle());
+           
+            //if null selection then skips
+            if (LibraryTable.getSelectionModel().getSelectedItem() == null) {
+            	return;
+            }
+            
             String Keywords = "";
+            
             ResultSet rs = dbConn.getKeywordsforDoc(LibraryTable.getSelectionModel().getSelectedItem().getId());
             try {
 				while (rs.next()) {
