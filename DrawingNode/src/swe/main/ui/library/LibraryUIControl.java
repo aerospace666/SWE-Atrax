@@ -101,11 +101,17 @@ public class LibraryUIControl implements Initializable{
     private ContextMenu CollectionContextMenu;
     
     @FXML
+    private Label infoLabels; 		//labels for info tab -> use to set css themes
+    
+    @FXML
     private Label showKeywords;		//label for keywords, syntax: showKeywords.setText(book.getKeywords())
  
     @FXML
     private Label showSubject;		//label for subject, syntax: showKeywords.setText(book.getSubject())
 
+
+    @FXML
+    private Label showTitle;
     
     private String Libraryname;  //library name, declare at line 121
     AtraxDatabase dbConn = new AtraxDatabase();
@@ -529,6 +535,8 @@ public class LibraryUIControl implements Initializable{
             showKeywords.setText(LibraryTable.getSelectionModel().getSelectedItem().getKeywords());
             
             showSubject.setText(LibraryTable.getSelectionModel().getSelectedItem().getSubject());
+            
+            showTitle.setText(LibraryTable.getSelectionModel().getSelectedItem().getTitle());
         }
     }
     

@@ -1,0 +1,17 @@
+#infoLabels{
+	-fx-font-size: 10.0pt;
+	-fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+#showKeywords{
+	-fx-background-color :white ;
+}
+
+#showSubject{
+	-fx-background-color :white ;
+}
+
+#showTitle{
+	-fx-background-color :white ;
+}

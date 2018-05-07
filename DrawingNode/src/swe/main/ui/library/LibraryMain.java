@@ -12,9 +12,10 @@ public class LibraryMain extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
-			Scene scene = new Scene(root,1020,600);
+			Scene scene = new Scene(root,1020,690);
 			scene.getStylesheets().add(getClass().getResource("/src/swe/main/ui/library/library.css").toExternalForm());
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("ATRAX");
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
