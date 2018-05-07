@@ -3,15 +3,4 @@ DrawingNode/.classpath
 /.metadata/
 PDFBox/.classpath
 /.recommenders/
-DrawingNode/atraxdb/log
-DrawingNode/derby.log
-*.lck
-*.lck
-*.ctrl
-*.dat
-*.log
-*.lck
-*.lck
-*.ctrl
-*.dat
-*.log
+
