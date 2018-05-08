@@ -2,6 +2,8 @@ package src.application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,10 @@ public class MetaData {
 	private String FileName;
 	private File file;
 	private String LibraryName;
+	private List<String> MetaData_keyword;
+	private List<Integer> KeywordOccurance;
+ 	private Calendar CreationDate;
+
 	
 	public MetaData(String keywords, String author, String title, String subject,String filename) {
 		super();
@@ -55,12 +61,9 @@ public class MetaData {
 		WhitespaceTokenizer whitespaceTokenizer = WhitespaceTokenizer.INSTANCE;
 		
 		//open NLP for tagging each word from pdf
-		System.out.println("\n" + "before POS model" + "\n");
 		POSModel model = new POSModel(Stream_input);
-		System.out.println("\n" + "after POS model" + "\n");
-		System.out.println("\n" + "before POSTaggerME model" + "\n");
 		POSTaggerME tagger = new POSTaggerME(model);
-		System.out.println("\n" + "After POSTaggerME model" + "\n");
+		
 		
 		//contains the entire pdf as a string
 		String Extract_Text_pdf,Keywords;
@@ -69,120 +72,146 @@ public class MetaData {
 		int MaxKeyword = 0;
 		Map<Integer, String> Keyword_occurance = new HashMap<Integer, String>();
 		List<String> tag_keyword = new ArrayList<String> (); //contains tags for each word in the pdf
-		List<String> MetaData_keyword = new ArrayList<String> ();
-		List<Integer> KeywordOccurance = new ArrayList<Integer> ();
+		MetaData_keyword = new ArrayList<String> ();
+		KeywordOccurance = new ArrayList<Integer> ();
 		
 		PDDocument document;
+	 	
 		try {
+			
 			document = PDDocument.load(file);
 			PDDocumentInformation PDoc = document.getDocumentInformation();
 			
-			//KEYWORD CREATION USING OPENNLP
-			if(PDoc.getKeywords() == null)
+			if((document.getNumberOfPages()) < 50)
 			{
-				
-					Extract_Text_pdf = new PDFTextStripper().getText(document);
+				//KEYWORD CREATION USING OPENNLP
+				if(PDoc.getKeywords() == null)
+				{
 					
-					Tokens = whitespaceTokenizer.tokenize(Extract_Text_pdf);
-					keywordTags = tagger.tag(Tokens);
-					
-					//open NLP for sentence detection
-					InputStream Stream = new FileInputStream("en-sent.bin");
-					SentenceModel Model = new SentenceModel(Stream);
-					SentenceDetectorME Detector = new SentenceDetectorME(Model);
-					
-					SentenceExtraction = Detector.sentDetect(Extract_Text_pdf);
-					
-					
-					for(int index =0;index < keywordTags.length;index++)
-					{
-						if((keywordTags[index].equals("NN"))| (keywordTags[index].equals("VB")) |(keywordTags[index].equals("NNS")) |(keywordTags[index].equals("NNP")))
+						Extract_Text_pdf = new PDFTextStripper().getText(document);
+						
+						Tokens = whitespaceTokenizer.tokenize(Extract_Text_pdf);
+						keywordTags = tagger.tag(Tokens);
+						
+						//open NLP for sentence detection
+						InputStream Stream = new FileInputStream("en-sent.bin");
+						SentenceModel Model = new SentenceModel(Stream);
+						SentenceDetectorME Detector = new SentenceDetectorME(Model);
+						
+						SentenceExtraction = Detector.sentDetect(Extract_Text_pdf);
+						
+						
+						for(int index =0;index < keywordTags.length;index++)
 						{
-							tag_keyword.add(Tokens[index]);
-						}
-					}
-					
-					for(int index1 =0;index1 < tag_keyword.size();index1++)
-					{
-						for(int index2 =0;index2 < SentenceExtraction.length;index2++)
-						{
-						if(SentenceExtraction[index2].contains(tag_keyword.get(index1)))
+							if((keywordTags[index].equals("NN"))| (keywordTags[index].equals("VB")) |(keywordTags[index].equals("NNS")) |(keywordTags[index].equals("NNP")))
 							{
-								occurance++;
-								if(occurance >= 50)
+								tag_keyword.add(Tokens[index]);
+							}
+						}
+						
+						for(int index1 =0;index1 < tag_keyword.size();index1++)
+						{
+							for(int index2 =0;index2 < SentenceExtraction.length;index2++)
+							{
+							if(SentenceExtraction[index2].contains(tag_keyword.get(index1)))
 								{
-									if(!Keyword_occurance.containsValue(tag_keyword.get(index1)))
+									occurance++;
+									if(occurance >= 50)
 									{
-										Keyword_occurance.put(occurance,tag_keyword.get(index1));
-										occurance = 0;
-										break;
+										if(!Keyword_occurance.containsValue(tag_keyword.get(index1)))
+										{
+											Keyword_occurance.put(occurance,tag_keyword.get(index1));
+											occurance = 0;
+											break;
+										}
 									}
 								}
 							}
 						}
-					}
-					
-					
-					Map<Integer, String> SortKeyword_occurance = new TreeMap<Integer, String>(Keyword_occurance);	
-					
-					for(Map.Entry<Integer, String> entry : SortKeyword_occurance.entrySet())
-					{	
-						if(MaxKeyword < 20)
-						{
-							KeywordOccurance.add(entry.getKey());
-							MetaData_keyword.add(entry.getValue());
-							MaxKeyword++;
-						}
-						else
-						{
-							break;
-						}
 						
-					}
-					
-						Keywords = MetaData_keyword.toString();
-					    MetaData_keyword.clear();
-					
-						String[] SpiltString = Keywords.split("-|\\.|,|:|\\[|\\]|\\ ");
-						for(int i=0;i<SpiltString.length;i++)
-						{
-							if((!SpiltString[i].equals("")) && (!SpiltString[i].matches("-?\\d+"))&&(SpiltString[i].length() > 1))
+						
+						Map<Integer, String> SortKeyword_occurance = new TreeMap<Integer, String>(Keyword_occurance);	
+						
+						for(Map.Entry<Integer, String> entry : SortKeyword_occurance.entrySet())
+						{	
+							if(MaxKeyword < 20)
 							{
-								MetaData_keyword.add(SpiltString[i]);
+								KeywordOccurance.add(entry.getKey());
+								MetaData_keyword.add(entry.getValue());
+								MaxKeyword++;
 							}
+							else
+							{
+								break;
+							}
+							
 						}
 						
-						PDoc.setKeywords( MetaData_keyword.toString());
-						System.out.println("New set of keywords for " + file.getName());
-						System.out.println(PDoc.getKeywords());
-			}			
-			
-			if((PDoc.getTitle() != null))
-			{	
-				Title = PDoc.getTitle();
-			
+							Keywords = MetaData_keyword.toString();
+						    MetaData_keyword.clear();
+						
+							String[] SpiltString = Keywords.split("-|\\.|,|:|\\[|\\]|\\ ");
+							for(int i=0;i<SpiltString.length;i++)
+							{
+								if((!SpiltString[i].equals("")) && (!SpiltString[i].matches("-?\\d+"))&&(SpiltString[i].length() > 1))
+								{
+									MetaData_keyword.add(SpiltString[i]);
+								}
+							}
+							
+							PDoc.setKeywords( MetaData_keyword.toString());
+							
+							/**
+							for(int i=0;i<MetaData_keyword.size();i++)
+							{
+								System.out.println(MetaData_keyword.get(i));
+							}
+							**/
+							//System.out.println(PDoc.getKeywords());
+				}
+				else
+				{
+					String[] s  = (PDoc.getKeywords()).split("-|\\.|,|:|\\[|\\]|\\ ");
+					for(int i=0;i<s.length;i++)
+					{
+						KeywordOccurance.add(1);
+					}
+				}
+				
+				if((PDoc.getTitle() != null))
+				{	
+					Title = PDoc.getTitle();
+				
+				}
+				
+				if((PDoc.getSubject() != null))
+				{	
+					Subject = PDoc.getSubject();
+				
+				}
+				
+				if((PDoc.getAuthor() != null))
+				{	
+					Author = PDoc.getAuthor();
+				
+				}
+				
+				if((PDoc.getKeywords() != null))
+				{	
+					Keywords = PDoc.getKeywords();
+				
+				}
+				
+				if((PDoc.getCreationDate() != null))
+				{	
+					CreationDate = PDoc.getCreationDate();
+				
+				}
+				System.out.println(file.getName());
+				System.out.println(PDoc.getKeywords());
+				System.out.println();
+				document.close();
 			}
-			
-			if((PDoc.getSubject() != null))
-			{	
-				Subject = PDoc.getSubject();
-			
-			}
-			
-			if((PDoc.getAuthor() != null))
-			{	
-				Author = PDoc.getAuthor();
-			
-			}
-			
-			if((PDoc.getKeywords() != null))
-			{	
-				Keywords = PDoc.getKeywords();
-			
-			}
-			
-			
-			document.close();
 			
 		} catch (InvalidPasswordException e) {
 			// TODO Auto-generated catch block
@@ -205,6 +234,8 @@ public class MetaData {
 			for(int i=0;i<ListOfFiles.length;i++)
 			{
 				ExtractMetaData(ListOfFiles[i]);
+				//System.out.println(file.getName());
+				//System.out.println(PDoc.getKeywords());
 			}
 		}
 		else
@@ -235,6 +266,26 @@ public class MetaData {
 	
 	public String getLibrary() {
 		return LibraryName;
+	}
+	
+	public List<String> getKeywordsList()
+	{
+		return MetaData_keyword;
+	}
+	
+	public String getPath()
+	{
+		return file.getPath();
+	}
+	
+	public Date getCreationDate()
+	{
+		return CreationDate.getTime();
+	}
+	
+	public List<Integer> getKeywordOccurance()
+	{
+		return KeywordOccurance;
 	}
 	
 }

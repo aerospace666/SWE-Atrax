@@ -1,5 +1,6 @@
 package src.application;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -18,32 +19,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-<<<<<<< HEAD
     	
     	MetaData Data = new MetaData();
 		
 		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
 		
 		Data.getFilePath(Path,"library"); //testing purpose
-		
-=======
->>>>>>> 212dc38e53acb01a36cce844f0c944432a8b5514
-    
-    	try {
-			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
-			Scene scene = new Scene(root,750,500);
-			scene.getStylesheets().add(getClass().getResource("/src/swe/main/ui/library/library.css").toExternalForm());
-			primaryStage.setScene(scene);
-			primaryStage.show();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	
-    }
-    
 
-    public static void main(String[] args) throws IOException {
-    	System.out.println("Start main application........");
     	
 //    	AtraxDatabase atraxdb = new AtraxDatabase();
 //    	
@@ -68,40 +50,13 @@ public class Main extends Application {
 //        	}
 //        	System.out.println("\n");
 //        }
-    	
-    	MetaData Data = new MetaData();
-		
-		String Path = "./TestPdf";
-		
-		Data.getFilePath(Path,"library"); //testing purpose
-		
-		//ArrayList<String> keywords = new ArrayList<String>();
-    	//keywords.add(metaData.getKeywords());
-    	
-    	System.out.println(Data.getKeywords());
-    	System.out.println(Data.getAuthor());
-    	System.out.println(Data.getFileNamet());
-    	System.out.println(Data.getSubject());
-    	System.out.println(Data.getTitle());
-    	
-        launch(args);
+   
         
-<<<<<<< HEAD
-        if(atraxdb.connection != null)
-        {
-        	atraxdb.closeDatabaseConnection();
-        }
-<<<<<<< HEAD
-        **/
-=======
 //        if(atraxdb.connection != null)
 //        {
 //        	atraxdb.closeDatabaseConnection();
 //        }
 
-        
-
->>>>>>> 212dc38e53acb01a36cce844f0c944432a8b5514
     }
     
 }
