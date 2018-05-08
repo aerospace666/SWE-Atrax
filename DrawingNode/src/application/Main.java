@@ -17,20 +17,16 @@ import src.swe.database.AtraxDatabase;
 
 public class Main extends Application {
     @Override
-<<<<<<< HEAD
-    public void start(Stage primaryStage) throws IOException {
-=======
+
     public void start(Stage primaryStage) throws IOException, SQLException {
     	
     	boolean uploadButtonClick = true;
->>>>>>> 6139e348defc4860f4ce0eb6b27b24b54e1ae5c0
+
     	
     	MetaData Data = new MetaData();
     	
 
-		String Path = "./TestPdf"; //include path here
-		
-<<<<<<< HEAD
+	//	String Path = "./TestPdf"; //include path here
 		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
 		
 		Data.getFilePath(Path,"library"); //testing purpose
@@ -66,7 +62,6 @@ public class Main extends Application {
 //        	atraxdb.closeDatabaseConnection();
 //        }
 
-=======
 		if(uploadButtonClick == true)
 		{
 			Data.getFilePath(Path,"library"); // get metadata then insert into database
@@ -88,6 +83,5 @@ public class Main extends Application {
     	System.out.println("Start main application........");
     	
         launch(args);
->>>>>>> 6139e348defc4860f4ce0eb6b27b24b54e1ae5c0
     }
 }
