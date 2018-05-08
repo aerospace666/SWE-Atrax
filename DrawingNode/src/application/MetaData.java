@@ -1,26 +1,33 @@
 package src.application;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Arrays;
+=======
+>>>>>>> 6139e348defc4860f4ce0eb6b27b24b54e1ae5c0
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.TreeMap;
-import java.io.*;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
+import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.WhitespaceTokenizer;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.pdfbox.pdmodel.PDDocumentInformation;
-import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import src.swe.database.AtraxDatabase;
 
 public class MetaData {
 	
@@ -28,12 +35,17 @@ public class MetaData {
 	private String Author;
 	private String Title;
 	private String Subject;
-	private String FileName;
 	private File file;
 	private String LibraryName;
 	private List<String> MetaData_keyword;
 	private List<Integer> KeywordOccurance;
  	private Calendar CreationDate;
+<<<<<<< HEAD
+=======
+ 	PDDocument document;
+ 	PDDocumentInformation PDoc;
+	AtraxDatabase dbConn = new AtraxDatabase();
+>>>>>>> 6139e348defc4860f4ce0eb6b27b24b54e1ae5c0
 
 	
 	public MetaData(String keywords, String author, String title, String subject,String filename) {
@@ -42,13 +54,9 @@ public class MetaData {
 		Author = author;
 		Title = title;
 		Subject = subject;
-		FileName = filename;
 	}
 	
-	public MetaData()
-	{
-	
-	}
+	public MetaData(){}
 	
 	public void ExtractMetaData(File file) throws IOException
 	{
@@ -63,7 +71,10 @@ public class MetaData {
 		//open NLP for tagging each word from pdf
 		POSModel model = new POSModel(Stream_input);
 		POSTaggerME tagger = new POSTaggerME(model);
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 6139e348defc4860f4ce0eb6b27b24b54e1ae5c0
 		
 		//contains the entire pdf as a string
 		String Extract_Text_pdf,Keywords;
@@ -75,13 +86,17 @@ public class MetaData {
 		MetaData_keyword = new ArrayList<String> ();
 		KeywordOccurance = new ArrayList<Integer> ();
 		
+<<<<<<< HEAD
 		PDDocument document;
 	 	
+=======
+>>>>>>> 6139e348defc4860f4ce0eb6b27b24b54e1ae5c0
 		try {
 			
 			document = PDDocument.load(file);
-			PDDocumentInformation PDoc = document.getDocumentInformation();
+			PDoc = document.getDocumentInformation();
 			
+<<<<<<< HEAD
 			if((document.getNumberOfPages()) < 50)
 			{
 				//KEYWORD CREATION USING OPENNLP
@@ -213,6 +228,113 @@ public class MetaData {
 				document.close();
 			}
 			
+=======
+			//KEYWORD CREATION USING OPENNLP
+			if(PDoc.getKeywords() == null || PDoc.getKeywords().isEmpty())
+			{
+				Extract_Text_pdf = new PDFTextStripper().getText(document);
+				
+				Tokens = whitespaceTokenizer.tokenize(Extract_Text_pdf);
+				keywordTags = tagger.tag(Tokens);
+				
+				//open NLP for sentence detection
+				InputStream Stream = new FileInputStream("en-sent.bin");
+				SentenceModel Model = new SentenceModel(Stream);
+				SentenceDetectorME Detector = new SentenceDetectorME(Model);
+				
+				SentenceExtraction = Detector.sentDetect(Extract_Text_pdf);
+				
+				for(int index =0;index < keywordTags.length;index++)
+				{
+					if((keywordTags[index].equals("NN"))| (keywordTags[index].equals("VB")) |(keywordTags[index].equals("NNS")) |(keywordTags[index].equals("NNP")))
+					{
+						tag_keyword.add(Tokens[index]);
+					}
+				}
+				
+				for(int index1 =0;index1 < tag_keyword.size();index1++)
+				{
+					for(int index2 =0;index2 < SentenceExtraction.length;index2++)
+					{
+					if(SentenceExtraction[index2].contains(tag_keyword.get(index1)))
+						{
+							occurance++;
+							if(occurance >= 50)
+							{
+								if(!Keyword_occurance.containsValue(tag_keyword.get(index1)))
+								{
+									Keyword_occurance.put(occurance,tag_keyword.get(index1));
+									occurance = 0;
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				Map<Integer, String> SortKeyword_occurance = new TreeMap<Integer, String>(Keyword_occurance);	
+				
+				for(Map.Entry<Integer, String> entry : SortKeyword_occurance.entrySet())
+				{	
+					if(MaxKeyword < 20)
+					{
+						KeywordOccurance.add(entry.getKey());
+						MetaData_keyword.add(entry.getValue());
+						MaxKeyword++;
+					}
+					else
+					{
+						break;
+					}
+					
+				}
+				
+				Keywords = MetaData_keyword.toString();
+			    MetaData_keyword.clear();
+			
+				String[] SpiltString = Keywords.split("-|\\.|,|:|\\[|\\]|\\ ");
+				for(int i=0;i<SpiltString.length;i++)
+				{
+					if((!SpiltString[i].equals("")) && (!SpiltString[i].matches("-?\\d+"))&&(SpiltString[i].length() > 1))
+					{
+						MetaData_keyword.add(SpiltString[i]);
+					}
+				}
+				
+				PDoc.setKeywords( MetaData_keyword.toString());
+				//	System.out.println(PDoc.getKeywords());
+			}			
+			
+			if((PDoc.getTitle() != null))
+			{	
+				Title = PDoc.getTitle();
+			}
+			
+			if((PDoc.getSubject() != null))
+			{	
+				Subject = PDoc.getSubject();
+			}
+			
+			if((PDoc.getAuthor() != null))
+			{	
+				Author = PDoc.getAuthor();
+			}
+			
+			if((PDoc.getKeywords() != null))
+			{	
+				Keywords = PDoc.getKeywords();
+			}
+			
+			if((PDoc.getCreationDate() != null))
+			{	
+				CreationDate = PDoc.getCreationDate();
+			}
+//			System.out.println(file.getName());
+//			System.out.println(PDoc.getKeywords());
+			
+			document.close();
+			
+>>>>>>> 6139e348defc4860f4ce0eb6b27b24b54e1ae5c0
 		} catch (InvalidPasswordException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -220,7 +342,6 @@ public class MetaData {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
 	}
 	
 	public void getFilePath(String FilePath,String Library) throws IOException
@@ -234,13 +355,26 @@ public class MetaData {
 			for(int i=0;i<ListOfFiles.length;i++)
 			{
 				ExtractMetaData(ListOfFiles[i]);
+<<<<<<< HEAD
 				//System.out.println(file.getName());
 				//System.out.println(PDoc.getKeywords());
+=======
+				System.out.println(file.getName());
+				System.out.println(PDoc.getKeywords());
+				//TODO insertToDatabase function goes here 
+				//TODO pass library ID instead of "1"
+				String result = dbConn.insertDocToLibrary(getFileName(), getTitle(), getSubject(), getCreationDate(), getPath(), 1, getAuthor(), ""); //temp fixed for keywords
+				System.out.println("\n The result from DB query is: " + result);
+				
+>>>>>>> 6139e348defc4860f4ce0eb6b27b24b54e1ae5c0
 			}
 		}
 		else
 		{
 			ExtractMetaData(file);
+			System.out.println(file.getName());
+			System.out.println(PDoc.getKeywords());
+			//TODO insertToDatabase function goes here
 		}
 	}
 
@@ -260,7 +394,7 @@ public class MetaData {
 		return Subject;
 	}
 	
-	public String getFileNamet() {
+	public String getFileName() {
 		return file.getName();
 	}
 	
@@ -289,4 +423,5 @@ public class MetaData {
 	}
 	
 }
+
 

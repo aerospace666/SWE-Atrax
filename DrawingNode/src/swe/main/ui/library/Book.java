@@ -1,27 +1,44 @@
 package src.swe.main.ui.library;
 
+
+import java.util.Date;
+
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Book {
 	private final SimpleStringProperty title;
-    private final SimpleStringProperty id;
+	private final SimpleStringProperty name;
+	private final SimpleStringProperty subject;
+    private final SimpleIntegerProperty id;
+    private final SimpleStringProperty libid;
     private final SimpleStringProperty author;
-    private final SimpleStringProperty date;
+    private final Date date;
     private final SimpleStringProperty filepath;
+    private final SimpleStringProperty keywords;
+   
 
     
-    public Book(String title, String id, String author, String date, String filepath) {
+    public Book(int id, String subject ,String name,String title, String author, Date date, String filepath, String keywords, String libid) {
     	this.title = new SimpleStringProperty(title);
-    	this.id = new SimpleStringProperty(id);
+    	this.name = new SimpleStringProperty(name);
+    	this.subject = new SimpleStringProperty(subject);
+    	this.id = new SimpleIntegerProperty(id);
     	this.author = new SimpleStringProperty(author);
-    	this.date = new SimpleStringProperty(date);
+    	this.date = date;
     	this.filepath = new SimpleStringProperty(filepath);
+    	this.libid = new SimpleStringProperty(libid);
+    	this.keywords = new SimpleStringProperty(keywords);
     }
     public String getTitle() {
     	
     	return title.get();
     }
-    public String getId() {
+    public String getName() {
+    	
+    	return name.get();
+    }
+    public int getId() {
     	
     	return id.get();
     }
@@ -29,13 +46,23 @@ public class Book {
     	
     	return author.get();
     }
-    public String getDate() {
+    public Date getDate() {
 
-    	return date.get();
+    	return date;
     }
     public String getFilepath() {
     	return filepath.get();
     }
     
+    public String getSubject() {
+    	return subject.get();
+    }
+    
+    public String getLibid() {
+    	return libid.get();
+    }
+    public String getKeywords() {
+    	return keywords.get();
+    }
     
 }
