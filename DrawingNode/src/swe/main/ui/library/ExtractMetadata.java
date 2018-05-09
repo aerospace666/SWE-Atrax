@@ -153,6 +153,15 @@ public class ExtractMetadata {
 						KeywordOccurance.add(1);
 					}
 				}
+			} else {	//if file is > 50 pages, then skip keywords generating
+				
+				//if no available keywords then set notice
+				if(PDoc.getKeywords() == null || PDoc.getKeywords().isEmpty() ) {
+					PDoc.setKeywords("<Notice: File is too large for generating Keywords>");
+				}
+			
+			}
+		
 				
 				String tempSubject = "-";
 				if((PDoc.getSubject() != null && !PDoc.getSubject().isEmpty()))
@@ -206,7 +215,7 @@ public class ExtractMetadata {
 				
 				book = new Book(ID, tempSubject, file.getName(), tempTitle , tempAuthor, tempDate, file.getAbsolutePath(), tempKeywords ,libid);
 				document.close();
-		    }
+		    
 			
 		} catch (InvalidPasswordException e) {
 			// TODO Auto-generated catch block

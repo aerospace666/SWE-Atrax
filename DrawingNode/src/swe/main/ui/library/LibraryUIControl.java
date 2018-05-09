@@ -336,9 +336,7 @@ public class LibraryUIControl implements Initializable{
     	wd = new WorkIndicatorDialog<String>(LibraryTable.getScene().getWindow(), "Generating Files's metadata...");
 		 
 	    wd.addTaskEndNotification(result -> {
-	    	System.out.println(result);
 	    	wd=null; // don't keep the object, cleanup
-	    	
 	    	//result return = counter ->check 353 for counter declaration
 	    	//if no pdf file, alert error and return
 	    	if (result == 0) {
@@ -390,9 +388,10 @@ public class LibraryUIControl implements Initializable{
     	
     	//refresh library table 
     	load(Libraryname);
-    	
     	return 1;
     	}); //end warp
+	    
+	    
     }
     
     
