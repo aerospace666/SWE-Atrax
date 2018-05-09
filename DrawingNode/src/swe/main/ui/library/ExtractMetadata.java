@@ -63,143 +63,150 @@ public class ExtractMetadata {
 			document = PDDocument.load(file);
 			PDoc = document.getDocumentInformation();
 			
-			//KEYWORD CREATION USING OPENNLP
-			if(PDoc.getKeywords() == null || PDoc.getKeywords().isEmpty() )
+		if((document.getNumberOfPages()) < 50)
 			{
-				
-					Extract_Text_pdf = new PDFTextStripper().getText(document);
+				//KEYWORD CREATION USING OPENNLP
+				if(PDoc.getKeywords() == null || PDoc.getKeywords().isEmpty() )
+				{
 					
-					Tokens = whitespaceTokenizer.tokenize(Extract_Text_pdf);
-					keywordTags = tagger.tag(Tokens);
-					
-					//open NLP for sentence detection
-					InputStream Stream = new FileInputStream("en-sent.bin");
-					SentenceModel Model = new SentenceModel(Stream);
-					SentenceDetectorME Detector = new SentenceDetectorME(Model);
-					
-					SentenceExtraction = Detector.sentDetect(Extract_Text_pdf);
-					
-					
-					for(int index =0;index < keywordTags.length;index++)
-					{
-						if((keywordTags[index].equals("NN"))| (keywordTags[index].equals("VB")) |(keywordTags[index].equals("NNS")) |(keywordTags[index].equals("NNP")))
+						Extract_Text_pdf = new PDFTextStripper().getText(document);
+						
+						Tokens = whitespaceTokenizer.tokenize(Extract_Text_pdf);
+						keywordTags = tagger.tag(Tokens);
+						
+						//open NLP for sentence detection
+						InputStream Stream = new FileInputStream("en-sent.bin");
+						SentenceModel Model = new SentenceModel(Stream);
+						SentenceDetectorME Detector = new SentenceDetectorME(Model);
+						
+						SentenceExtraction = Detector.sentDetect(Extract_Text_pdf);
+						
+						
+						for(int index =0;index < keywordTags.length;index++)
 						{
-							tag_keyword.add(Tokens[index]);
-						}
-					}
-					
-					for(int index1 =0;index1 < tag_keyword.size();index1++)
-					{
-						for(int index2 =0;index2 < SentenceExtraction.length;index2++)
-						{
-						if(SentenceExtraction[index2].contains(tag_keyword.get(index1)))
+							if((keywordTags[index].equals("NN"))| (keywordTags[index].equals("VB")) |(keywordTags[index].equals("NNS")) |(keywordTags[index].equals("NNP")))
 							{
-								occurance++;
-								if(occurance >= 50)
+								tag_keyword.add(Tokens[index]);
+							}
+						}
+						
+						for(int index1 =0;index1 < tag_keyword.size();index1++)
+						{
+							for(int index2 =0;index2 < SentenceExtraction.length;index2++)
+							{
+							if(SentenceExtraction[index2].contains(tag_keyword.get(index1)))
 								{
-									if(!Keyword_occurance.containsValue(tag_keyword.get(index1)))
+									occurance++;
+									if(occurance >= 50)
 									{
-										Keyword_occurance.put(occurance,tag_keyword.get(index1));
-										occurance = 0;
-										break;
+										if(!Keyword_occurance.containsValue(tag_keyword.get(index1)))
+										{
+											Keyword_occurance.put(occurance,tag_keyword.get(index1));
+											occurance = 0;
+											break;
+										}
 									}
 								}
 							}
 						}
-					}
-					
-					
-					Map<Integer, String> SortKeyword_occurance = new TreeMap<Integer, String>(Keyword_occurance);	
-					
-					for(Map.Entry<Integer, String> entry : SortKeyword_occurance.entrySet())
-					{	
-						if(MaxKeyword < 20)
-						{
-							KeywordOccurance.add(entry.getKey());
-							MetaData_keyword.add(entry.getValue());
-							MaxKeyword++;
-						}
-						else
-						{
-							break;
-						}
 						
-					}
-					
-						Keywords = MetaData_keyword.toString();
-					    MetaData_keyword.clear();
-					
-						String[] SpiltString = Keywords.split("-|\\.|,|:|\\[|\\]|\\ ");
-						for(int i=0;i<SpiltString.length;i++)
-						{
-							if((!SpiltString[i].equals("")) && (!SpiltString[i].matches("-?\\d+"))&&(SpiltString[i].length() > 1))
+						
+						Map<Integer, String> SortKeyword_occurance = new TreeMap<Integer, String>(Keyword_occurance);	
+						
+						for(Map.Entry<Integer, String> entry : SortKeyword_occurance.entrySet())
+						{	
+							if(MaxKeyword < 20)
 							{
-								MetaData_keyword.add(SpiltString[i]);
+								KeywordOccurance.add(entry.getKey());
+								MetaData_keyword.add(entry.getValue());
+								MaxKeyword++;
 							}
+							else
+							{
+								break;
+							}
+							
 						}
 						
-						PDoc.setKeywords( MetaData_keyword.toString());
-						System.out.println("New set of keywords for " + file.getName());
+							Keywords = MetaData_keyword.toString();
+							MetaData_keyword.clear();
 						
-						
-			}
-			
-			
-			
-			
-			
-			String tempSubject = "-";
-			if((PDoc.getSubject() != null && !PDoc.getSubject().isEmpty()))
-			{	
-				tempSubject = PDoc.getSubject();
-			
-			}
-			
-			String tempTitle = "-";
-			if((PDoc.getTitle() != null && !PDoc.getTitle().isEmpty()))
-			{	
-				tempTitle = PDoc.getTitle();
-			
-			}
-			
-			String tempAuthor = "-";
-			if(PDoc.getAuthor() != null && !PDoc.getAuthor().isEmpty())
-			{	
-				tempAuthor = PDoc.getAuthor();
-			
-			}
-			
-			/**
-			//insert to database for keywords
-			AtraxDatabase dbConn = new AtraxDatabase();
-			Keywords = PDoc.getKeywords();
-			dbConn.insertKeywordtoKeywordsTable(MetaData_keyword);
-			for (String tempString : MetaData_keyword) {
-				for (String TempOccur : Keyword_occurance.values()) {
-					if(TempOccur.equals(tempString)) {
-						dbConn.insertIntoDocKeywordTable(d, keywordID, keywordOccurence) // need get doc id function
+							String[] SpiltString = Keywords.split("-|\\.|,|:|\\[|\\]|\\ ");
+							for(int i=0;i<SpiltString.length;i++)
+							{
+								if((!SpiltString[i].equals("")) && (!SpiltString[i].matches("-?\\d+"))&&(SpiltString[i].length() > 1))
+								{
+									MetaData_keyword.add(SpiltString[i]);
+								}
+							}
+							
+							PDoc.setKeywords( MetaData_keyword.toString());
+							System.out.println("New set of keywords for " + file.getName());
+							
+							
+				}
+				else
+				{
+					String[] s  = (PDoc.getKeywords()).split("-|\\.|,|:|\\[|\\]|\\ ");
+					for(int i=0;i<s.length;i++)
+					{
+						KeywordOccurance.add(1);
 					}
 				}
-			}
-			*/
-			
-			
-			
-			Date tempDate =  new Date(0);
-			if(PDoc.getCreationDate() != null)
-			{	
-				tempDate = PDoc.getCreationDate().getTime();
-			
-			}
-			
-			String tempKeywords = "-";
-			if (PDoc.getKeywords() != null && ! PDoc.getKeywords().isEmpty()) {
-				tempKeywords = PDoc.getKeywords();
-			}
-			
-			
-			book = new Book(ID, tempSubject, file.getName(), tempTitle , tempAuthor, tempDate, file.getAbsolutePath(), tempKeywords ,libid);
-			document.close();
+				
+				String tempSubject = "-";
+				if((PDoc.getSubject() != null && !PDoc.getSubject().isEmpty()))
+				{	
+					tempSubject = PDoc.getSubject();
+				
+				}
+				
+				String tempTitle = "-";
+				if((PDoc.getTitle() != null && !PDoc.getTitle().isEmpty()))
+				{	
+					tempTitle = PDoc.getTitle();
+				
+				}
+				
+				String tempAuthor = "-";
+				if(PDoc.getAuthor() != null && !PDoc.getAuthor().isEmpty())
+				{	
+					tempAuthor = PDoc.getAuthor();
+				
+				}
+				
+				/**
+				//insert to database for keywords
+				AtraxDatabase dbConn = new AtraxDatabase();
+				Keywords = PDoc.getKeywords();
+				dbConn.insertKeywordtoKeywordsTable(MetaData_keyword);
+				for (String tempString : MetaData_keyword) {
+					for (String TempOccur : Keyword_occurance.values()) {
+						if(TempOccur.equals(tempString)) {
+							dbConn.insertIntoDocKeywordTable(d, keywordID, keywordOccurence) // need get doc id function
+						}
+					}
+				}
+				*/
+				
+				
+				
+				Date tempDate =  new Date(0);
+				if(PDoc.getCreationDate() != null)
+				{	
+					tempDate = PDoc.getCreationDate().getTime();
+				
+				}
+				
+				String tempKeywords = "-";
+				if (PDoc.getKeywords() != null && ! PDoc.getKeywords().isEmpty()) {
+					tempKeywords = PDoc.getKeywords();
+				}
+				
+				
+				book = new Book(ID, tempSubject, file.getName(), tempTitle , tempAuthor, tempDate, file.getAbsolutePath(), tempKeywords ,libid);
+				document.close();
+		    }
 			
 		} catch (InvalidPasswordException e) {
 			// TODO Auto-generated catch block
