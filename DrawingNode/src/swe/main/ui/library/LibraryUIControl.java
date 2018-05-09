@@ -26,7 +26,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -42,15 +41,13 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import src.swe.database.AtraxDatabase;
-import src.swe.main.ui.Alert.AlertFormat;;
+import src.swe.main.ui.Alert.AlertFormat;
+import src.swe.main.ui.Alert.WorkIndicatorDialog;;
 public class LibraryUIControl implements Initializable{
 
 	@FXML
     private StackPane MainID;
-	
-	@FXML
-    private SplitPane SplitPaneId;
-	
+		
 	@FXML
     private BorderPane LibraryUI;
 	
@@ -111,9 +108,11 @@ public class LibraryUIControl implements Initializable{
 
 
     @FXML
-    private Label showTitle;
+    private Label showTitle;		//label for title, syntax: showTitle.setText(book.getTitle())
     
-    private String Libraryname;  //library name, declare at line 121
+    
+    
+    private String Libraryname;  //library name
     AtraxDatabase dbConn = new AtraxDatabase();
     
     ObservableList<Book> BookList = FXCollections.observableArrayList(); //Book List for LibaryTable
@@ -121,7 +120,10 @@ public class LibraryUIControl implements Initializable{
     
     AlertFormat alert = new AlertFormat();
     
+    private WorkIndicatorDialog<String> wd=null;	// progress indicator object. import from main.ui.Alert.WorkIndicatorDialog
     
+    
+    // Implement in menu item: file, Clear collection select when add new collection
     @FXML
     void ClearCollectionSelection(ActionEvent event) {
     	CollectionTable.getSelectionModel().clearSelection();
@@ -166,7 +168,7 @@ public class LibraryUIControl implements Initializable{
 			
 			Scene pop = new Scene(grid, 250, 50);
 			popup.setScene(pop);
-			popup.setTitle("Enter Libary Name");
+			popup.setTitle("Enter Collection Name");
 			
 			//check if it from collection context menu
 			if (CollectionTable.getSelectionModel().getSelectedItem() == null)
@@ -174,34 +176,50 @@ public class LibraryUIControl implements Initializable{
 				popup.show();
 				
 			} else {
-				//start process with libraryname equal the collection selection
-				try {
-					Libraryname = CollectionTable.getSelectionModel().getSelectedItem();
-					//extract data
-					getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
-					
-					//insert generated book to database
-					for (Book book: BookList) {
+				
+				
+				// progress indicator wrap the code
+				wd = new WorkIndicatorDialog<String>(LibraryTable.getScene().getWindow(), "Generating Files's metadata...");
+				 
+			    wd.addTaskEndNotification(result -> {
+			    	System.out.println(result);
+			    	wd=null; // don't keep the object, cleanup
+			    });
+			 
+			    wd.exec("123", inputParam -> {
+			    	
+			    	
+			    	//actual code
+			    	//start process with libraryname equal the collection selection 
+					try {
+						Libraryname = CollectionTable.getSelectionModel().getSelectedItem();
+						//extract data
+						getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
 						
-						dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
-					}
+						//insert generated book to database
+						for (Book book: BookList) {
+							
+							dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+						}
+						
+						
+						
+					} catch (IOException e1) {
+						
+						e1.printStackTrace();
+					} 
 					
+					//example:
+			        //ReadFolder data = new ReadFolder;
+			        // data.getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
+			       
 					
-					
-				} catch (IOException e1) {
-					
-					e1.printStackTrace();
-				} 
+					//TODO then call load function to load data to table view
+			        load(Libraryname);
+			       
+			       return 1;
+			    });	//end wrap
 				
-				//example:
-		        //ReadFolder data = new ReadFolder;
-		        // data.getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
-		       
-				
-				//TODO then call load function to load data to table view
-		        load(Libraryname);
-		        
-		        return;
 		        				        
 			}
 			
@@ -230,39 +248,57 @@ public class LibraryUIControl implements Initializable{
 						}
 				       
 						
-						
-						//TODO call function to reading folder and insert to database
-						
-						try {
+						// progress indicator wrap the code
+						wd = new WorkIndicatorDialog<String>(LibraryTable.getScene().getWindow(), "Generating Files's metadata...");
+						 
+					    wd.addTaskEndNotification(result -> {
+					    	System.out.println(result);
+					    	wd=null; // don't keep the object, cleanup
+					    });
+					 
+					    wd.exec("123", inputParam -> {
+					    	
+					    	
+					    	//actual code
+					    	//TODO call function to reading folder and insert to database
+					    	
+					    	
+					    	try {
 							
-							getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
+					    		getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
 						
 							
-							for (Book book: BookList) {
+					    		for (Book book: BookList) {
 								
-								dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
-							}
+					    			dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+					    		}
 							
 							
 							
-						} catch (IOException e1) {
+					    	} catch (IOException e1) {
 							
-							e1.printStackTrace();
-						}
+					    		e1.printStackTrace();
+					    	}
 			
 						
-						//example:
-				        //ReadFolder data = new ReadFolder;
-				        // data.getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
+					    	//example:
+					    	//ReadFolder data = new ReadFolder;
+					    	// data.getFilePath(selectedDirectory.getAbsolutePath(),name.getText());
 				       
 						
-						//TODO load new collection name & update library table
+					    	//TODO load new collection name & update library table
 				       
-				        LibraryList.add(Libraryname);
-				        CollectionTable.setItems(LibraryList);
-				        CollectionTable.getSelectionModel().selectLast();
-				        load(Libraryname);
-				        				        
+					    	
+					    	
+					    	
+					    	
+					    	return 1;
+					    }); // end wrap
+					    
+					    LibraryList.add(Libraryname);
+				    	CollectionTable.setItems(LibraryList);
+				    	CollectionTable.getSelectionModel().selectLast();
+					    load(Libraryname);
 				     }
 				 });
 			
@@ -276,7 +312,7 @@ public class LibraryUIControl implements Initializable{
     	
     	//if select from empty collection then return
     	if (CollectionTable.getSelectionModel().getSelectedItem() == null) {
-    		alert.errorAlert("No file selecetd", "Please choose a file");
+    		alert.errorAlert("No Collection selecetd", "Please choose a collection first");
     		return;
     	}
     	
@@ -294,6 +330,29 @@ public class LibraryUIControl implements Initializable{
     	if(selectedfile.isEmpty()) {
     		return;
     	}
+    	
+    	
+    	//progress indicator wrap the code
+    	wd = new WorkIndicatorDialog<String>(LibraryTable.getScene().getWindow(), "Generating Files's metadata...");
+		 
+	    wd.addTaskEndNotification(result -> {
+	    	System.out.println(result);
+	    	wd=null; // don't keep the object, cleanup
+	    	
+	    	//result return = counter ->check 353 for counter declaration
+	    	//if no pdf file, alert error and return
+	    	if (result == 0) {
+	    			
+	   			alert.errorAlert("Unsupported file type", "Please choose only pdf file");
+				return;
+	    	}
+	    	
+	    });
+	 
+	    wd.exec("123", inputParam -> {
+	    	
+	    //actual code	
+	    	
     	int counter = 0; //counter check for non pdf
     	
     	//extract each file data and insert into database
@@ -301,6 +360,7 @@ public class LibraryUIControl implements Initializable{
     		
     		if (tempFile.getName().contains(".pdf")) {
     			counter++;
+    			
     			try {
     				getFilePath(tempFile.getAbsolutePath(), Libraryname);
 			
@@ -314,20 +374,25 @@ public class LibraryUIControl implements Initializable{
     				
     	    		dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
     			}
+    			
+    		
     		}
     	}
     		
     	//if no pdf file, alert error and return
     	if (counter == 0) {
     			
-   			alert.errorAlert("Unsupported file type", "Please choose only pdf file");
-			return;
+   			//alert.errorAlert("Unsupported file type", "Please choose only pdf file");
+			return counter;
     	}
     		
     	
     	
     	//refresh library table 
     	load(Libraryname);
+    	
+    	return 1;
+    	}); //end warp
     }
     
     
@@ -341,7 +406,7 @@ public class LibraryUIControl implements Initializable{
     	dbConn.createNewLibrary(Library);
     	
     	String libid = dbConn.getLibraryID(Library);
-    	//System.out.println(libid);
+		//System.out.println(libid);
     	
     	//extract data from ExtractMetadata.java
     	ExtractMetadata extractBook = new ExtractMetadata();
@@ -381,14 +446,8 @@ public class LibraryUIControl implements Initializable{
 	}
     
     
-    //TODO insert Keywords for each files
-    public void InsertKeywords() {
-    	
-    }
-    
-    
-    
-    
+
+
     
     //TODO initialize table column & Load() import bookdata and display
      
@@ -415,7 +474,7 @@ public class LibraryUIControl implements Initializable{
     	BookList.clear();						//Erase bookList then assign database to book
     	
     	//System.out.println(dbConn.getLibraryID(libname));
-    	if (dbConn.getLibraryID(libname) != null) {
+    	if (dbConn.getLibraryID(libname) != "ERROR") {
     		
     		int libid = Integer.parseInt(dbConn.getLibraryID(libname));
     		//System.out.println(libid);
@@ -465,7 +524,14 @@ public class LibraryUIControl implements Initializable{
     @FXML
     void CheckCollectionEvent(MouseEvent event) {
     	if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1){
-           // System.out.println(CollectionTable.getSelectionModel().getSelectedItem());
+    		
+    		//if select from empty collection then return
+        	if (CollectionTable.getSelectionModel().getSelectedItem() == null) {
+        		return;
+        	}
+    		
+    		
+    		// System.out.println(CollectionTable.getSelectionModel().getSelectedItem());
             load(CollectionTable.getSelectionModel().getSelectedItem());
         }
     }
