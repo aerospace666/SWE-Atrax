@@ -1,87 +1,27 @@
 package src.application;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart.Data;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import src.swe.database.AtraxDatabase;
+
 
 public class Main extends Application {
-    @Override
-
-    public void start(Stage primaryStage) throws IOException, SQLException {
-    	
-    	boolean uploadButtonClick = true;
-
-    	
-    	MetaData Data = new MetaData();
-    	
-
-	//	String Path = "./TestPdf"; //include path here
-		String Path = "C:/Users/dolly/Downloads/Atraxtestdata/demo";
-		
-		Data.getFilePath(Path,"library"); //testing purpose
-
-    	
-//    	AtraxDatabase atraxdb = new AtraxDatabase();
-//    	
-//    	atraxdb.getDatabaseConnection();
-//    	
-//    	Statement statement = atraxdb.connection.createStatement();
-//    	ResultSet resultSet = statement.executeQuery("SELECT * FROM documents");
-//        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-//        System.out.println("Retreive data from table----");
-//        
-//        int colCount = resultSetMetaData.getColumnCount();
-//        for(int x=1; x <= colCount; x++)
-//        {
-//        	System.out.format("%20s", resultSetMetaData.getColumnName(x) + " | ");
-//        }
-//        System.out.println("\n");
-//        while(resultSet.next())
-//        {
-//        	for(int x=1; x <= colCount; x++)
-//        	{
-//        		System.out.format("%20s", resultSet.getString(x) + " | ");
-//        	}
-//        	System.out.println("\n");
-//        }
-   
-        
-//        if(atraxdb.connection != null)
-//        {
-//        	atraxdb.closeDatabaseConnection();
-//        }
-
-		if(uploadButtonClick == true)
-		{
-			Data.getFilePath(Path,"library"); // get metadata then insert into database
-			
-		}
-		
-    	try {
-			StackPane root = (StackPane)FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
-			Scene scene = new Scene(root,750,500);
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
+			Scene scene = new Scene(root,1020,690);
 			scene.getStylesheets().add(getClass().getResource("/src/swe/main/ui/library/library.css").toExternalForm());
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("ATRAX");
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-    }
-    
-    public static void main(String[] args) throws IOException, SQLException {
-    	System.out.println("Start main application........");
-    	
-        launch(args);
-    }
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
 }

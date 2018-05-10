@@ -182,8 +182,17 @@ public class LibraryUIControl implements Initializable{
 				wd = new WorkIndicatorDialog<String>(LibraryTable.getScene().getWindow(), "Generating Files's metadata...");
 				 
 			    wd.addTaskEndNotification(result -> {
-			    	System.out.println(result);
+			    	
+			    	//debug log
+			    	System.out.println("-Line " + Thread.currentThread().getStackTrace()[1].getLineNumber() + ": " + result);
+			    	
 			    	wd=null; // don't keep the object, cleanup
+			    	
+			    	//if return 0, means no pdf file in the folder
+			    	if (result == 0) {
+			   			alert.errorAlert("Unsupported file type", "Please choose only pdf file");
+						return;
+			    	}
 			    });
 			 
 			    wd.exec("123", inputParam -> {
@@ -191,11 +200,16 @@ public class LibraryUIControl implements Initializable{
 			    	
 			    	//actual code
 			    	//start process with libraryname equal the collection selection 
+			    	
+			    	int check = 0;
 					try {
 						Libraryname = CollectionTable.getSelectionModel().getSelectedItem();
-						//extract data
-						getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
 						
+						//extract data
+						//if no pdf file in the folder then getfilepath return 0 for error alert
+						 check = getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
+						
+					
 						//insert generated book to database
 						for (Book book: BookList) {
 							
@@ -217,7 +231,7 @@ public class LibraryUIControl implements Initializable{
 					//TODO then call load function to load data to table view
 			        load(Libraryname);
 			       
-			       return 1;
+			       return check;
 			    });	//end wrap
 				
 		        				        
@@ -252,8 +266,15 @@ public class LibraryUIControl implements Initializable{
 						wd = new WorkIndicatorDialog<String>(LibraryTable.getScene().getWindow(), "Generating Files's metadata...");
 						 
 					    wd.addTaskEndNotification(result -> {
-					    	System.out.println(result);
+					    	//debug log
+					    	System.out.println("-Line " + Thread.currentThread().getStackTrace()[1].getLineNumber() + ": " + result);
 					    	wd=null; // don't keep the object, cleanup
+					    	
+					    	//if return 0, means no pdf file in the folder
+					    	if (result == 0) {
+					   			alert.errorAlert("Unsupported file type", "Please choose only pdf file");
+								return;
+					    	}
 					    });
 					 
 					    wd.exec("123", inputParam -> {
@@ -262,12 +283,15 @@ public class LibraryUIControl implements Initializable{
 					    	//actual code
 					    	//TODO call function to reading folder and insert to database
 					    	
-					    	
+					    	int check = 0;
 					    	try {
-							
-					    		getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
+					    		//if no pdf file in the folder then getfilepath return 0 for error alert
+					    		
+					    		check = getFilePath(selectedDirectory.getAbsolutePath(),Libraryname);
 						
-							
+					    		
+								
+								
 					    		for (Book book: BookList) {
 								
 					    			dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
@@ -292,7 +316,7 @@ public class LibraryUIControl implements Initializable{
 					    	
 					    	
 					    	
-					    	return 1;
+					    	return check;
 					    }); // end wrap
 					    
 					    LibraryList.add(Libraryname);
@@ -327,7 +351,7 @@ public class LibraryUIControl implements Initializable{
     	Libraryname = CollectionTable.getSelectionModel().getSelectedItem();
     	
     	//if there is no files selected then return
-    	if(selectedfile.isEmpty()) {
+    	if(selectedfile == null || selectedfile.isEmpty()) {
     		return;
     	}
     	
@@ -337,6 +361,8 @@ public class LibraryUIControl implements Initializable{
 		 
 	    wd.addTaskEndNotification(result -> {
 	    	wd=null; // don't keep the object, cleanup
+	    	//debug log
+	    	System.out.println("-Line " + Thread.currentThread().getStackTrace()[1].getLineNumber() + ": " + result);
 	    	//result return = counter ->check 353 for counter declaration
 	    	//if no pdf file, alert error and return
 	    	if (result == 0) {
@@ -373,7 +399,6 @@ public class LibraryUIControl implements Initializable{
     	    		dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
     			}
     			
-    		
     		}
     	}
     		
@@ -396,7 +421,7 @@ public class LibraryUIControl implements Initializable{
     
     
     //import file path and library name to extract file data
-    public void getFilePath(String FilePath,String Library) throws IOException
+    public int getFilePath(String FilePath,String Library) throws IOException
 	{
     	//empty previous book list
     	BookList.clear();
@@ -426,8 +451,8 @@ public class LibraryUIControl implements Initializable{
 			}
 			// if no pdf file in folder show error
 			if (id == 0) {
-				alert.errorAlert("Unsupported file type(s)", "Please choose only pdf file");
-				return;
+				//alert.errorAlert("Unsupported file type(s)", "Please choose only pdf file");
+				return 0;
 			}
 		}
 		else	//if a file
@@ -437,10 +462,11 @@ public class LibraryUIControl implements Initializable{
 				BookList.add(new ExtractMetadata().Extractdata(path, id, libid));
 			} else 		// show error 
 			{
-				alert.errorAlert("Unsupported file type", "Please choose only pdf file");
-				return;
+				//alert.errorAlert("Unsupported file type", "Please choose only pdf file");
+				return 0;
 			}
 		}
+		return 1;
 		
 	}
     
