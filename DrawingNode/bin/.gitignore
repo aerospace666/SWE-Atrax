@@ -1,3 +1,12 @@
-/src/
+/.classpath
+/.project
+/.settings/
+/TestPdf/
 /atraxdb/
-/build.xml
+/build.fxbuild
+/derby.log
+/en-pos-maxent.bin
+/en-sent.bin
+/f5c9bdb64a87dd158cc0dd42fe3d6028.jpg
+/lib/
+/src/
