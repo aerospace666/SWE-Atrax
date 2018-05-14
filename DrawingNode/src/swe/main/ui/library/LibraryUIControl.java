@@ -213,7 +213,16 @@ public class LibraryUIControl implements Initializable{
 						//insert generated book to database
 						for (Book book: BookList) {
 							
-							dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+							String docId = dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+							dbConn.insertKeywordtoKeywordsTable(book.getKeywordlist());
+							for (String tempString : book.getKeywordlist()) {
+								for (int TempOccur : book.getKeyOcurrences().keySet()) {
+									if(book.getKeyOcurrences().get(TempOccur).equals(tempString)) {
+										int keyId = Integer.parseInt(dbConn.getKeywordID(tempString));
+										dbConn.insertIntoDocKeywordTable(Integer.parseInt(docId), keyId, TempOccur);
+									}
+								}
+							}
 						}
 						
 						
@@ -294,7 +303,16 @@ public class LibraryUIControl implements Initializable{
 								
 					    		for (Book book: BookList) {
 								
-					    			dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+					    			String docId = dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+									dbConn.insertKeywordtoKeywordsTable(book.getKeywordlist());
+									for (String tempString : book.getKeywordlist()) {
+										for (int TempOccur : book.getKeyOcurrences().keySet()) {
+											if(book.getKeyOcurrences().get(TempOccur).equals(tempString)) {
+												int keyId = Integer.parseInt(dbConn.getKeywordID(tempString));
+												dbConn.insertIntoDocKeywordTable(Integer.parseInt(docId), keyId, TempOccur);
+											}
+										}
+									}
 					    		}
 							
 							
@@ -396,7 +414,16 @@ public class LibraryUIControl implements Initializable{
     			//insert book data into database
     	    	for (Book book: BookList) {
     				
-    	    		dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+    	    		String docId = dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+					dbConn.insertKeywordtoKeywordsTable(book.getKeywordlist());
+					for (String tempString : book.getKeywordlist()) {
+						for (int TempOccur : book.getKeyOcurrences().keySet()) {
+							if(book.getKeyOcurrences().get(TempOccur).equals(tempString)) {
+								int keyId = Integer.parseInt(dbConn.getKeywordID(tempString));
+								dbConn.insertIntoDocKeywordTable(Integer.parseInt(docId), keyId, TempOccur);
+							}
+						}
+					}
     			}
     			
     		}

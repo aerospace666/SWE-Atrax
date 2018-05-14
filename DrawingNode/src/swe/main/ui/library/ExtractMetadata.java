@@ -184,21 +184,8 @@ public class ExtractMetadata {
 				
 				}
 				
-				/**
-				//insert to database for keywords
-				AtraxDatabase dbConn = new AtraxDatabase();
-				Keywords = PDoc.getKeywords();
-				dbConn.insertKeywordtoKeywordsTable(MetaData_keyword);
-				for (String tempString : MetaData_keyword) {
-					for (String TempOccur : Keyword_occurance.values()) {
-						if(TempOccur.equals(tempString)) {
-							dbConn.insertIntoDocKeywordTable(d, keywordID, keywordOccurence) // need get doc id function
-						}
-					}
-				}
-				*/
 				
-				
+							
 				
 				Date tempDate =  new Date(0);
 				if(PDoc.getCreationDate() != null)
@@ -213,7 +200,7 @@ public class ExtractMetadata {
 				}
 				
 				
-				book = new Book(ID, tempSubject, file.getName(), tempTitle , tempAuthor, tempDate, file.getAbsolutePath(), tempKeywords ,libid);
+				book = new Book(ID, tempSubject, file.getName(), tempTitle , tempAuthor, tempDate, file.getAbsolutePath(), tempKeywords ,libid , Keyword_occurance, MetaData_keyword);
 				document.close();
 		    
 			

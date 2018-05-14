@@ -437,7 +437,7 @@ public class AtraxDatabase {
 
 	public String insertIntoDocKeywordTable(int docID, int keywordID, int keywordOccurence)  
 	{
-		String updateQuery = "INSERT INTO DOCUMENT_KEYWORD(DOC_ID,KEYWORD_ID,OCCURENCE) VALUES (?,?,?)";
+		String updateQuery = "INSERT INTO DOCUMENT_KEYWORD(DOC_ID,KEYWORD_ID,OCCURRENCE) VALUES (?,?,?)";
 
 		// check for database connection
 		if(connection == null)
