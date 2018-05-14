@@ -529,6 +529,62 @@ public class AtraxDatabase {
 		}
 	}
 	
+	/*
+	 * this method delete single documents from the library
+	 * @param document id
+	 * return 0 for success, -1 for any error
+	 */
+	public int deleteDocument(int doc_id)
+	{
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		// delete from documents and document_keyword table
+		String deleteDocument = "DELETE DOCUMENTS, DOCUMENT_KEYWORD " +
+								"FROM DOCUMENTS d " +
+								"INNER JOIN DOCUMENT_KEYWORD dkw ON d.id = dkw.doc_id " +
+								"WHERE d.id = " + doc_id;
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(deleteDocument);
+			if(preparedStmt.execute() == true) 
+			{
+				return 0;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		return -1;
+	}
+	
+	/*
+	 * this method delete documents from the library
+	 * @param library id
+	 * return 0 for success, -1 for any error
+	 */
+	public int deleteLibrary(int library_id)
+	{
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		// delete from documents and library table
+		String deleteLibrary =  "DELETE DOCUMENTS, LIBRARIES " +
+								"FROM DOCUMENTS d " +
+								"INNER JOIN LIBRARIES l ON d.library_id = l.id " +
+								"WHERE l.id = " + library_id;
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(deleteLibrary);
+			if(preparedStmt.execute() == true) 
+			{
+				return 0;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		return -1;
+	}
+	
 	// this method is for testing the query
 	public void testQuery() throws SQLException
 	{
