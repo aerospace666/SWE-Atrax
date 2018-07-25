@@ -54,6 +54,7 @@
 	<classpathentry kind="lib" path="lib/preflight-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/preflight-app-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/xmpbox-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/grobid-core-0.5.1-onejar.jar" sourcepath="lib/grobid-core-0.5.1-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Mon May 14 20:44:31 AEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-5e40-6e06-000006e92e48 
+Wed Jul 25 10:11:41 AEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0164-cec6-ee4c-000006e52798 
 on database directory /Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/atraxdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4f8e5cde 
 Loaded from file:/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -8,6 +8,6 @@ java.runtime.version=9.0.4+11
 user.dir=/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode
 os.name=Mac OS X
 os.arch=x86_64
-os.version=10.13.4
+os.version=10.13.6
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

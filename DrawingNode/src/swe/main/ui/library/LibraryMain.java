@@ -11,9 +11,9 @@ public class LibraryMain extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/LibraryUI.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/src/swe/main/ui/library/TestNewInterface.fxml"));
 			Scene scene = new Scene(root,1020,690);
-			scene.getStylesheets().add(getClass().getResource("/src/swe/main/ui/library/library.css").toExternalForm());
+			//scene.getStylesheets().add(getClass().getResource("/src/swe/main/ui/library/library.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("ATRAX");
 			primaryStage.show();

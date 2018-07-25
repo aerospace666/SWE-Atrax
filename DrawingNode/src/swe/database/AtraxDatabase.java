@@ -61,7 +61,7 @@ public class AtraxDatabase {
 		
 		//Quick fix for keywords-> change to table document_temp
 		String updateQuery = "INSERT INTO DOCUMENT_TEMP(filename, title, subject, CREATION_DATE, file_path, library_id, author, keywords) VALUES (?,?,?,?,?,?,?,?)";
-		String checkExistance = "SELECT ID FROM DOCUMENTS WHERE LIBRARY_ID=? AND FILE_PATH=? AND FILENAME=?";
+		String checkExistance = "SELECT ID FROM DOCUMENT_TEMP WHERE LIBRARY_ID=? AND FILE_PATH=? AND FILENAME=?";
 		
 		
 		// check for database connection
@@ -129,7 +129,8 @@ public class AtraxDatabase {
 			}else {
 				//means document DOES exist, so return the docID instead of adding duplicate
 				//System.out.println("\n means the file exists, so do not process it!!");
-				return Integer.toString(result);
+				//return Integer.toString(result);
+				return "0";
 			}
 
 		}catch (SQLException ex) {

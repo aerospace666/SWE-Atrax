@@ -86,13 +86,13 @@ public class LibraryUIControl implements Initializable{
     private TableColumn<String, String> CollectionColumn;
 
     @FXML
-    private Menu FileId;
+    private Menu FileMenu;
     
     @FXML
-    private MenuItem AddFolder;
+    private MenuItem AddFolderMenu;
     
     @FXML
-    private MenuItem AddFile;
+    private MenuItem AddFileMenu;
     
     @FXML
     private ContextMenu CollectionContextMenu;
@@ -213,16 +213,21 @@ public class LibraryUIControl implements Initializable{
 						//insert generated book to database
 						for (Book book: BookList) {
 							
-							String docId = dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+							int docId = Integer.parseInt(dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords()));
+			    			
+							//0 mean existed in database
+							if(docId != 0)
+			    			{	
 							dbConn.insertKeywordtoKeywordsTable(book.getKeywordlist());
 							for (String tempString : book.getKeywordlist()) {
 								for (int TempOccur : book.getKeyOcurrences().keySet()) {
 									if(book.getKeyOcurrences().get(TempOccur).equals(tempString)) {
 										int keyId = Integer.parseInt(dbConn.getKeywordID(tempString));
-										dbConn.insertIntoDocKeywordTable(Integer.parseInt(docId), keyId, TempOccur);
+										dbConn.insertIntoDocKeywordTable(docId, keyId, TempOccur);
 									}
 								}
 							}
+			    			}
 						}
 						
 						
@@ -303,16 +308,21 @@ public class LibraryUIControl implements Initializable{
 								
 					    		for (Book book: BookList) {
 								
-					    			String docId = dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+					    			int docId = Integer.parseInt(dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords()));
+					    			
+					    			//0 mean existed in database
+					    			if(docId != 0)
+					    			{
 									dbConn.insertKeywordtoKeywordsTable(book.getKeywordlist());
 									for (String tempString : book.getKeywordlist()) {
 										for (int TempOccur : book.getKeyOcurrences().keySet()) {
 											if(book.getKeyOcurrences().get(TempOccur).equals(tempString)) {
 												int keyId = Integer.parseInt(dbConn.getKeywordID(tempString));
-												dbConn.insertIntoDocKeywordTable(Integer.parseInt(docId), keyId, TempOccur);
+												dbConn.insertIntoDocKeywordTable(docId, keyId, TempOccur);
 											}
 										}
 									}
+					    			}
 					    		}
 							
 							
@@ -414,16 +424,20 @@ public class LibraryUIControl implements Initializable{
     			//insert book data into database
     	    	for (Book book: BookList) {
     				
-    	    		String docId = dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords());
+    	    		int docId = Integer.parseInt(dbConn.insertDocToLibrary(book.getName(), book.getTitle(), book.getSubject(), book.getDate(), book.getFilepath(), Integer.parseInt(book.getLibid()), book.getAuthor(), book.getKeywords()));
+	    			//0 mean existed in database
+    	    		if(docId != 0)
+	    			{
 					dbConn.insertKeywordtoKeywordsTable(book.getKeywordlist());
 					for (String tempString : book.getKeywordlist()) {
 						for (int TempOccur : book.getKeyOcurrences().keySet()) {
 							if(book.getKeyOcurrences().get(TempOccur).equals(tempString)) {
 								int keyId = Integer.parseInt(dbConn.getKeywordID(tempString));
-								dbConn.insertIntoDocKeywordTable(Integer.parseInt(docId), keyId, TempOccur);
+								dbConn.insertIntoDocKeywordTable(docId, keyId, TempOccur);
 							}
 						}
 					}
+	    			}
     			}
     			
     		}

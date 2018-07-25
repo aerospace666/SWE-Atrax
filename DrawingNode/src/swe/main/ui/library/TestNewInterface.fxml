@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="MainID" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="889.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.swe.main.ui.library.TestNewInterfaceControl">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <MenuBar layoutY="1.0" prefHeight="519.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <menus>
+                <Menu fx:id="FileMenu" mnemonicParsing="false" onAction="#ClearCollectionSelection" text="File">
+                  <items>
+                    <MenuItem fx:id="AddFolderMenu" mnemonicParsing="false" onAction="#AddFolder" text="Add a Collection" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <TabPane fx:id="tabpane" layoutY="28.0" prefHeight="491.0" prefWidth="763.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+              <tabs>
+                <Tab fx:id="LibraryTab" text="Libary">
+                     <content>
+                        <SplitPane dividerPositions="0.1772885283893395" prefHeight="489.0" prefWidth="883.0">
+                          <items>
+                            <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="150.0">
+                                 <children>
+                                    <TreeView fx:id="CollectionTable" layoutX="-1.0" layoutY="14.0" maxWidth="-Infinity" prefHeight="489.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <contextMenu>
+                                          <ContextMenu fx:id="CollectionContextMenu">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#AddFolder" text="Add a Folder" />
+                                                <MenuItem mnemonicParsing="false" onAction="#AddFile" text="Add File(s)" />
+                                             </items>
+                                          </ContextMenu>
+                                       </contextMenu></TreeView>
+                                 </children>
+                              </AnchorPane>
+                              <SplitPane dividerPositions="0.512022630834512" prefHeight="456.0" prefWidth="651.0">
+                                <items>
+                                  <AnchorPane>
+                                       <children>
+                                          <TableView fx:id="LibraryTable" prefHeight="537.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columns>
+                                              <TableColumn fx:id="TitleCo" editable="false" prefWidth="270.0" text="Title" />
+                                              <TableColumn fx:id="AuthorCo" editable="false" prefWidth="100.0" text="Author" />
+                                            </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                          </TableView>
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane maxWidth="400.0" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <TabPane prefHeight="456.0" prefWidth="273.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <tabs>
+                                              <Tab closable="false" text="Metadata">
+                                                <content>
+                                                  <AnchorPane>
+                                                         <children>
+                                                            <ScrollPane layoutX="29.0" layoutY="102.0" prefHeight="425.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <content>
+                                                                  <VBox>
+                                                                     <children>
+                                                                        <HBox spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Item type:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showItemType" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="20.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Title:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showTitle" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="37.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Author(s):" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showAuthors" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="54.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Abstract:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showAbstract" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="71.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Keyword(s):" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showKeywords" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="127.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Date" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showDate" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="163.0" spacing="50.0">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Affiliation:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showAffiliation" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="145.0" spacing="50.0">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Publication:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showPublication" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="162.0" spacing="50.0">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Language:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showLanguage" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="179.0" spacing="50.0">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="DOI:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showDOI" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="196.0" spacing="50.0">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="ISSN:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showISSN" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="213.0" spacing="50.0">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="URL:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showURL" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox layoutX="10.0" layoutY="247.0" spacing="50.0">
+                                                                           <children>
+                                                                              <Label alignment="TOP_LEFT" text="Notes:" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Label fx:id="showNote" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                                 <HBox.margin>
+                                                                                    <Insets />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </content>
+                                                            </ScrollPane>
+                                                         </children></AnchorPane>
+                                                </content>
+                                              </Tab>
+                                              <Tab closable="false" text="Tags">
+                                                <content>
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                </content>
+                                              </Tab>
+                                            </tabs>
+                                          </TabPane>
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                          </items>
+                        </SplitPane>
+                     </content>
+                </Tab>
+                <Tab fx:id="MindmapTab" text="Mindmap">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
