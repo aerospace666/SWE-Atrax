@@ -48,11 +48,49 @@ public class AtraxDatabase {
 			System.out.println("Close Database connection Error code: " + e.getErrorCode());
 		}
 	}
+	
+	// populate Documents table based on GROBID implementation
+	public int populateDocumentsTable(String _ITEM_TYPE, String _TITLE, String _ABSTRACT, String _PUBLICATION,
+									  String _LANGUAGE, String _DOI, String _ISSN, String _URL, 
+									  String _LIBRARY_CATALOG, String _EXTRA, String _PATH, int _LIBRARY_ID, String _DATE)
+	{
+		String insertQuery = "INSERT INTO DOCUMENTS (ITEM_TYPE, TITLE, ABSTRACT, PUBLICATION, "
+												+ "LANGUAGE, DOI, ISSN, URL, LIBRARY_CATALOG,"
+												+ "EXTRA, PATH, LIBRARY_ID, DATE ) "
+												+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(insertQuery);
+			preparedStmt.setString (1, _ITEM_TYPE);
+			preparedStmt.setString (2, _TITLE);
+			preparedStmt.setString (3, _ABSTRACT);
+			preparedStmt.setString(4, _PUBLICATION); 
+			preparedStmt.setString(5, _LANGUAGE);
+			preparedStmt.setString(6, _DOI); 
+			preparedStmt.setString(7, _ISSN);
+			preparedStmt.setString(8, _URL);
+			preparedStmt.setString(9, _LIBRARY_CATALOG);
+			preparedStmt.setString(10, _EXTRA);
+			preparedStmt.setString(11, _PATH);
+			preparedStmt.setInt(12, _LIBRARY_ID);
+			preparedStmt.setString(13, _DATE);
+			// execute insert SQL stetement
+			preparedStmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return -1;
+		}
+		return 0;
+	}
 
 	// Add a document into the DOCUMENT table
 	public String insertDocToLibrary(String FileName, String Title, String Subject, java.util.Date CreationDate, String filePath, int library_id, String author, String keywords)  // add keywords
 	{
-		//System.out.println("\n Entered into insertintoDocLibrary function");
 		
 		/**
 		String updateQuery = "INSERT INTO DOCUMENTS(filename, title, subject, CREATION_DATE, file_path, library_id, author) VALUES (?,?,?,?,?,?,?)";
