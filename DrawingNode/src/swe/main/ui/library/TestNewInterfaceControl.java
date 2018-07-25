@@ -1,5 +1,6 @@
 package src.swe.main.ui.library;
 
+import java.awt.desktop.SystemSleepEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
@@ -115,11 +116,11 @@ public class TestNewInterfaceControl implements Initializable{
     ObservableList<BiblioItem> BookList = FXCollections.observableArrayList(); //Book List for LibaryTable
     ObservableList<TreeItem<String>> LibraryList = FXCollections.observableArrayList(); //LibrayList for Collection table
     
-    
+   
     //icon for treeview library elements
-    //final Node LibraryIcon = new ImageView(new Image(getClass().getResourceAsStream("/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/books-certificate-collection-of-study-learning-school-37a090ff7826e98f-512x512.png")));
+    Image LibraryIcon = new Image(getClass().getClassLoader().getResourceAsStream("Icon/196124.png"));
     
-    TreeItem<String> CollectionItem = new TreeItem<String> ("Library"); //, LibraryIcon );
+    TreeItem<String> CollectionItem = new TreeItem<String> ("Library", new ImageView(LibraryIcon));
     
     @FXML
     void AddFile(ActionEvent event) {
@@ -169,7 +170,7 @@ public class TestNewInterfaceControl implements Initializable{
     	//LibraryTable.setItems(BookList);		//set book to table view
     	String pdfPath = "TestPdf/Koelsch SFS Collagen ja508190d.pdf";
 		
-		String pGrodHome = "grobid-0.5.1/grobid-home";
+		String pGrodHome = "grobid-home";
 		
 		//File input = new File("Koelsch SFS Collagen ja508190d.pdf");
 		
@@ -193,12 +194,14 @@ public class TestNewInterfaceControl implements Initializable{
     	
     	
     	showAbstract.setText(resHeader.getAbstract());
- 
+    	//System.out.println(getClass().getClassLoader().getResource("196124.jpg"));
     }
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+		
+		
 		init();
 		load("hi");
 	}
