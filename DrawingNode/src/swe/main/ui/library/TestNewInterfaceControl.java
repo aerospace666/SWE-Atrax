@@ -1,6 +1,9 @@
 package src.swe.main.ui.library;
 
+<<<<<<< HEAD
 import java.io.File;
+=======
+>>>>>>> a587306da099b25bddc7de1fffc9a22f69d09246
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -18,11 +21,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+<<<<<<< HEAD
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+=======
+>>>>>>> a587306da099b25bddc7de1fffc9a22f69d09246
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;

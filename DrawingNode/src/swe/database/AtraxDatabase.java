@@ -78,7 +78,7 @@ public class AtraxDatabase {
 			preparedStmt.setString(11, _PATH);
 			preparedStmt.setInt(12, _LIBRARY_ID);
 			preparedStmt.setString(13, _DATE);
-			// execute insert SQL stetement
+			// execute insert SQL statement
 			preparedStmt.executeUpdate();
 		}
 		catch (SQLException e) {
@@ -86,6 +86,199 @@ public class AtraxDatabase {
 			return -1;
 		}
 		return 0;
+	}
+	
+	// Add a new library to DB 
+	public int insertNewLibrary(String LibraryName)  
+	{
+		String insertQuery = "INSERT INTO LIBRARIES(NAME) VALUES (?)";
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(insertQuery);
+			preparedStmt.setString (1, LibraryName);
+			
+		    preparedStmt.execute();
+		}catch (Exception e) {
+			System.err.println(e.getMessage());
+			return -1;
+		}		 
+		return 0;
+	}
+		
+	//  get libraryID
+	public int getLibraryID(String LibraryName)  
+	{
+		int library_id = 0;
+		String selectQuery = "SELECT ID FROM LIBRARIES WHERE NAME=?";
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(selectQuery);
+			preparedStmt.setString (1, LibraryName);
+			
+			ResultSet  rs = preparedStmt.executeQuery();
+		    
+		    // extract data from the ResultSet
+	        while (rs.next()) {
+	    	   library_id = rs.getInt(1);
+	        }    
+		}catch (Exception e) {
+			System.err.println(e.getMessage());
+		}		 
+		return library_id;
+	 }
+		
+	// populate Authors table based on GROBID implementation
+	public int populateAuthorsTable(String _NAME)
+	{
+		String insertQuery = "INSERT INTO AUTHORS(NAME) VALUES (?)";
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(insertQuery);
+			preparedStmt.setString (1, _NAME);
+			// execute insert SQL statement
+			preparedStmt.execute();
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return -1;
+		}
+		return 0;
+	}
+		
+	// populate Document_Author table based on GROBID implementation
+	public int populateDocument_Author(int _DOC_ID, int _AUTHOR_ID)
+	{
+		String insertQuery = "INSERT INTO DOCUMENT_AUTHOR(DOC_ID, AUTHOR_ID) VALUES (?,?)";
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(insertQuery);
+			preparedStmt.setInt (1, _DOC_ID);
+			preparedStmt.setInt (2, _AUTHOR_ID);
+			// execute insert SQL statement
+			preparedStmt.execute();
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return -1;
+		}
+		return 0;
+	}
+		
+	//  get document ID from document title
+	public int getDocumentID(String _TITLE)  
+	{
+		int document_id = 0;
+		String selectQuery = "SELECT ID FROM DOCUMENTS WHERE TITLE = ?";
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(selectQuery);
+			preparedStmt.setString (1, _TITLE);
+			
+			ResultSet  rs = preparedStmt.executeQuery();
+		    
+		    // extract data from the ResultSet
+	        while (rs.next()) {
+	        	document_id = rs.getInt(1);
+	        }    
+		}catch (Exception e) {
+			System.err.println(e.getMessage());
+			return -1;
+		}		 
+		return document_id;
+	 }
+	
+	//  get author ID from author name
+	public int getAuthorID(String _NAME)  
+	{
+		int author_id = 0;
+		String selectQuery = "SELECT ID FROM AUTHORS WHERE NAME = ?";
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(selectQuery);
+			preparedStmt.setString (1, _NAME);
+			
+			ResultSet  rs = preparedStmt.executeQuery();
+		    
+		    // extract data from the ResultSet
+	        while (rs.next()) {
+	        	author_id = rs.getInt(1);
+	        }    
+		}catch (Exception e) {
+			System.err.println(e.getMessage());
+			return -1;
+		}		 
+		return author_id;
+	 }
+	
+	// Get array of all file data for a single library
+	public ResultSet getAllLibraryDoc(int libraryID)
+	{		
+		ResultSet rs = null;
+		String selectQuery = "SELECT * FROM DOCUMENTS WHERE LIBRARY_ID=?";
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(selectQuery);
+			preparedStmt.setInt (1, libraryID);
+			rs = preparedStmt.executeQuery();
+		}catch (SQLException ex) {
+			System.out.println("\n Failed to select from DOC table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+		}
+		return rs;
+	}
+		
+	/*
+	 * this method retrieve meta-data of selected single document 
+	 * @param document ID
+	 * return result set of completed meta-data
+	 */
+	public ResultSet getDocMetadata(int documentID)
+	{
+		ResultSet rs = null;
+		// check for database connection
+		if(connection == null)
+		{
+			getDatabaseConnection();
+		}
+		// implementation of regular expression 
+		String query = 	"SELECT * FROM DOCUMENTS D " +
+						"LEFT JOIN DOCUMENT_AUTHOR DA ON D.ID = DA.DOC_ID " +
+						"LEFT JOIN AUTHORS A ON DA.AUTHOR_ID = A.ID " + 
+						"WHERE D.ID " + "=" + documentID ;
+		try {
+			PreparedStatement preparedStmt = connection.prepareStatement(query);
+			rs = preparedStmt.executeQuery();
+		}catch (SQLException ex) {
+			System.out.println(ex.getMessage());		
+		}
+		return rs;
 	}
 
 	// Add a document into the DOCUMENT table
@@ -181,8 +374,6 @@ public class AtraxDatabase {
 
 	// Add a new library to DB and get the ID back
 	public String createNewLibrary(String LibraryName)  
-
-	
 	{
 		String updateQuery = "INSERT INTO LIBRARIES(Name) VALUES (?)";
 		String checkExistance = "SELECT ID FROM LIBRARIES WHERE NAME=?";
@@ -237,22 +428,18 @@ public class AtraxDatabase {
 			//return 1 meaning error
 			return "ERROR";
 		}		 
-
 	}
 
+	/*
 	// get libraryID
 	public String getLibraryID(String LibraryName)  
-
-	
 	{
 		String checkExistance = "SELECT ID FROM LIBRARIES WHERE NAME=?";
-
 		// check for database connection
 		if(connection == null)
 		{
 			getDatabaseConnection();
 		}
-
 		//Check if the LIBRARY already exists, if so, don't process it and return the LIBRARY ID instead
 		try {
 			//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
@@ -265,7 +452,6 @@ public class AtraxDatabase {
 			//get the result into an int. There will only ever be a single result in the query
 			while (rs.next()) {
 				result = rs.getInt("ID");
-
 			}
 			if (result == 0) {
 				//means the libraray doesn't exist/nothing was returned above, so error it
@@ -275,96 +461,52 @@ public class AtraxDatabase {
 				//System.out.println("\n means the file exists, so do not process it!!");
 				return Integer.toString(result);
 			}
-
 		}catch (SQLException ex) {
 			System.out.println("\n Failed to select from LIBRARY table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
 			//return 1 meaning error
 			return "ERROR";
 		}		 
-
 	}
+	*/
 	
 	// Get array of all libraries in DB
-	
-	public List<String> getAllLibraryNames(){
-		
+	public List<String> getAllLibraryNames()
+	{
+		String checkExistance = "SELECT NAME FROM LIBRARIES";
+
+		// check for database connection
+		if(connection == null)
 		{
-			String checkExistance = "SELECT NAME FROM LIBRARIES";
-
-			// check for database connection
-			if(connection == null)
-			{
-				getDatabaseConnection();
-			}
-
-			//get all the library names
-			try {
-				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
-				//create the statement
-				PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
-				// execute the preparedstatement
-				ResultSet rs = preparedStmt.executeQuery();
-				List<String> result = new ArrayList<String>();
-				//int n = 0;
-				//get the result into a string
-				while (rs.next()) {
-					result.add(rs.getString("NAME"));
-					//System.out.println("the result is: " + result.get(n));
-					//n++;
-
-				}
-				//System.out.println("the result arrary is: " + result[0]);
-				return result;
-				
-			}catch (SQLException ex) {
-				System.out.println("\n Failed to select from LIBRARY table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
-				//return 1 meaning error
-				return new ArrayList<String>();
-			
-
+			getDatabaseConnection();
 		}
-		
-	}
-	}
-	
-	// Get array of all file data for a single library
-	
-	public ResultSet getAllLibraryDoc(int libraryID){
-		
-		{
-			//String checkExistance = "SELECT ID, FILENAME, TITLE, SUBJECT, CREATION_DATE, FILE_PATH, AUTHOR FROM DOCUMENTS WHERE LIBRARY_ID=?";
-			
-			//table Document_temp
-			String checkExistance = "SELECT ID, FILENAME, TITLE, SUBJECT, CREATION_DATE, FILE_PATH, AUTHOR, KEYWORDS FROM DOCUMENT_TEMP WHERE LIBRARY_ID=?";
-			// check for database connection
-			if(connection == null)
-			{
-				getDatabaseConnection();
+
+		//get all the library names
+		try {
+			//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
+			//create the statement
+			PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
+			// execute the preparedstatement
+			ResultSet rs = preparedStmt.executeQuery();
+			List<String> result = new ArrayList<String>();
+			//int n = 0;
+			//get the result into a string
+			while (rs.next()) {
+				result.add(rs.getString("NAME"));
+				//System.out.println("the result is: " + result.get(n));
+				//n++;
+
 			}
-
-			//get all the library names
-			try {
-				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
-				//create the statement
-				PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
-				preparedStmt.setInt (1, libraryID);
-				// execute the preparedstatement
-				ResultSet rs = preparedStmt.executeQuery();
-				
-				return rs;
-				
-			}catch (SQLException ex) {
-				System.out.println("\n Failed to select from DOC table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
-				return null;
+			//System.out.println("the result arrary is: " + result[0]);
+			return result;
 			
-
+		}catch (SQLException ex) {
+			System.out.println("\n Failed to select from LIBRARY table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+			//return 1 meaning error
+			return new ArrayList<String>();
 		}
-		
-	}
 	}
 
 	// This method populate data to keywords table
-	
 	public String insertKeywordtoKeywordsTable(List<String> keywords)  
 	{
 		String updateQuery = "INSERT INTO KEYWORDS(KEYWORD) VALUES (?)";
@@ -425,11 +567,9 @@ public class AtraxDatabase {
 		//if it ever gets to here, means the list was empty
 		System.out.println("\n Failed to run function insertKeyword...most likely the list was empty");
 		return "1";
-
 	}
 
 	//Get the keyword ID from Keywords table
-
 	public String getKeywordID(String keyword)  
 	{
 		String checkExistance = "SELECT ID FROM KEYWORDS WHERE KEYWORD=?";
@@ -439,102 +579,88 @@ public class AtraxDatabase {
 		{
 			getDatabaseConnection();
 		}
-			//Check if the keyword already exists in the DB, if so, don't process it and return the keyword ID instead
-			try {
-				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
-				//create the statement
-				PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
-				preparedStmt.setString (1, keyword);
-				// execute the preparedstatement
-				ResultSet rs = preparedStmt.executeQuery();
-				int result = 0;
-				//get the result into an int. There will only ever be a single result in the query
-				while (rs.next()) {
-					result = rs.getInt("ID");
-	
+		//Check if the keyword already exists in the DB, if so, don't process it and return the keyword ID instead
+		try {
+			//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
+			//create the statement
+			PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
+			preparedStmt.setString (1, keyword);
+			// execute the preparedstatement
+			ResultSet rs = preparedStmt.executeQuery();
+			int result = 0;
+			//get the result into an int. There will only ever be a single result in the query
+			while (rs.next()) {
+				result = rs.getInt("ID");
+			}
+			// ResultSet resultset = preparedStmt.getResultSet();
+			if (result == 0) {
+				//means the KW doesn't exist/nothing was returned above
+					return "1";
 				}
-				// ResultSet resultset = preparedStmt.getResultSet();
-				if (result == 0) {
-					//means the KW doesn't exist/nothing was returned above
-						return "1";
-					}
-				else {
-					//means KW DOES exist, so return the KWID
-					return Integer.toString(result);
-				}
-	
-			}catch (SQLException ex) {
-				System.out.println("\n Failed to select from KEYWORDS table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
-				//return 1 meaning error
-				return "1";
-			}		
-
-
+			else {
+				//means KW DOES exist, so return the KWID
+				return Integer.toString(result);
+			}
+		}catch (SQLException ex) {
+			System.out.println("\n Failed to select from KEYWORDS table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+			//return 1 meaning error
+			return "1";
+		}		
 	}
 	
 	// This method populate data to document_keyword table
-
 	public String insertIntoDocKeywordTable(int docID, int keywordID, int keywordOccurence)  
 	{
 		String updateQuery = "INSERT INTO DOCUMENT_KEYWORD(DOC_ID,KEYWORD_ID,OCCURRENCE) VALUES (?,?,?)";
-
 		// check for database connection
 		if(connection == null)
 		{
 			getDatabaseConnection();
 		}
+		try {
+			//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-insert-a-record/
+			//System.out.println("\n means the file doesn't exist, so process it");
+			// create the mysql insert preparedstatement
+			PreparedStatement preparedStmt1 = connection.prepareStatement(updateQuery);
+			//prepare the statement
+			preparedStmt1.setInt (1, docID);	
+			preparedStmt1.setInt (2, keywordID);	
+			preparedStmt1.setInt (3, keywordOccurence);	
 
-			try {
-				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-insert-a-record/
-				//System.out.println("\n means the file doesn't exist, so process it");
-				// create the mysql insert preparedstatement
-				PreparedStatement preparedStmt1 = connection.prepareStatement(updateQuery);
-				//prepare the statement
-				preparedStmt1.setInt (1, docID);	
-				preparedStmt1.setInt (2, keywordID);	
-				preparedStmt1.setInt (3, keywordOccurence);	
-
-				// execute the preparedstatement
-				preparedStmt1.executeUpdate();
-				//return 0 meaning success, catch block will catch failure
-				return "0";
-			} catch (SQLException ex) {
-				System.out.println("\n Failed to insert into DOCUMENT_KEYWORD table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
-				//return 1 meaning error
-				return "1";
-			}
-
+			// execute the preparedstatement
+			preparedStmt1.executeUpdate();
+			//return 0 meaning success, catch block will catch failure
+			return "0";
+		} catch (SQLException ex) {
+			System.out.println("\n Failed to insert into DOCUMENT_KEYWORD table!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+			//return 1 meaning error
+			return "1";
 		}
+	}
 
 	//get keywords for a docID
-	
 	public ResultSet getKeywordsforDoc(int docID)  
 	{
 		String checkExistance = "SELECT KEYWORD FROM KEYWORDS KW LEFT JOIN DOCUMENT_KEYWORD DKW on DKW.KEYWORD_ID=KW.ID WHERE DKW.DOC_ID=?";
-
 		// check for database connection
 		if(connection == null)
 		{
 			getDatabaseConnection();
 		}
-			try {
-				//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
-				//create the statement
-				PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
-				preparedStmt.setInt (1, docID);
-				// execute the preparedstatement
-				ResultSet rs = preparedStmt.executeQuery();
-				//return the result
-				return rs;
-
-	
-			}catch (SQLException ex) {
-				System.out.println("\n Failed to select from KEYWORDS/DOC_KEYWORDS table(s)!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
-				//return 1 meaning error
-				return null;
-			}		
-
-
+		try {
+			//https://www.mkyong.com/jdbc/jdbc-preparestatement-example-select-list-of-the-records/
+			//create the statement
+			PreparedStatement preparedStmt = connection.prepareStatement(checkExistance);
+			preparedStmt.setInt (1, docID);
+			// execute the preparedstatement
+			ResultSet rs = preparedStmt.executeQuery();
+			//return the result
+			return rs;
+		}catch (SQLException ex) {
+			System.out.println("\n Failed to select from KEYWORDS/DOC_KEYWORDS table(s)!! The error code is: " + ex.getErrorCode() + "\n The error message is: " +  ex.getMessage() + "\n The SQL state is: " + ex.getSQLState());
+			//return 1 meaning error
+			return null;
+		}		
 	}
 	
 	/*
@@ -625,16 +751,10 @@ public class AtraxDatabase {
 	}
 	
 	// this method is for testing the query
-	public void testQuery() throws SQLException
+	public void displayData(ResultSet _resultSet) throws SQLException  
 	{
-		if(connection == null)
-		{
-			getDatabaseConnection();
-		}
-		Statement statement = connection.createStatement();
-		ResultSet resultSet = statement.executeQuery("SELECT * FROM documents");
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		System.out.println("Retreive data from table----");
+		ResultSetMetaData resultSetMetaData = _resultSet.getMetaData();
+		System.out.println("Retrieving data from table......");
 
 		int colCount = resultSetMetaData.getColumnCount();
 		for(int x=1; x <= colCount; x++)
@@ -642,11 +762,11 @@ public class AtraxDatabase {
 			System.out.format("%20s", resultSetMetaData.getColumnName(x) + " | ");
 		}
 		System.out.println("\n");
-		while(resultSet.next())
+		while(_resultSet.next())
 		{
 			for(int x=1; x <= colCount; x++)
 			{
-				System.out.format("%20s", resultSet.getString(x) + " | ");
+				System.out.format("%20s", _resultSet.getString(x) + " | ");
 			}
 			System.out.println("\n");
 		}

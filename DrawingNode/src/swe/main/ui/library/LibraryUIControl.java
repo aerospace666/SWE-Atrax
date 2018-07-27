@@ -470,7 +470,7 @@ public class LibraryUIControl implements Initializable{
     	//create new collection _ if already exist then return libraryid
     	dbConn.createNewLibrary(Library);
     	
-    	String libid = dbConn.getLibraryID(Library);
+    	int libid = dbConn.getLibraryID(Library);
 		//System.out.println(libid);
     	
     	//extract data from ExtractMetadata.java
@@ -486,7 +486,7 @@ public class LibraryUIControl implements Initializable{
 			{	
 				if (file.getName().contains(".pdf")) {
 					id++;
-					BookList.add(extractBook.Extractdata(file, id, libid));	//extractdata return a book identified with id and libid then add to bookList
+					//BookList.add(extractBook.Extractdata(file, id, libid));	//extractdata return a book identified with id and libid then add to bookList
 				}
 					
 			}
@@ -500,7 +500,7 @@ public class LibraryUIControl implements Initializable{
 		{
 			if (path.getName().contains(".pdf")) {
 				id++;
-				BookList.add(new ExtractMetadata().Extractdata(path, id, libid));
+				//BookList.add(new ExtractMetadata().Extractdata(path, id, libid));
 			} else 		// show error 
 			{
 				//alert.errorAlert("Unsupported file type", "Please choose only pdf file");
@@ -540,9 +540,9 @@ public class LibraryUIControl implements Initializable{
     	BookList.clear();						//Erase bookList then assign database to book
     	
     	//System.out.println(dbConn.getLibraryID(libname));
-    	if (dbConn.getLibraryID(libname) != "ERROR") {
+    	if (dbConn.getLibraryID(libname) != 0) {
     		
-    		int libid = Integer.parseInt(dbConn.getLibraryID(libname));
+    		int libid = dbConn.getLibraryID(libname);
     		//System.out.println(libid);
     	
     		ResultSet rs = dbConn.getAllLibraryDoc(libid);
