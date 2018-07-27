@@ -1,15 +1,17 @@
 package src.swe.main.ui.library;
 
-<<<<<<< HEAD
+
 import java.io.File;
-=======
->>>>>>> a587306da099b25bddc7de1fffc9a22f69d09246
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+
 import org.grobid.core.data.BiblioItem;
+import org.grobid.core.data.Person;
 import org.grobid.core.engines.Engine;
 import org.grobid.core.factory.GrobidFactory;
 import org.grobid.core.main.GrobidHomeFinder;
@@ -21,14 +23,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-<<<<<<< HEAD
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-=======
->>>>>>> a587306da099b25bddc7de1fffc9a22f69d09246
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -50,7 +49,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import src.swe.database.AtraxDatabase;
 import src.swe.main.ui.Alert.AlertFormat;
-import src.swe.main.ui.Alert.Popup;
 import src.swe.main.ui.Alert.WorkIndicatorDialog;
 
 public class TestNewInterfaceControl implements Initializable{
@@ -196,37 +194,97 @@ public class TestNewInterfaceControl implements Initializable{
     	
     	
     	
-    	//if user dosent select any directory
+    	//if user doesnt select any directory
     	if (selectedFolder == null) {
     		return;
     	}
     	
     	System.out.println(selectedFolder.getAbsolutePath());
     	
+    	
+    	
+    	/*
+    	 * Popup ask for Collection name
+    	 *
+    	 * */
+    	Stage popup = new Stage();
+
+        GridPane grid = new GridPane();
+		grid.setPadding(new Insets(10, 10, 10, 10));
+		grid.setVgap(5);
+		grid.setHgap(5);
+		//Defining the Name text field
+		final TextField name = new TextField();
+		name.setPromptText("Enter your libary name.");
+		name.setPrefColumnCount(10);
+		name.getText();
+		GridPane.setConstraints(name, 0, 0);
+		grid.getChildren().add(name);
+		
+		//Defining the Submit button
+		Button create = new Button("Create");
+		GridPane.setConstraints(create, 1, 0);
+		grid.getChildren().add(create);
+		
+		Scene pop = new Scene(grid, 250, 50);
+		popup.setScene(pop);
+		popup.setTitle("Enter Collection Name");
+		
+		
+		//Create event handler
+		create.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				
+				System.out.println("----Collection name is: " + name.getText());
+				
+				if (name.getText() == null || name.getText().isEmpty()) {
+				
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("No name");
+					alert.setContentText("Please enter Collection name");
+					alert.showAndWait();
+					
+					popup.show();
+					return;
+				}
+				
+				
+				popup.close();
+				
+				LibraryList.add(new TreeItem<String>(name.getText()));
+				
+				ProcessData(selectedFolder.getAbsolutePath(), name.getText());	
+				
+			}
+			
+		});		
+		
+		
+		
+		
+		
     	//Check if add to existed collection
     	if (CollectionTable.getSelectionModel().getSelectedItem() == null) {
+    		//popup class ask for collection name then process the data
+    		popup.show();
+  
+    		//TODO insert new collection name into database	
     		
-    		Popup popup = new Popup();
-    		CollectionName = popup.start();
-    		
-    		//TODO insert new collection name into database
-    				
     	} 
     	else
     	{
     		CollectionName = CollectionTable.getSelectionModel().getSelectedItem().getValue();
+    		System.out.println(CollectionName);
+    		ProcessData(selectedFolder.getAbsolutePath(), CollectionName);
     	}
-    	
-    	
-    	
-    	ProcessData(selectedFolder.getAbsolutePath(), CollectionName);
-    	
     	
     }
     
     
    
-    
 
     @FXML
     void ClearCollectionSelection(ActionEvent event) {
@@ -247,7 +305,7 @@ public class TestNewInterfaceControl implements Initializable{
     	//collection table
     	
     	CollectionItem.setExpanded(true);
-    	LibraryList.add(new TreeItem<String> ("Test1"));
+    	
     	
     	
     
@@ -255,20 +313,15 @@ public class TestNewInterfaceControl implements Initializable{
     }
     
     //TODO retrieve data from database, assign to book object then display to table view
-    public void load(String libname) {
+    public void load(String CollectionName){
+  
+    	try {
+			RetrieveDataDatabase(CollectionName);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
-    	
-    	
-		//BookList.add(resHeader);
-		LibraryTable.setItems(BookList);
-		
-    	CollectionItem.getChildren().setAll(LibraryList);		//update new elements
-    	
-    	CollectionTable.setRoot(CollectionItem);		//set collection to tree view
-    	
-    	
-    	//showAbstract.setText(resHeader.getAbstract());
-    	//System.out.println(getClass().getClassLoader().getResource("196124.jpg"));
     }
     
     
@@ -282,7 +335,7 @@ public class TestNewInterfaceControl implements Initializable{
     	
     	AlertFormat alert = new AlertFormat();
     	
-    	WorkIndicatorDialog<String> wd = new WorkIndicatorDialog<>(LibraryTable.getScene().getWindow(), "Generating Files's metadata...");
+    	WorkIndicatorDialog<String> wd = new WorkIndicatorDialog<>(MainID.getScene().getWindow(), "Generating Files's metadata...");
     	
     	wd.addTaskEndNotification(result -> {
 	    	
@@ -294,6 +347,11 @@ public class TestNewInterfaceControl implements Initializable{
 	    		
 	   			alert.errorAlert("Unsupported file type", "Please choose only pdf file");
 				return;
+	    	} else if (result == -1)
+	    	{
+	    		
+	    		alert.infoAlert("Notice", "Folder is empty");
+				return;
 	    	}
 	    });
     	
@@ -302,12 +360,10 @@ public class TestNewInterfaceControl implements Initializable{
 		    	
 		    	//Processing code
 		    	
-    		 //return 0 if there is no Pdf file in the folfer
+    		 //return 0 if there is no Pdf file in the folfer, -1 if the folder is empty
     		 int check = getPdfData(PdfPath, CollectionName);
 		    	
-    		 
-    		 
-    		 
+    		
     		 return check;
     	
     	 });
@@ -335,8 +391,8 @@ public class TestNewInterfaceControl implements Initializable{
 		 System.out.println("-------- GROBID_HOME="+GrobidProperties.get_GROBID_HOME_PATH());
 			
 		 Engine engine = GrobidFactory.getInstance().createEngine();
-		 
 		 BiblioItem resHeader = new BiblioItem();
+		 
 		 
 		
 		 File WorkingDirectory = new File(PdfPath);
@@ -344,13 +400,20 @@ public class TestNewInterfaceControl implements Initializable{
 		 if (WorkingDirectory.isDirectory())
 		 {
 			 File[] ListOfFiles = WorkingDirectory.listFiles();
+			 if (ListOfFiles.length == 0)
+			 {
+				 return -1;
+			 }
+			 
 			 for(File file : ListOfFiles) 
 			 {
 				 if (file.getName().toLowerCase().contains(".pdf")) {
 					 check++;
+					 
+					 resHeader = new BiblioItem();
 					 engine.processHeader(file.getAbsolutePath(), true, resHeader);
 					 BookList.add(resHeader);
-					 insertIntoDatabase(resHeader, CollectionName);
+					 insertIntoDatabase(resHeader, CollectionName, file.getAbsolutePath());
 				 }
 			 }
 		 } 
@@ -374,13 +437,112 @@ public class TestNewInterfaceControl implements Initializable{
      * 
      * */
 	
-	public void insertIntoDatabase(BiblioItem resHeader, String CollectionName) {
+	public void insertIntoDatabase(BiblioItem resHeader, String CollectionName, String PdfPath) {
 		
 		//check database connection
 		AtraxDatabase dbConn = new AtraxDatabase(); 
-		dbConn.createNewLibrary(CollectionName);
-		String CollectionId = dbConn.getLibraryID(CollectionName);
 		
+		//Create new Collection name - Do nothing if already exist
+		dbConn.createNewLibrary(CollectionName);
+		
+		int CollectionId = dbConn.getLibraryID(CollectionName);
+		
+		/*
+		 * Validate input
+		 * */
+		String Title = resHeader.getTitle();
+		String Journal = resHeader.getJournal();
+		String Abstract =  resHeader.getAbstract();
+		String Publisher =  resHeader.getPublisher();
+		String Lang = resHeader.getLanguage();
+		String Doi = resHeader.getDOI();
+		String ISSN = resHeader.getISSNe();
+		String URL = "";
+		if (Doi != null)
+			URL = "WWW.dx.doi.org/" + Doi;
+		String Institution =  resHeader.getInstitution();
+		String Extra = resHeader.getNote();
+		String PublicDate = resHeader.getPublicationDate();
+		List<Person> authors = resHeader.getFullAuthors(); 
+		
+		if (Title == null)
+		{
+			Title = "Can not retrieve title.";
+			showTitle.setStyle("-fx-underline : true");
+		}
+		
+		if (authors.size() > 1) 
+			resHeader.setAuthors(authors.get(0).getFirstName() + " " 
+									+ authors.get(0).getLastName() + " et al");		
+		
+		//insert into Document command
+		dbConn.populateDocumentsTable(Journal, Title,
+				Abstract, Publisher, Lang,
+				Doi, ISSN, URL,
+				Institution, Extra, PdfPath, 
+				CollectionId, PublicDate);
+		
+		//insert into Author command
+		if (authors.size() > 0)
+		{
+			for (int i = 0; i <= authors.size(); i++)
+			{
+				String authorName = authors.get(i).getFirstName() + " " + authors.get(i).getLastName();
+				dbConn.populateAuthorsTable(authorName);
+				
+				//insert into Author-Doc command
+				dbConn.populateDocument_Author(dbConn.getDocumentID(Title), dbConn.getAuthorID(authorName));
+			}
+			
+		}
+		
+	}
+	
+	public void RetrieveDataDatabase (String CollectionName) throws SQLException {
+		AtraxDatabase dbConn = new AtraxDatabase();
+		int CollectionID = dbConn.getLibraryID(CollectionName);
+		ResultSet rs = dbConn.getAllLibraryDoc(CollectionID);
+		
+		while(rs.next())
+		{
+			BiblioItem resHeader = new BiblioItem();
+			resHeader.setTitle(rs.getString("TITLE"));
+			
+			//TODO retrieve author from author table 
+			resHeader.setAuthors("");
+				    
+			showTitle.setText(rs.getString("TITLE"));
+			showItemType.setText(rs.getString("ITEM_TYPE"));
+			showAbstract.setText(rs.getString("ABSTRACT"));
+			showDate.setText(rs.getString("Date"));
+			showPublication.setText(rs.getString("PUBLICATION"));
+			showLanguage.setText(rs.getString("LANGUAGE"));
+			showDOI.setText(rs.getString("DOI"));
+			showISSN.setText(rs.getString("ISSN"));
+			showURL.setText(rs.getString("URL"));
+			showNote.setText(rs.getString("EXTRA"));
+		}
+	}
+	
+	public void CheckExistDatabase () {
+		
+		AtraxDatabase dbConn = new AtraxDatabase();
+		LibraryList.clear();
+		
+		//retreive all Collection name command
+		List<String> CollectionNames = dbConn.getAllLibraryNames();
+		
+		if (CollectionNames.isEmpty())
+			return;
+		
+		for (String CollectionName : CollectionNames)
+		{
+			LibraryList.add(new TreeItem<String>(CollectionName));
+		}
+		CollectionItem.getChildren().setAll(LibraryList);
+		CollectionTable.setRoot(CollectionItem);
+		CollectionTable.getSelectionModel().selectFirst();
+		load(CollectionTable.getSelectionModel().getSelectedItem().getValue());
 		
 	}
     
@@ -390,7 +552,7 @@ public class TestNewInterfaceControl implements Initializable{
 		
 		
 		init();
-		load("hi");
+		CheckExistDatabase();
 	}
 	
 	
