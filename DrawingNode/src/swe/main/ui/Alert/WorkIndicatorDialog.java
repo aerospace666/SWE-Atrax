@@ -176,5 +176,9 @@ public class WorkIndicatorDialog<P> {
     public Integer getResultValue() {
         return resultValue;
     }
+
+	
+
+	
  
 }
