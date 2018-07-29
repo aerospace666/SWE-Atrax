@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public class AtraxDatabase {
 
 	private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-	private String URL = "jdbc:derby:atraxdb";
+	private String URL = "jdbc:derby:atraxDB";
 	public Connection connection =  null;
 
 	public AtraxDatabase(){}
