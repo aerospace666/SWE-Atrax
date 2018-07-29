@@ -1,11 +1,6 @@
 ----------------------------------------------------------------
-<<<<<<< HEAD
-Sun Jul 29 13:04:22 AEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0164-e3fe-7890-000007176e00 
-=======
-Fri Jul 27 13:29:25 AEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0164-d9c8-ad05-00001fb641b8 
->>>>>>> parent of c7be9b1... Required to fix some function (Check Describtion)
+Sun Jul 29 14:29:51 AEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0164-e44c-b9aa-0000070eba00 
 on database directory /Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/atraxdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4f8e5cde 
 Loaded from file:/Users/conghienhoang/Documents/GitHub/SWE-Atrax/DrawingNode/lib/derby.jar
 java.vendor=Oracle Corporation
