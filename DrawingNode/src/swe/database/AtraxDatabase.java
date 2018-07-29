@@ -14,7 +14,7 @@ import java.util.List;
 public class AtraxDatabase {
 
 	private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-	private String URL = "jdbc:derby:atraxdb";
+	private String URL = "jdbc:derby:atraxDB";
 	public Connection connection =  null;
 
 	public AtraxDatabase(){}
@@ -51,13 +51,13 @@ public class AtraxDatabase {
 	
 	// populate Documents table based on GROBID implementation
 	public int populateDocumentsTable(String _ITEM_TYPE, String _TITLE, String _ABSTRACT, String _PUBLICATION,
-									  String _LANGUAGE, String _DOI, String _ISSN, String _URL, 
-									  String _LIBRARY_CATALOG, String _EXTRA, String _PATH, int _LIBRARY_ID, String _DATE)
+									  String _LANGUAGE, String _DOI, String _ISSN, String _URL, String _LIBRARY_CATALOG,
+									  String _EXTRA, String _PATH, int _LIBRARY_ID, String _DATE, String _AFFILIATION)
 	{
 		String insertQuery = "INSERT INTO DOCUMENTS (ITEM_TYPE, TITLE, ABSTRACT, PUBLICATION, "
 												+ "LANGUAGE, DOI, ISSN, URL, LIBRARY_CATALOG,"
 												+ "EXTRA, PATH, LIBRARY_ID, DATE ) "
-												+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+												+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		// check for database connection
 		if(connection == null)
 		{
@@ -78,6 +78,7 @@ public class AtraxDatabase {
 			preparedStmt.setString(11, _PATH);
 			preparedStmt.setInt(12, _LIBRARY_ID);
 			preparedStmt.setString(13, _DATE);
+			preparedStmt.setString(14, _AFFILIATION);
 			// execute insert SQL statement
 			preparedStmt.executeUpdate();
 		}

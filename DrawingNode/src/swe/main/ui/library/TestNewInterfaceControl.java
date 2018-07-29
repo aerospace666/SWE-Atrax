@@ -490,11 +490,11 @@ public class TestNewInterfaceControl implements Initializable{
 									+ authors.get(0).getLastName() + " et al");		
 		
 		//insert into Document command
-		dbConn.populateDocumentsTable(Journal, Title,
-				Abstract, Publisher, Lang,
-				Doi, ISSN, URL,
-				Institution, Extra, PdfPath, 
-				CollectionId, PublicDate);
+//		dbConn.populateDocumentsTable(Journal, Title,
+//				Abstract, Publisher, Lang,
+//				Doi, ISSN, URL,
+//				Institution, Extra, PdfPath, 
+//				CollectionId, PublicDate);
 		
 		//insert into Author command
 		if (authors != null && authors.size() > 0)
