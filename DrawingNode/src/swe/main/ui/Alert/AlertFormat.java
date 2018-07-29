@@ -13,11 +13,4 @@ public class AlertFormat {
 		return;
 	}
 	
-	public void infoAlert(String title, String content) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle(title);
-		alert.setContentText(content);
-		alert.showAndWait();
-		return;
-	}
 }

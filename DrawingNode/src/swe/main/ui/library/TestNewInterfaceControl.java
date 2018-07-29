@@ -1,18 +1,22 @@
 package src.swe.main.ui.library;
 
+<<<<<<< HEAD
 
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+=======
+<<<<<<< HEAD
+import java.io.File;
+=======
+>>>>>>> a587306da099b25bddc7de1fffc9a22f69d09246
+>>>>>>> parent of c7be9b1... Required to fix some function (Check Describtion)
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import org.grobid.core.data.BiblioItem;
-import org.grobid.core.data.Person;
 import org.grobid.core.engines.Engine;
 import org.grobid.core.factory.GrobidFactory;
 import org.grobid.core.main.GrobidHomeFinder;
@@ -24,11 +28,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+<<<<<<< HEAD
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+=======
+>>>>>>> a587306da099b25bddc7de1fffc9a22f69d09246
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -52,6 +59,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import src.swe.database.AtraxDatabase;
 import src.swe.main.ui.Alert.AlertFormat;
+import src.swe.main.ui.Alert.Popup;
 import src.swe.main.ui.Alert.WorkIndicatorDialog;
 
 public class TestNewInterfaceControl implements Initializable{
@@ -199,13 +207,14 @@ public class TestNewInterfaceControl implements Initializable{
     	
     	
     	
-    	//if user doesnt select any directory
+    	//if user dosent select any directory
     	if (selectedFolder == null) {
     		return;
     	}
     	
     	System.out.println(selectedFolder.getAbsolutePath());
     	
+<<<<<<< HEAD
     	
     	
     	/*
@@ -276,17 +285,35 @@ public class TestNewInterfaceControl implements Initializable{
     	if (CollectionTable.getSelectionModel().getSelectedItem() == null || CollectionTable.getSelectionModel().getSelectedItem().getValue() == "Library") {
     		//popup  ask for collection name then process the data
     		popup.show(); 		
+=======
+    	//Check if add to existed collection
+    	if (CollectionTable.getSelectionModel().getSelectedItem() == null) {
+    		
+    		Popup popup = new Popup();
+    		CollectionName = popup.start();
+    		
+    		//TODO insert new collection name into database
+    				
+>>>>>>> parent of c7be9b1... Required to fix some function (Check Describtion)
     	} 
     	else
     	{
     		CollectionName = CollectionTable.getSelectionModel().getSelectedItem().getValue();
-    		System.out.println(CollectionName);
-    		ProcessData(selectedFolder.getAbsolutePath(), CollectionName);
     	}
+    	
+    	
+    	
+    	ProcessData(selectedFolder.getAbsolutePath(), CollectionName);
+    	
     	
     }
     
     
+<<<<<<< HEAD
+=======
+   
+    
+>>>>>>> parent of c7be9b1... Required to fix some function (Check Describtion)
 
     
    /*
@@ -318,6 +345,7 @@ public class TestNewInterfaceControl implements Initializable{
     	//collection table
     	
     	CollectionItem.setExpanded(true);
+<<<<<<< HEAD
     	LibraryList.add(CollectionItem);
 		CollectionTable.setRoot(LibraryList.get(0));
 	
@@ -329,6 +357,30 @@ public class TestNewInterfaceControl implements Initializable{
     public void load(String CollectionName) {
     	RetrieveDataDatabase(CollectionName, grobidInit());
     	LibraryTable.setItems(BookList);
+=======
+    	LibraryList.add(new TreeItem<String> ("Test1"));
+    	
+    	
+    
+    	
+    }
+    
+    //TODO retrieve data from database, assign to book object then display to table view
+    public void load(String libname) {
+    	
+    	
+    	
+		//BookList.add(resHeader);
+		LibraryTable.setItems(BookList);
+		
+    	CollectionItem.getChildren().setAll(LibraryList);		//update new elements
+    	
+    	CollectionTable.setRoot(CollectionItem);		//set collection to tree view
+    	
+    	
+    	//showAbstract.setText(resHeader.getAbstract());
+    	//System.out.println(getClass().getClassLoader().getResource("196124.jpg"));
+>>>>>>> parent of c7be9b1... Required to fix some function (Check Describtion)
     }
     
     
@@ -342,7 +394,7 @@ public class TestNewInterfaceControl implements Initializable{
     	
     	AlertFormat alert = new AlertFormat();
     	
-    	WorkIndicatorDialog<String> wd = new WorkIndicatorDialog<>(MainID.getScene().getWindow(), "Generating Files's metadata...");
+    	WorkIndicatorDialog<String> wd = new WorkIndicatorDialog<>(LibraryTable.getScene().getWindow(), "Generating Files's metadata...");
     	
     	wd.addTaskEndNotification(result -> {
 	    	
@@ -354,11 +406,6 @@ public class TestNewInterfaceControl implements Initializable{
 	    		
 	   			alert.errorAlert("Unsupported file type", "Please choose only pdf file");
 				return;
-	    	} else if (result == -1)
-	    	{
-	    		
-	    		alert.infoAlert("Notice", "Folder is empty");
-				return;
 	    	}
 	    });
     	
@@ -367,10 +414,12 @@ public class TestNewInterfaceControl implements Initializable{
 		    	
 		    	//Processing code
 		    	
-    		 //return 0 if there is no Pdf file in the folfer, -1 if the folder is empty
+    		 //return 0 if there is no Pdf file in the folfer
     		 int check = getPdfData(PdfPath, CollectionName);
 		    	
-    		
+    		 
+    		 
+    		 
     		 return check;
     	
     	 });
@@ -395,8 +444,8 @@ public class TestNewInterfaceControl implements Initializable{
 			
 		 
 		 Engine engine = GrobidFactory.getInstance().createEngine();
-		 BiblioItem resHeader = new BiblioItem();
 		 
+		 BiblioItem resHeader = new BiblioItem();
 		 
 		
 		 File WorkingDirectory = new File(PdfPath);
@@ -404,20 +453,13 @@ public class TestNewInterfaceControl implements Initializable{
 		 if (WorkingDirectory.isDirectory())
 		 {
 			 File[] ListOfFiles = WorkingDirectory.listFiles();
-			 if (ListOfFiles.length == 0)
-			 {
-				 return -1;
-			 }
-			 
 			 for(File file : ListOfFiles) 
 			 {
 				 if (file.getName().toLowerCase().contains(".pdf")) {
 					 check++;
-					 
-					 resHeader = new BiblioItem();
 					 engine.processHeader(file.getAbsolutePath(), true, resHeader);
 					 BookList.add(resHeader);
-					 insertIntoDatabase(resHeader, CollectionName, file.getAbsolutePath());
+					 insertIntoDatabase(resHeader, CollectionName);
 				 }
 			 }
 		 } 
@@ -441,14 +483,14 @@ public class TestNewInterfaceControl implements Initializable{
      * 
      * */
 	
-	public void insertIntoDatabase(BiblioItem resHeader, String CollectionName, String PdfPath) {
+	public void insertIntoDatabase(BiblioItem resHeader, String CollectionName) {
 		
 		//check database connection
 		AtraxDatabase dbConn = new AtraxDatabase(); 
-		
-		//Create new Collection name - Do nothing if already exist
 		dbConn.createNewLibrary(CollectionName);
+		String CollectionId = dbConn.getLibraryID(CollectionName);
 		
+<<<<<<< HEAD
 		int CollectionId = dbConn.getLibraryID(CollectionName);
 		
 		/*
@@ -567,6 +609,8 @@ public class TestNewInterfaceControl implements Initializable{
 	
 		CollectionTable.getSelectionModel().selectNext();
 		load(CollectionTable.getSelectionModel().getSelectedItem().getValue());
+=======
+>>>>>>> parent of c7be9b1... Required to fix some function (Check Describtion)
 		
 	}
 	
@@ -705,7 +749,7 @@ public class TestNewInterfaceControl implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {	
 		init();
-		CheckExistDatabase();
+		load("hi");
 	}
 	
 	
