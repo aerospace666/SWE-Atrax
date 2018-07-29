@@ -7,3 +7,5 @@ PDFBox/.classpath
 *.log
 *.log
 *.log
+*.lck
+*.dat

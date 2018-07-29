@@ -44,7 +44,7 @@
                           <items>
                             <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="150.0">
                                  <children>
-                                    <TreeView fx:id="CollectionTable" layoutX="-1.0" layoutY="14.0" maxWidth="-Infinity" prefHeight="489.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TreeView fx:id="CollectionTable" layoutX="-1.0" layoutY="14.0" maxWidth="-Infinity" onMouseClicked="#ColllectionTableHandler" prefHeight="489.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <contextMenu>
                                           <ContextMenu fx:id="CollectionContextMenu">
                                              <items>
@@ -59,7 +59,7 @@
                                 <items>
                                   <AnchorPane>
                                        <children>
-                                          <TableView fx:id="LibraryTable" prefHeight="537.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <TableView fx:id="LibraryTable" onMouseClicked="#LibraryTableHandler" prefHeight="537.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <columns>
                                               <TableColumn fx:id="TitleCo" editable="false" prefWidth="270.0" text="Title" />
                                               <TableColumn fx:id="AuthorCo" editable="false" prefWidth="100.0" text="Author" />
@@ -82,14 +82,14 @@
                                                                <content>
                                                                   <VBox>
                                                                      <children>
-                                                                        <HBox spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                        <HBox spacing="48.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="Item type:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showItemType" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showItemType" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
@@ -99,14 +99,14 @@
                                                                               <Insets top="10.0" />
                                                                            </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="20.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                        <HBox layoutX="10.0" layoutY="20.0" spacing="79.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="Title:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showTitle" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showTitle" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
@@ -116,14 +116,14 @@
                                                                               <Insets top="10.0" />
                                                                            </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="37.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                        <HBox layoutX="10.0" layoutY="37.0" spacing="47.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="Author(s):" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showAuthors" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showAuthors" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
@@ -133,14 +133,14 @@
                                                                               <Insets top="10.0" />
                                                                            </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="54.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                        <HBox layoutX="10.0" layoutY="54.0" spacing="53.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="Abstract:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showAbstract" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showAbstract" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
@@ -150,14 +150,14 @@
                                                                               <Insets top="10.0" />
                                                                            </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="71.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                        <HBox layoutX="10.0" layoutY="71.0" spacing="35.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="Keyword(s):" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showKeywords" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showKeywords" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
@@ -167,14 +167,14 @@
                                                                               <Insets top="10.0" />
                                                                            </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="127.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                        <HBox layoutX="10.0" layoutY="127.0" spacing="77.0" VBox.vgrow="ALWAYS">
                                                                            <children>
-                                                                              <Label alignment="TOP_LEFT" text="Date" HBox.hgrow="ALWAYS">
+                                                                              <Label alignment="TOP_LEFT" text="Date:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showDate" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showDate" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
@@ -184,103 +184,124 @@
                                                                               <Insets top="10.0" />
                                                                            </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="163.0" spacing="50.0">
+                                                                        <HBox layoutX="10.0" layoutY="163.0" spacing="47.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="Affiliation:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
-                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                    <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showAffiliation" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showAffiliation" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
                                                                               </Label>
                                                                            </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="145.0" spacing="50.0">
+                                                                        <HBox layoutX="10.0" layoutY="145.0" spacing="48.0" VBox.vgrow="ALWAYS">
                                                                            <children>
-                                                                              <Label alignment="TOP_LEFT" text="Publication:" HBox.hgrow="ALWAYS">
+                                                                              <Label alignment="TOP_LEFT" text="Publisher:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
-                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                    <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showPublication" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showPublication" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
                                                                               </Label>
                                                                            </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="162.0" spacing="50.0">
+                                                                        <HBox layoutX="10.0" layoutY="162.0" spacing="45.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="Language:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
-                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                    <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showLanguage" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showLanguage" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
                                                                               </Label>
                                                                            </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="179.0" spacing="50.0">
+                                                                        <HBox layoutX="10.0" layoutY="179.0" spacing="82.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="DOI:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
-                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                    <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showDOI" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showDOI" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
                                                                               </Label>
                                                                            </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="196.0" spacing="50.0">
+                                                                        <HBox layoutX="10.0" layoutY="196.0" spacing="75.0" VBox.vgrow="ALWAYS">
                                                                            <children>
-                                                                              <Label alignment="TOP_LEFT" text="ISSN:" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="ISSNLabel" alignment="TOP_LEFT" text="ISSN:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
-                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                    <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showISSN" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showISSN" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
                                                                               </Label>
                                                                            </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="213.0" spacing="50.0">
+                                                                        <HBox layoutX="10.0" layoutY="213.0" spacing="80.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="URL:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
-                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                    <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showURL" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showURL" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
                                                                               </Label>
                                                                            </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
                                                                         </HBox>
-                                                                        <HBox layoutX="10.0" layoutY="247.0" spacing="50.0">
+                                                                        <HBox layoutX="10.0" layoutY="247.0" spacing="68.0" VBox.vgrow="ALWAYS">
                                                                            <children>
                                                                               <Label alignment="TOP_LEFT" text="Notes:" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
-                                                                                    <Insets left="10.0" top="10.0" />
+                                                                                    <Insets left="10.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <Label fx:id="showNote" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                                                                              <Label fx:id="showNote" alignment="TOP_LEFT" contentDisplay="TOP" maxWidth="235.0" onMouseClicked="#MakeLabelSelectable" textOverrun="LEADING_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
                                                                               </Label>
                                                                            </children>
+                                                                           <VBox.margin>
+                                                                              <Insets top="10.0" />
+                                                                           </VBox.margin>
                                                                         </HBox>
                                                                      </children>
                                                                   </VBox>

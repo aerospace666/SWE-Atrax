@@ -1,14 +1,15 @@
 package src.swe.main.ui.library;
 
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-
 
 import org.grobid.core.data.BiblioItem;
 import org.grobid.core.data.Person;
@@ -42,6 +43,8 @@ import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
@@ -121,6 +124,9 @@ public class TestNewInterfaceControl implements Initializable{
 
     @FXML
     private Label showNote;
+    
+    @FXML
+    private Label ISSNLabel;
 
     @FXML
     private Tab MindmapTab;
@@ -154,15 +160,14 @@ public class TestNewInterfaceControl implements Initializable{
     @FXML
     void AddFile(ActionEvent event) {
 
-    	String CollectionName; 
+    	String CollectionName = CollectionTable.getSelectionModel().getSelectedItem().getValue();
     	//if select from empty collection then return
-    	if (CollectionTable.getSelectionModel().getSelectedItem() == null) {
+    	if (CollectionName == null || CollectionName == "Library") {
     		AlertFormat alert = new AlertFormat();
 			alert .errorAlert("No Collection selecetd", "Please choose a collection first");
     		return;
     	}
     	
-    	CollectionName = CollectionTable.getSelectionModel().getSelectedItem().getValue();
     	
     	FileChooser fileChooser = new FileChooser();
     	
@@ -170,9 +175,9 @@ public class TestNewInterfaceControl implements Initializable{
     	List<File> selectedfile = fileChooser.showOpenMultipleDialog(MainID.getScene().getWindow());
     	
     	//if there is no files selected then return
-    	if(selectedfile == null || selectedfile.isEmpty()) {
+    	if(selectedfile == null || selectedfile.isEmpty()) 
     		return;
-    	}
+    	
     	
     	for (File file : selectedfile)
     	{
@@ -251,11 +256,12 @@ public class TestNewInterfaceControl implements Initializable{
 					return;
 				}
 				
-				
+			
 				popup.close();
 				
-				LibraryList.add(new TreeItem<String>(name.getText()));
-				
+				TreeItem <String> tempTree = new TreeItem<String>(name.getText());
+				CollectionItem.getChildren().add(tempTree);
+				CollectionTable.getSelectionModel().select(tempTree);
 				ProcessData(selectedFolder.getAbsolutePath(), name.getText());	
 				
 			}
@@ -267,12 +273,9 @@ public class TestNewInterfaceControl implements Initializable{
 		
 		
     	//Check if add to existed collection
-    	if (CollectionTable.getSelectionModel().getSelectedItem() == null) {
-    		//popup class ask for collection name then process the data
-    		popup.show();
-  
-    		//TODO insert new collection name into database	
-    		
+    	if (CollectionTable.getSelectionModel().getSelectedItem() == null || CollectionTable.getSelectionModel().getSelectedItem().getValue() == "Library") {
+    		//popup  ask for collection name then process the data
+    		popup.show(); 		
     	} 
     	else
     	{
@@ -284,13 +287,23 @@ public class TestNewInterfaceControl implements Initializable{
     }
     
     
-   
 
-    @FXML
-    void ClearCollectionSelection(ActionEvent event) {
-    	CollectionTable.getSelectionModel().clearSelection();
+    
+   /*
+    * 
+    * Initial Grobid properties, biblioItem and engine
+    * */ 
+    
+    public BiblioItem grobidInit() {
+    	String pGrodHome = "grobid-home";
+		GrobidHomeFinder Grofind = new GrobidHomeFinder(Arrays.asList(pGrodHome)) ;
+		GrobidProperties.getInstance(Grofind);	
+		System.out.println("-------- GROBID_HOME="+GrobidProperties.get_GROBID_HOME_PATH());	
+    	BiblioItem resHeader = new BiblioItem();
+		return resHeader;
     }
-
+    
+    
     
   //TODO initialize table column & Load() import BiblioItem and display
     
@@ -305,23 +318,17 @@ public class TestNewInterfaceControl implements Initializable{
     	//collection table
     	
     	CollectionItem.setExpanded(true);
-    	
-    	
-    	
-    
+    	LibraryList.add(CollectionItem);
+		CollectionTable.setRoot(LibraryList.get(0));
+	
+
     	
     }
     
-    //TODO retrieve data from database, assign to book object then display to table view
-    public void load(String CollectionName){
-  
-    	try {
-			RetrieveDataDatabase(CollectionName);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
+    // retrieve data from database, assign to book object then display to table view
+    public void load(String CollectionName) {
+    	RetrieveDataDatabase(CollectionName, grobidInit());
+    	LibraryTable.setItems(BookList);
     }
     
     
@@ -382,14 +389,11 @@ public class TestNewInterfaceControl implements Initializable{
 		
 		//Processing metadata extraction
 		 String pGrodHome = "grobid-home";
-			
-		 
 		 GrobidHomeFinder Grofind = new GrobidHomeFinder(Arrays.asList(pGrodHome)) ;
-			
 		 GrobidProperties.getInstance(Grofind);
-			
 		 System.out.println("-------- GROBID_HOME="+GrobidProperties.get_GROBID_HOME_PATH());
 			
+		 
 		 Engine engine = GrobidFactory.getInstance().createEngine();
 		 BiblioItem resHeader = new BiblioItem();
 		 
@@ -424,7 +428,7 @@ public class TestNewInterfaceControl implements Initializable{
 				check++;
 				engine.processHeader(WorkingDirectory.getAbsolutePath(), true, resHeader);
 				BookList.add(resHeader);
-				//insertIntoDatabase(resHeader, CollectionName);
+				insertIntoDatabase(resHeader, CollectionName, WorkingDirectory.getAbsolutePath());
 			}
 		 }
 	
@@ -456,13 +460,23 @@ public class TestNewInterfaceControl implements Initializable{
 		String Publisher =  resHeader.getPublisher();
 		String Lang = resHeader.getLanguage();
 		String Doi = resHeader.getDOI();
-		String ISSN = resHeader.getISSNe();
+		String ISSN = resHeader.getISSN();
+		if (ISSN == null) 
+			ISSN = resHeader.getISSNe();
+		if (ISSN == null) 
+			ISSN = resHeader.getISBN10();
+		if (ISSN == null) 
+			ISSN = resHeader.getISBN13();
 		String URL = "";
-		if (Doi != null)
-			URL = "WWW.dx.doi.org/" + Doi;
+		if (Doi != null) 
+			URL = "https://dx.doi.org/" + Doi;
+				else
+					Doi = "";
 		String Institution =  resHeader.getInstitution();
 		String Extra = resHeader.getNote();
-		String PublicDate = resHeader.getPublicationDate();
+		String PublicDate = "";
+		if (resHeader.getNormalizedPublicationDate() != null)
+			PublicDate = resHeader.getNormalizedPublicationDate().getMonthString() + "/" + resHeader.getNormalizedPublicationDate().getYearString();
 		List<Person> authors = resHeader.getFullAuthors(); 
 		
 		if (Title == null)
@@ -471,7 +485,7 @@ public class TestNewInterfaceControl implements Initializable{
 			showTitle.setStyle("-fx-underline : true");
 		}
 		
-		if (authors.size() > 1) 
+		if (authors != null && authors.size() > 1) 
 			resHeader.setAuthors(authors.get(0).getFirstName() + " " 
 									+ authors.get(0).getLastName() + " et al");		
 		
@@ -483,9 +497,9 @@ public class TestNewInterfaceControl implements Initializable{
 				CollectionId, PublicDate);
 		
 		//insert into Author command
-		if (authors.size() > 0)
+		if (authors != null && authors.size() > 0)
 		{
-			for (int i = 0; i <= authors.size(); i++)
+			for (int i = 0; i < authors.size(); i++)
 			{
 				String authorName = authors.get(i).getFirstName() + " " + authors.get(i).getLastName();
 				dbConn.populateAuthorsTable(authorName);
@@ -498,65 +512,204 @@ public class TestNewInterfaceControl implements Initializable{
 		
 	}
 	
-	public void RetrieveDataDatabase (String CollectionName) throws SQLException {
+	
+	public void RetrieveDataDatabase (String CollectionName, BiblioItem resHeader) {
 		AtraxDatabase dbConn = new AtraxDatabase();
 		int CollectionID = dbConn.getLibraryID(CollectionName);
 		ResultSet rs = dbConn.getAllLibraryDoc(CollectionID);
 		
-		while(rs.next())
-		{
-			BiblioItem resHeader = new BiblioItem();
-			resHeader.setTitle(rs.getString("TITLE"));
-			
-			//TODO retrieve author from author table 
-			resHeader.setAuthors("");
-				    
-			showTitle.setText(rs.getString("TITLE"));
-			showItemType.setText(rs.getString("ITEM_TYPE"));
-			showAbstract.setText(rs.getString("ABSTRACT"));
-			showDate.setText(rs.getString("Date"));
-			showPublication.setText(rs.getString("PUBLICATION"));
-			showLanguage.setText(rs.getString("LANGUAGE"));
-			showDOI.setText(rs.getString("DOI"));
-			showISSN.setText(rs.getString("ISSN"));
-			showURL.setText(rs.getString("URL"));
-			showNote.setText(rs.getString("EXTRA"));
+		BookList.clear();
+		
+		try {
+			while(rs.next())
+			{
+				
+				resHeader = new BiblioItem();
+				
+				//TODO retrieve author from author table 
+				resHeader.setAuthors("");
+					    
+				resHeader.setTitle(rs.getString("TITLE"));
+				resHeader.setJournal(rs.getString("ITEM_TYPE"));
+				resHeader.setAbstract(rs.getString("ABSTRACT"));
+				resHeader.setPublisher(rs.getString("PUBLICATION"));
+				resHeader.setPublicationDate(rs.getString("Date"));
+				resHeader.setLanguage(rs.getString("LANGUAGE"));
+				resHeader.setDOI(rs.getString("DOI") + ".");
+				resHeader.setISSN(rs.getString("ISSN"));
+				resHeader.setURL(rs.getString("URL"));
+				resHeader.setNote(rs.getString("EXTRA"));
+				resHeader.setTown(rs.getString("PATH"));
+				BookList.add(resHeader);
+				
+			}
+		} catch (SQLException e) {
+			//Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	public void CheckExistDatabase () {
+	public void CheckExistDatabase() {
 		
 		AtraxDatabase dbConn = new AtraxDatabase();
 		LibraryList.clear();
+		List<String> CollectionNames = null;
+		CollectionNames = dbConn.getAllLibraryNames();
+
 		
-		//retreive all Collection name command
-		List<String> CollectionNames = dbConn.getAllLibraryNames();
-		
-		if (CollectionNames.isEmpty())
+		if (CollectionNames == null || CollectionNames.isEmpty())
 			return;
 		
 		for (String CollectionName : CollectionNames)
 		{
-			LibraryList.add(new TreeItem<String>(CollectionName));
+			CollectionItem.getChildren().add(new TreeItem<String>(CollectionName));
 		}
-		CollectionItem.getChildren().setAll(LibraryList);
-		CollectionTable.setRoot(CollectionItem);
-		CollectionTable.getSelectionModel().selectFirst();
+	
+		CollectionTable.getSelectionModel().selectNext();
 		load(CollectionTable.getSelectionModel().getSelectedItem().getValue());
 		
 	}
+	
+	
+	/*
+	 * Event handling section
+	 * 
+	 * */
+	 
+	@FXML
+	void ClearCollectionSelection(ActionEvent event) {
+	    	CollectionTable.getSelectionModel().clearSelection();
+	}
+	 
+	 
+	@FXML
+	void ColllectionTableHandler(MouseEvent event) {
+		if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1){	
+    		//if select from empty collection then return
+        	if (CollectionTable.getSelectionModel().getSelectedItem() == null) 
+        	{
+        		//CollectionTable.getSelectionModel().clearSelection();
+        		return;
+        	}
+ 	
+            load(CollectionTable.getSelectionModel().getSelectedItem().getValue());
+            
+        }
+		
+	}
+	
+	@FXML
+	void LibraryTableHandler(MouseEvent event) {
+		AlertFormat alert = new AlertFormat();
+		
+		
+		/*
+		 * Open PDf
+		 * */
+		if(event.getButton().equals(MouseButton.PRIMARY)  && event.getClickCount() == 2)
+		{
+			
+			
+			//if null selection then skips
+            if (LibraryTable.getSelectionModel().getSelectedItem() == null) {
+            	//LibraryTable.getSelectionModel().clearSelection();
+            	return;
+            }
+            
+            try {
+                Desktop desktop = null;
+                
+                if (Desktop.isDesktopSupported())
+                	desktop = Desktop.getDesktop();
+                		else
+                			alert.infoAlert("No Pdf Viewer Found ", "Please install pdf viwer app to display the document");
+                
+                 
+                
+                //fixed unrecognized resources path ---town is non display and unnecessary members -> use to store file path instead
+                String temp = LibraryTable.getSelectionModel().getSelectedItem().getTown();
+                File openFile = new File(temp);
+                
+                if(openFile.exists())
+                	desktop.open(openFile);
+                		else
+                		{
+                			//TODO remove file from document database 
+                			BookList.remove(LibraryTable.getSelectionModel().getSelectedItem());
+                			alert.errorAlert("", "File not found");
+                		}
+                
+                
+              } catch (IOException ioe) {
+            	  ioe.printStackTrace();
+              }
+        
+        }
+		
+	    
+		/*
+		 * Display pdf Metadata 
+		 * */
+		 if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1){
+	           
+	            //if null selection then skips
+	            if (LibraryTable.getSelectionModel().getSelectedItem() == null) 
+	            	return;
+	            
+	            BiblioItem resHeader = new BiblioItem();
+	            resHeader = LibraryTable.getSelectionModel().getSelectedItem();
+	            
+	            /*
+	             * set Label elements
+	             * */
+	            showItemType.setText(resHeader.getJournal());
+	            showTitle.setText(resHeader.getTitle());
+	            showAuthors.setText(resHeader.getAuthors());
+	            showAbstract.setText(resHeader.getAbstract());
+	            showDate.setText(resHeader.getPublicationDate());
+	            showPublication.setText(resHeader.getPublisher());
+	            showLanguage.setText(resHeader.getLanguage());
+	            showDOI.setText(resHeader.getDOI());
+	            showISSN.setText(resHeader.getISSN());
+	            showURL.setText(resHeader.getURL());
+	            showNote.setText(resHeader.getNote());
+	            
+		 }
+	}
+	
+	@FXML
+    void MakeLabelSelectable(MouseEvent event) {
+		if(event.getButton().equals(MouseButton.PRIMARY)){
+            if(event.getClickCount() == 2){
+            	System.out.println((Label)event.getSource());
+            	System.out.println(event.getClass().getName());
+            	
+            	
+            }
+            }
+               /* label.setVisible(false);
+                TextArea textarea = new TextArea(label.getText());
+                textarea.setPrefHeight(label.getHeight() + 10);
+                stackpane.getChildren().add(textarea);
+
+                textarea.setOnKeyPressed(event ->{
+                    System.out.println(event.getCode());
+                    if(event.getCode().toString().equals("ENTER"))
+                    {
+                        stackpane.getChildren().remove(textarea);
+                        label.setVisible(true);                               
+                    }*/
+    }
+	
     
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		
-		
+	public void initialize(URL location, ResourceBundle resources) {	
 		init();
 		CheckExistDatabase();
 	}
 	
 	
     
-    
+	
     
 }
